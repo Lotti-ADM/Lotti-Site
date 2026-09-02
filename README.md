@@ -1,9 +1,8 @@
 # Lotti — site institucional
 
-Landing page da Lotti (Next.js 16, App Router, Tailwind v4). É um site
-**exclusivamente de marketing**: não tem banco de dados, não tem checkout e
-nenhum componente lê ou escreve dado. As dependências de runtime são apenas
-`next`, `react`, `react-dom`, `lucide-react` e `zod`.
+Landing page e checkout público da Lotti (Next.js 16, App Router, Tailwind v4).
+O conteúdo institucional é estático; a rota `/checkout` usa APIs server-side
+para criar a assinatura no Asaas e provisionar o acesso pelo Supabase.
 
 O aplicativo (CRM) vive em **outro repositório e outro projeto da Vercel**, em
 `app.plataformalotti.com.br`. Todo botão de "Entrar" / "Acessar plataforma"
@@ -23,6 +22,10 @@ Não existe `npm test` neste repositório.
 `test:visual` faz requisições HTTP contra um servidor já rodando. Ele usa
 `http://localhost:3000` por padrão; aponte para outro endereço com
 `TEST_BASE_URL`:
+
+O checkout de planos está disponível em `/checkout`. A integração segura com
+Asaas, Supabase e o e-mail de criação de senha está documentada em
+[`docs/ASAAS_CHECKOUT.md`](docs/ASAAS_CHECKOUT.md).
 
 ```bash
 npm run build && npx next start -p 3100
@@ -83,10 +86,8 @@ convida a "falar com a gente pelo WhatsApp", então enquanto `whatsapp` estiver
 URLs os QR Codes das fachadas e os links de indicação de parceiro. Mudar aqui
 sem mudar lá quebra QR Code já impresso e link já distribuído.
 
-O mesmo vale para `appUrl` (endereço do CRM), que **ainda não existe neste
-arquivo** — hoje o endereço do app aparece escrito à mão nos componentes. A
-branch `chore/dominio-plataformalotti-v2` centraliza isso em `siteConfig.appUrl`;
-quando ela entrar, o campo passa a valer a mesma trava.
+O mesmo vale para `appUrl` (endereço do CRM): Header e Hero leem esse campo em
+`siteConfig`, sem manter cópias do domínio nos componentes.
 
 Os códigos dos planos (`essencial`, `profissional`, `imobiliaria`, em
 [`src/content/pricing.ts`](src/content/pricing.ts)) são chave primária no banco

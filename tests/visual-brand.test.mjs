@@ -217,6 +217,10 @@ test("usa o verde Lotti como acento em ações e progresso", async () => {
   );
   // No header escuro o verde aparece como acento no botão "Entrar".
   assert.match(header, /bg-\[#093323\]/);
+  assert.match(
+    styles,
+    /\.checkout-progress \.is-current span,[\s\S]*?background: var\(--color-forest\)/,
+  );
   assert.match(steps, /text-eyebrow uppercase text-forest/);
 });
 
@@ -339,4 +343,73 @@ test("apresenta funcionalidades e produto na primeira dobra", async () => {
   ]) {
     assert.ok(landing.includes(capability), `funcionalidade ausente no hero: ${capability}`);
   }
+});
+
+test("leva cada plano mensal para o checkout", async () => {
+  const { response, body } = await get("/planos");
+
+  assert.equal(response.status, 200);
+  assert.match(body, /\/checkout\?plano=essencial/);
+  assert.match(body, /\/checkout\?plano=profissional/);
+  assert.match(body, /\/checkout\?plano=imobiliaria/);
+  assert.match(body, />Assinar agora</);
+  assert.match(body, /Até 5/);
+  assert.match(body, /Até 20/);
+  assert.match(body, /Até 100/);
+  assert.doesNotMatch(body, /Faturado .* por ano|Economize 2 meses|Teste grátis por 14 dias/);
+});
+
+test("renderiza cartão à esquerda e Pix anual com 12 mensalidades", async () => {
+  const { response, body } = await get("/checkout?plano=profissional");
+
+  assert.equal(response.status, 200);
+  assert.match(body, /Ambiente de pagamento seguro/);
+  assert.match(body, /Lotti Profissional/);
+  assert.match(body, /Pix/);
+  assert.match(body, /Cartão/);
+  assert.ok(body.indexOf("<strong>Cartão</strong>") < body.indexOf("<strong>Pix</strong>"));
+  assert.match(body, /12 meses em um pagamento/);
+  assert.match(body, /referente a 12 meses de/);
+  assert.match(body, /R\$\s*1\.788,00/);
+  assert.match(body, /R\$\s*149,00/);
+  assert.match(body, /único endereço autorizado a criar a senha inicial/);
+  assert.match(body, /Processado com segurança pelo Asaas/);
+  assert.match(body, /Até 20 imóveis e 15 contratos de aluguel ativos/);
+  assert.match(body, /20 Fachadas Inteligentes/);
+  assert.match(body, /renovação anual/i);
+  assert.doesNotMatch(body, /Card Holder|Expiration Date|Complete all fields/);
+});
+
+test("mantém segredos e cartão fora do cliente e da persistência", async () => {
+  const checkoutRoute = await readFile(
+    new URL("../src/app/api/checkout/route.ts", import.meta.url),
+    "utf8",
+  );
+  const repository = await readFile(
+    new URL("../src/lib/checkout/repository.ts", import.meta.url),
+    "utf8",
+  );
+  const migration = await readFile(
+    new URL("../supabase/migrations/20260826090000_asaas_saas_checkout.sql", import.meta.url),
+    "utf8",
+  );
+  const asaasServer = await readFile(
+    new URL("../src/lib/asaas/server.ts", import.meta.url),
+    "utf8",
+  );
+  const provisioning = await readFile(
+    new URL("../src/lib/checkout/provisioning.ts", import.meta.url),
+    "utf8",
+  );
+
+  assert.doesNotMatch(checkoutRoute, /NEXT_PUBLIC_(ASAAS|SUPABASE_SECRET|SUPABASE_SERVICE)/);
+  const sensitiveColumn = /^\s*(card_number|credit_card_number|cvv|ccv)\s+/im;
+  assert.doesNotMatch(repository, sensitiveColumn);
+  assert.doesNotMatch(migration, sensitiveColumn);
+  assert.match(migration, /ENABLE ROW LEVEL SECURITY/);
+  assert.match(migration, /claim_asaas_checkout_event/);
+  assert.match(migration, /claim_checkout_order_provisioning/);
+  assert.match(migration, /REVOKE ALL ON TABLE public\.checkout_orders FROM PUBLIC, anon, authenticated/);
+  assert.match(asaasServer, /input\.billingCycle === "annual" \? "YEARLY" : "MONTHLY"/);
+  assert.match(provisioning, /cycle === "annual" \? 12 : 1/);
 });

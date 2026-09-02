@@ -240,9 +240,9 @@ export const plans = {
   title: "Comece com o que precisa hoje. Evolua quando sua operação pedir.",
   lead: "Escolha a capacidade ideal para sua carteira. Clientes, funil e lançamentos financeiros continuam sem limite em todos os planos.",
   points: [
-    "Teste grátis por 14 dias sem cartão.",
-    "Planos que acompanham seu crescimento.",
-    "Desconto de 2 meses no ciclo anual.",
+    "Valores mensais claros.",
+    "Limites definidos por faixa de operação.",
+    "Pagamento por Pix ou cartão.",
   ],
   cta: "Ver planos e preços",
 } as const;

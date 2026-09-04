@@ -669,6 +669,7 @@
       #093323 100%
     );
     transition:
+      background 0.5s cubic-bezier(0.16, 1, 0.3, 1),
       border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
       box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1),
       backdrop-filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -686,6 +687,12 @@
   }
 
   .header-pill--scrolled {
+    background: linear-gradient(
+      100deg,
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(4, 27, 19, 0.74) 56%,
+      rgba(9, 51, 35, 0.7) 100%
+    );
     border-color: rgba(255, 255, 255, 0.12);
     box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.35),

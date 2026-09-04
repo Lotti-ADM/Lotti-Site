@@ -313,7 +313,10 @@ test("usa grafite no cabeçalho e verde Lotti no centro das lâminas", async () 
     /\.header-pill\s*\{[\s\S]*?background:\s*linear-gradient\([\s\S]*?#000000[\s\S]*?#093323/,
   );
   assert.doesNotMatch(styles, /\.header-pill--top\s*\{[^}]*background:/s);
-  assert.doesNotMatch(styles, /\.header-pill--scrolled\s*\{[^}]*background:/s);
+  assert.match(
+    styles,
+    /\.header-pill--scrolled\s*\{[^}]*background:\s*linear-gradient\([^}]*rgba\(/s,
+  );
   assert.match(
     styles,
     /\.blade\s*\{[\s\S]*?background:\s*linear-gradient\([\s\S]*?#000000 1\.44231%[\s\S]*?#093323 50\.4808%[\s\S]*?#000000 100%[\s\S]*?\);/,
@@ -388,6 +391,8 @@ test("apresenta funcionalidades e produto na primeira dobra", async () => {
   );
   assert.match(heroComponent, /hero-feature-viewport[^\"]*bg-paper/);
   assert.doesNotMatch(heroComponent, /hero-feature-viewport[^\"]*bg-\[linear-gradient/);
+  assert.doesNotMatch(heroComponent, /hero-feature-viewport[^\"]*shadow-/);
+  assert.doesNotMatch(heroComponent, /hero-feature-viewport[^\"]*border-y/);
   assert.match(
     heroComponent,
     /pt-\[calc\(var\(--header-h\)\+clamp\(2rem,4vw,3rem\)\)\]/,

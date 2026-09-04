@@ -68,7 +68,7 @@ export function Hero() {
         </div>
 
         <div
-          className="hero-feature-viewport relative left-1/2 mt-12 w-screen -translate-x-1/2 overflow-hidden border-y border-line/70 bg-paper py-5 shadow-[0_12px_40px_rgba(0,0,0,0.04)]"
+          className="hero-feature-viewport relative left-1/2 mt-12 w-screen -translate-x-1/2 overflow-hidden bg-paper py-5"
           aria-label="Principais funcionalidades"
           data-hero-capabilities=""
         >

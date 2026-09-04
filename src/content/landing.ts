@@ -31,7 +31,7 @@ export const nav = [
 
 export const hero = {
   eyebrow: "Gestão imobiliária inteligente",
-  headline: ["Sua operação imobiliária,", "organizada do primeiro lead ao repasse."],
+  headline: ["Pare de operar.", "Comece a gerir."],
   lead: "Centralize imóveis, clientes, negociações, contratos e aluguéis. A Lotti conecta CRM, IA e gestão financeira para você reduzir tarefas manuais e crescer com controle.",
   primaryCta: "Começar teste grátis",
   secondaryCta: "Conhecer a Lotti",

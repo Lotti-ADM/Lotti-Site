@@ -53,7 +53,7 @@ test("usa verde Lotti no lado escuro do degradê do título do hero", async () =
   assert.match(body, /text-gradient-forest/);
   assert.match(
     body,
-    /class="block text-ink" aria-label="Sua operação imobiliária,"/,
+    /class="block text-ink" aria-label="Pare de operar\."/,
   );
   assert.match(
     styles,
@@ -295,8 +295,6 @@ test("apresenta uma proposta de valor direta na página principal", async () => 
 
   assert.equal(response.status, 200);
   for (const content of [
-    "Sua operação imobiliária,",
-    "organizada do primeiro lead ao repasse.",
     "Da captação ao repasse, tudo conectado.",
     "Mais que um CRM. Uma operação que trabalha integrada.",
     "Um plano para cada fase da sua operação.",
@@ -313,10 +311,11 @@ test("usa grafite no cabeçalho e verde Lotti no centro das lâminas", async () 
 
   assert.match(
     styles,
-    /\.header-pill--top\s*\{[^}]*rgba\(8, 10, 9, 0\.94\)/s,
+    /\.header-pill--top\s*\{[\s\S]*?rgba\(3, 4, 4, 0\.97\)[\s\S]*?rgba\(9, 51, 35, 0\.94\)/,
   );
   assert.match(
     styles,
-    /\.blade\s*\{[\s\S]*?background:\s*linear-gradient\([\s\S]*?var\(--color-ink\)[\s\S]*?var\(--color-forest\)[\s\S]*?var\(--color-ink\)[\s\S]*?\);/,
+    /\.blade\s*\{[\s\S]*?background:\s*linear-gradient\([\s\S]*?rgba\(0, 0, 0, 0\.24\)[\s\S]*?rgba\(9, 51, 35, 0\.5\)[\s\S]*?rgba\(0, 0, 0, 0\.24\)[\s\S]*?\);/,
   );
+  assert.doesNotMatch(styles, /\.blade\s*\{[^}]*opacity:/s);
 });

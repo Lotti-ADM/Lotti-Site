@@ -35,33 +35,37 @@ export function Hero() {
   return (
     <section id="topo" className="relative overflow-hidden pt-[calc(var(--header-h)+clamp(2rem,4vw,3rem))] pb-[clamp(4rem,8vw,7rem)] hero-mesh">
       <div className="shell relative z-10 flex flex-col items-center text-center">
-        <p className="eyebrow">{hero.eyebrow}</p>
+        {/* Primeira dobra: so a mensagem e os CTAs. A faixa e o produto
+            ficam abaixo do fold, como na referencia. */}
+        <div className="flex min-h-[calc(100svh-var(--header-h)-clamp(2rem,4vw,3rem))] w-full flex-col items-center justify-center">
+          <p className="eyebrow">{hero.eyebrow}</p>
 
-        <h1 className="mt-7 max-w-[22ch] text-display text-balance lg:max-w-none">
-          <span aria-label={hero.headline[0]} className="block text-gradient-forest lg:whitespace-nowrap">{hero.headline[0]}</span>
-          <span aria-label={hero.headline[1]} className="block text-gradient-forest pb-2 lg:whitespace-nowrap">{hero.headline[1]}</span>
-        </h1>
+          <h1 className="mt-7 max-w-[22ch] text-display text-balance lg:max-w-none">
+            <span aria-label={hero.headline[0]} className="block text-gradient-forest lg:whitespace-nowrap">{hero.headline[0]}</span>
+            <span aria-label={hero.headline[1]} className="block text-gradient-forest pb-2 lg:whitespace-nowrap">{hero.headline[1]}</span>
+          </h1>
 
-        <p className="mt-6 max-w-[64ch] text-lead text-muted">{hero.lead}</p>
+          <p className="mt-6 max-w-[64ch] text-lead text-muted">{hero.lead}</p>
 
-        <div className="mt-8 flex w-full flex-col items-center" data-hero-actions="">
-          <div className="flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center">
-            <Button href="https://olivercrm.vercel.app/" arrow className="btn-shimmer w-full shadow-lg sm:w-auto" target="_blank" rel="noopener noreferrer">
-              {hero.primaryCta}
-            </Button>
-            <Button
-              href="#recursos"
-              variant="secondary"
-              className="glass w-full transition-transform hover:scale-105 sm:w-auto"
-            >
-              {hero.secondaryCta}
-            </Button>
+          <div className="mt-8 flex w-full flex-col items-center" data-hero-actions="">
+            <div className="flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center">
+              <Button href="https://olivercrm.vercel.app/" arrow className="btn-shimmer w-full shadow-lg sm:w-auto" target="_blank" rel="noopener noreferrer">
+                {hero.primaryCta}
+              </Button>
+              <Button
+                href="#recursos"
+                variant="secondary"
+                className="glass w-full transition-transform hover:scale-105 sm:w-auto"
+              >
+                {hero.secondaryCta}
+              </Button>
+            </div>
+            <p className="mt-5 text-small text-muted">{hero.footnote}</p>
           </div>
-          <p className="mt-5 text-small text-muted">{hero.footnote}</p>
         </div>
 
         <div
-          className="hero-feature-viewport mt-12 w-[100dvw] shrink-0 overflow-hidden bg-transparent py-5"
+          className="hero-feature-viewport w-[100dvw] shrink-0 overflow-hidden bg-transparent py-5"
           aria-label="Principais funcionalidades"
           data-hero-capabilities=""
         >

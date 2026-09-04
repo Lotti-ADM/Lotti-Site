@@ -233,7 +233,7 @@
   }
 
   .hero-feature-track {
-    animation: marquee 76s linear infinite;
+    animation: marquee 130s linear infinite;
     will-change: transform;
     backface-visibility: hidden;
   }

@@ -322,13 +322,16 @@ test("usa grafite no cabeçalho e verde Lotti no centro das lâminas", async () 
   assert.doesNotMatch(styles, /\.blade\s*\{[^}]*opacity:/s);
 });
 
-test("alinha as três lâminas no fim do hero e escalona o início como no logo", async () => {
+test("encerra as lâminas antes do fim do hero com espaçamento regular", async () => {
   const hero = await readFile(
     new URL("../src/components/site/Hero.tsx", import.meta.url),
     "utf8",
   );
 
-  assert.match(hero, /top: "-26%", height: "126%"/);
-  assert.match(hero, /top: "-6%", height: "106%"/);
-  assert.match(hero, /top: "8%", height: "92%"/);
+  assert.match(hero, /left: "62%"[^\n]*top: "-26%", height: "96%"/);
+  assert.match(hero, /left: "70%"[^\n]*top: "-10%", height: "80%"/);
+  assert.match(
+    hero,
+    /left: "calc\(78% - 3rem\)"[^\n]*top: "6%", height: "80%"/,
+  );
 });

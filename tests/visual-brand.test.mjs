@@ -321,6 +321,18 @@ test("usa grafite no cabeçalho e verde Lotti no centro das lâminas", async () 
   assert.doesNotMatch(styles, /\.blade\s*\{[^}]*opacity:/s);
 });
 
+test("mantém o cabeçalho mais baixo e compacto", async () => {
+  const header = await readFile(
+    new URL("../src/components/site/Header.tsx", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(header, /justify-center pt-5/);
+  assert.match(header, /rounded-full px-6 py-2 transition-all/);
+  assert.doesNotMatch(header, /justify-center pt-3/);
+  assert.doesNotMatch(header, /rounded-full px-6 py-3 transition-all/);
+});
+
 test("encerra as lâminas antes do fim do hero com espaçamento regular", async () => {
   const hero = await readFile(
     new URL("../src/components/site/Hero.tsx", import.meta.url),

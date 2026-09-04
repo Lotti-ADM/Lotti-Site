@@ -41,10 +41,10 @@ export function Header() {
       style={{ height: "var(--header-h)" }}
     >
       {/* Floating dark pill navbar */}
-      <div className="shell flex h-full items-center justify-center pt-3">
+      <div className="shell flex h-full items-center justify-center pt-5">
         <div
           className={[
-            "header-pill flex w-full items-center justify-between gap-6 rounded-full px-6 py-3 transition-all duration-500",
+            "header-pill flex w-full items-center justify-between gap-6 rounded-full px-6 py-2 transition-all duration-500",
             scrolled
               ? "header-pill--scrolled"
               : "header-pill--top",

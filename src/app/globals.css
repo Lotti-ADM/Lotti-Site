@@ -210,10 +210,9 @@
     height: 140%;
     background: linear-gradient(
       to bottom,
-      rgba(0, 0, 0, 0.24) 0%,
-      rgba(9, 51, 35, 0.5) 43%,
-      rgba(9, 51, 35, 0.5) 57%,
-      rgba(0, 0, 0, 0.24) 100%
+      #000000 1.44231%,
+      #093323 50.4808%,
+      #000000 100%
     );
     transform: skewX(var(--blade-skew));
   }
@@ -629,8 +628,13 @@
   /* ---- Floating Dark Pill Header ----------------------------------------- */
   .header-pill {
     border: 1px solid transparent;
+    background: linear-gradient(
+      100deg,
+      #000000 0%,
+      #041b13 56%,
+      #093323 100%
+    );
     transition:
-      background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
       border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
       box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1),
       backdrop-filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -639,12 +643,6 @@
   }
 
   .header-pill--top {
-    background: linear-gradient(
-      100deg,
-      rgba(3, 4, 4, 0.97) 0%,
-      rgba(7, 29, 21, 0.95) 56%,
-      rgba(9, 51, 35, 0.94) 100%
-    );
     border-color: rgba(255, 255, 255, 0.08);
     box-shadow:
       0 4px 24px rgba(0, 0, 0, 0.25),
@@ -654,12 +652,6 @@
   }
 
   .header-pill--scrolled {
-    background: linear-gradient(
-      100deg,
-      rgba(0, 0, 0, 0.99) 0%,
-      rgba(5, 25, 18, 0.98) 56%,
-      rgba(9, 51, 35, 0.97) 100%
-    );
     border-color: rgba(255, 255, 255, 0.12);
     box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.35),

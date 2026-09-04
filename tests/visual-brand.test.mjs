@@ -311,11 +311,13 @@ test("usa grafite no cabeçalho e verde Lotti no centro das lâminas", async () 
 
   assert.match(
     styles,
-    /\.header-pill--top\s*\{[\s\S]*?rgba\(3, 4, 4, 0\.97\)[\s\S]*?rgba\(9, 51, 35, 0\.94\)/,
+    /\.header-pill\s*\{[\s\S]*?background:\s*linear-gradient\([\s\S]*?#000000[\s\S]*?#093323/,
   );
+  assert.doesNotMatch(styles, /\.header-pill--top\s*\{[^}]*background:/s);
+  assert.doesNotMatch(styles, /\.header-pill--scrolled\s*\{[^}]*background:/s);
   assert.match(
     styles,
-    /\.blade\s*\{[\s\S]*?background:\s*linear-gradient\([\s\S]*?rgba\(0, 0, 0, 0\.24\)[\s\S]*?rgba\(9, 51, 35, 0\.5\)[\s\S]*?rgba\(0, 0, 0, 0\.24\)[\s\S]*?\);/,
+    /\.blade\s*\{[\s\S]*?background:\s*linear-gradient\([\s\S]*?#000000 1\.44231%[\s\S]*?#093323 50\.4808%[\s\S]*?#000000 100%[\s\S]*?\);/,
   );
   assert.doesNotMatch(styles, /\.blade\s*\{[^}]*opacity:/s);
 });

@@ -398,10 +398,8 @@ test("apresenta funcionalidades e produto na primeira dobra", async () => {
     heroComponent,
     /pt-\[calc\(var\(--header-h\)\+clamp\(2rem,4vw,3rem\)\)\]/,
   );
-  assert.match(
-    styles,
-    /\.hero-feature-viewport\s*\{[^}]*max-width:\s*100vw;[^}]*mask-image:[^}]*1\.5rem/s,
-  );
+  assert.match(styles, /\.hero-feature-viewport\s*\{[^}]*max-width:\s*100vw;/s);
+  assert.doesNotMatch(styles, /\.hero-feature-viewport\s*\{[^}]*mask-image/s);
   assert.match(
     heroComponent,
     /className="block text-gradient-forest[^\"]*" text=\{hero\.headline\[0\]\}/,

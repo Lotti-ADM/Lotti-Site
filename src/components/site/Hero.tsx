@@ -62,11 +62,11 @@ export function Hero() {
  */
 function BladeField() {
   // Larguras e folgas na proporção do símbolo: lâminas grossas, respiro fino,
-  // mesmo comprimento, com início e fim escalonados como no símbolo.
+  // inícios escalonados como no símbolo, com a base das três alinhada ao hero.
   const blades = [
-    { left: "64%", width: "5rem", top: "-26%", height: "96%" },
-    { left: "71%", width: "5rem", top: "-10%", height: "96%" },
-    { left: "78%", width: "5rem", top: "6%", height: "96%" },
+    { left: "64%", width: "5rem", top: "-26%", height: "126%" },
+    { left: "71%", width: "5rem", top: "-6%", height: "106%" },
+    { left: "78%", width: "5rem", top: "8%", height: "92%" },
   ];
 
   return (

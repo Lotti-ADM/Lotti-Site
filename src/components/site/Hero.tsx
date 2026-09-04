@@ -51,19 +51,7 @@ export function Hero() {
           className="mt-6 max-w-[64ch] text-lead text-muted"
         />
 
-        <div
-          className="hero-feature-viewport relative left-1/2 mt-11 w-screen -translate-x-1/2 overflow-hidden border-y border-white/10 bg-[linear-gradient(100deg,#000000_0%,#041b13_55%,#093323_100%)] py-5"
-          aria-label="Principais funcionalidades"
-          data-hero-capabilities=""
-        >
-          <div className="hero-feature-track flex w-max gap-8">
-            <HeroFeatureCopy copy="primary" />
-            <HeroFeatureCopy copy="duplicate" ariaHidden />
-          </div>
-        </div>
-
-        <div className="mt-11 flex w-full flex-col items-center" data-hero-actions="">
-          <span className="mb-7 h-px w-24 bg-gradient-to-r from-transparent via-forest/40 to-transparent" aria-hidden="true" />
+        <div className="mt-8 flex w-full flex-col items-center" data-hero-actions="">
           <div className="flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center">
             <Button href="https://olivercrm.vercel.app/" arrow className="btn-shimmer w-full shadow-lg sm:w-auto" target="_blank" rel="noopener noreferrer">
               {hero.primaryCta}
@@ -77,6 +65,17 @@ export function Hero() {
             </Button>
           </div>
           <p className="mt-5 text-small text-muted">{hero.footnote}</p>
+        </div>
+
+        <div
+          className="hero-feature-viewport relative left-1/2 mt-12 w-screen -translate-x-1/2 overflow-hidden border-y border-line/70 bg-paper py-5 shadow-[0_12px_40px_rgba(0,0,0,0.04)]"
+          aria-label="Principais funcionalidades"
+          data-hero-capabilities=""
+        >
+          <div className="hero-feature-track flex w-max gap-8">
+            <HeroFeatureCopy copy="primary" />
+            <HeroFeatureCopy copy="duplicate" ariaHidden />
+          </div>
         </div>
 
         <div className="relative mt-12 w-full pt-8 sm:mt-16 sm:pt-10 perspective-[2000px]">
@@ -113,9 +112,9 @@ function HeroFeatureCopy({
         return (
           <li
             key={capability}
-            className="flex shrink-0 items-center gap-3 text-[0.78rem] font-semibold uppercase tracking-[0.14em] text-white sm:text-small"
+            className="flex shrink-0 items-center gap-3 text-[0.78rem] font-semibold uppercase tracking-[0.14em] text-ink sm:text-small"
           >
-            <Icon size={19} strokeWidth={1.7} className="text-white/65" aria-hidden="true" />
+            <Icon size={19} strokeWidth={1.7} className="text-forest/70" aria-hidden="true" />
             {capability}
           </li>
         );

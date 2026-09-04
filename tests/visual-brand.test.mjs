@@ -367,10 +367,12 @@ test("apresenta funcionalidades e produto na primeira dobra", async () => {
   assert.match(heroComponent, /HeroFeatureCopy copy="primary"/);
   assert.match(heroComponent, /HeroFeatureCopy copy="duplicate"/);
   assert.ok(
-    heroComponent.indexOf("data-hero-capabilities") <
-      heroComponent.indexOf("data-hero-actions"),
-    "funcionalidades devem formar um bloco separado antes das ações",
+    heroComponent.indexOf("data-hero-actions") <
+      heroComponent.indexOf("data-hero-capabilities"),
+    "as ações devem permanecer com a mensagem principal, antes da faixa de funcionalidades",
   );
+  assert.match(heroComponent, /hero-feature-viewport[^\"]*bg-paper/);
+  assert.doesNotMatch(heroComponent, /hero-feature-viewport[^\"]*bg-\[linear-gradient/);
   assert.match(
     heroComponent,
     /className="block text-gradient-forest[^\"]*" text=\{hero\.headline\[0\]\}/,

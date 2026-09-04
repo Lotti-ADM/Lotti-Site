@@ -208,18 +208,8 @@
     position: absolute;
     top: -20%;
     height: 140%;
-    background: linear-gradient(
-      to bottom,
-      #000000 1.44231%,
-      #093323 50.4808%,
-      #000000 100%
-    );
+    background-color: var(--color-surface);
     transform: skewX(var(--blade-skew));
-    /* Sem o mask a lâmina termina num corte reto e vira uma "parede":
-       o degradê zera a opacidade em 70% da altura, antes do corte da secao
-       (que cai entre 77% e 90% de cada lamina). */
-    -webkit-mask-image: linear-gradient(to bottom, #000 28%, transparent 70%);
-    mask-image: linear-gradient(to bottom, #000 28%, transparent 70%);
   }
 
   .hero-product-glow {

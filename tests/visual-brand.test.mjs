@@ -302,7 +302,7 @@ test("apresenta uma proposta de valor direta na página principal", async () => 
   }
 });
 
-test("usa grafite no cabeçalho e verde Lotti no centro das lâminas", async () => {
+test("usa grafite no cabeçalho e cinza de superfície nas lâminas", async () => {
   const styles = await readFile(
     new URL("../src/app/globals.css", import.meta.url),
     "utf8",
@@ -317,9 +317,10 @@ test("usa grafite no cabeçalho e verde Lotti no centro das lâminas", async () 
     styles,
     /\.header-pill--scrolled\s*\{[^}]*rgba\(0, 0, 0, 0\.995\)[^}]*backdrop-filter:\s*blur\(24px\)/s,
   );
+  // As lâminas voltaram ao cinza secundário do site, atrás do texto do hero.
   assert.match(
     styles,
-    /\.blade\s*\{[\s\S]*?background:\s*linear-gradient\([\s\S]*?#000000 1\.44231%[\s\S]*?#093323 50\.4808%[\s\S]*?#000000 100%[\s\S]*?\);/,
+    /\.blade\s*\{[^}]*background-color:\s*var\(--color-surface\);/s,
   );
   assert.doesNotMatch(styles, /\.blade\s*\{[^}]*opacity:/s);
 });
@@ -336,17 +337,23 @@ test("mantém o cabeçalho mais baixo e compacto", async () => {
   assert.doesNotMatch(header, /rounded-full px-6 py-3 transition-all/);
 });
 
-test("estende as lâminas além do quadro do produto com espaçamento regular", async () => {
+test("mantém as lâminas à direita do hero, como no site original", async () => {
   const hero = await readFile(
     new URL("../src/components/site/Hero.tsx", import.meta.url),
     "utf8",
   );
 
-  assert.match(hero, /left: "62%"[^\n]*top: "-26%", height: "126%"/);
-  assert.match(hero, /left: "70%"[^\n]*top: "-10%", height: "110%"/);
+  assert.match(hero, /left: "64%"[^\n]*top: "-26%", height: "96%"/);
+  assert.match(hero, /left: "71%"[^\n]*top: "-10%", height: "80%"/);
   assert.match(
     hero,
-    /left: "78%"[^\n]*top: "-10%", height: "126%"/,
+    /left: "78%"[^\n]*top: "6%", height: "64%"/,
+  );
+  assert.match(hero, /className="blade-field"/);
+  // O campo de lâminas é filho direto da section, não do quadro do produto.
+  assert.ok(
+    hero.indexOf("<BladeField />") < hero.indexOf('className="shell'),
+    "as lâminas devem ficar atrás do hero inteiro",
   );
 });
 

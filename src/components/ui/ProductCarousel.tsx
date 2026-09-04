@@ -84,7 +84,7 @@ export function ProductCarousel({ className, sizes }: ProductCarouselProps) {
   return (
     <div
       className={[
-        "relative overflow-hidden rounded-[var(--radius-card)] border border-line bg-paper",
+        "relative overflow-hidden border border-line bg-paper",
         className,
       ]
         .filter(Boolean)

@@ -208,8 +208,17 @@
     position: absolute;
     top: -20%;
     height: 140%;
-    background-color: var(--color-surface);
+    background: linear-gradient(
+      to bottom,
+      #000000 1.44231%,
+      #093323 50.4808%,
+      #000000 100%
+    );
     transform: skewX(var(--blade-skew));
+    /* A ponta dissolve: sem isso a lamina escura termina num corte reto e
+       vira uma "parede" no fim do campo. */
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
   }
 
   .hero-product-glow {

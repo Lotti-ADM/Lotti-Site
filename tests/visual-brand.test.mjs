@@ -302,7 +302,7 @@ test("apresenta uma proposta de valor direta na página principal", async () => 
   }
 });
 
-test("usa grafite no cabeçalho e cinza de superfície nas lâminas", async () => {
+test("usa grafite no cabeçalho e verde Lotti no centro das lâminas", async () => {
   const styles = await readFile(
     new URL("../src/app/globals.css", import.meta.url),
     "utf8",
@@ -317,11 +317,12 @@ test("usa grafite no cabeçalho e cinza de superfície nas lâminas", async () =
     styles,
     /\.header-pill--scrolled\s*\{[^}]*rgba\(0, 0, 0, 0\.995\)[^}]*backdrop-filter:\s*blur\(24px\)/s,
   );
-  // As lâminas voltaram ao cinza secundário do site, atrás do texto do hero.
   assert.match(
     styles,
-    /\.blade\s*\{[^}]*background-color:\s*var\(--color-surface\);/s,
+    /\.blade\s*\{[\s\S]*?background:\s*linear-gradient\([\s\S]*?#000000 1\.44231%[\s\S]*?#093323 50\.4808%[\s\S]*?#000000 100%[\s\S]*?\);/,
   );
+  // A ponta da lâmina dissolve em vez de terminar num corte reto.
+  assert.match(styles, /\.blade\s*\{[\s\S]*?mask-image:\s*linear-gradient\(to bottom/);
   assert.doesNotMatch(styles, /\.blade\s*\{[^}]*opacity:/s);
 });
 

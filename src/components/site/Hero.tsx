@@ -35,9 +35,9 @@ export function Hero() {
   return (
     <section id="topo" className="relative overflow-hidden pt-[calc(var(--header-h)+clamp(2rem,4vw,3rem))] pb-[clamp(4rem,8vw,7rem)] hero-mesh">
       <div className="shell relative z-10 flex flex-col items-center text-center">
-        {/* Primeira dobra: so a mensagem e os CTAs. A faixa e o produto
-            ficam abaixo do fold, como na referencia. */}
-        <div className="flex min-h-[calc(100svh-var(--header-h)-clamp(2rem,4vw,3rem))] w-full flex-col items-center justify-start pt-[clamp(1rem,4vh,3rem)]">
+        {/* Sem espaco morto na dobra: o que espia no rodape da tela e o
+            print do app; a faixa animada vem depois dele. */}
+        <div className="flex w-full flex-col items-center">
           <p className="eyebrow">{hero.eyebrow}</p>
 
           <h1 className="mt-7 max-w-[22ch] text-display text-balance lg:max-w-none">
@@ -64,8 +64,19 @@ export function Hero() {
           </div>
         </div>
 
+        <div className="relative mt-12 w-full pt-8 sm:mt-16 sm:pt-10 perspective-[2000px]">
+          <BladeField />
+          <div className="hero-product-glow" aria-hidden="true" />
+          <div className="relative z-10 transform-gpu transition-all duration-700 hover:rotate-x-[1deg] hover:rotate-y-[-1deg] hover:scale-[1.005]">
+            <ProductCarousel
+              sizes="(max-width: 1216px) 100vw, 1216px"
+              className="shadow-[0_28px_80px_rgba(9,51,35,0.18)]"
+            />
+          </div>
+        </div>
+
         <div
-          className="hero-feature-viewport w-[100dvw] shrink-0 overflow-hidden bg-transparent py-5"
+          className="hero-feature-viewport mt-16 w-[100dvw] shrink-0 overflow-hidden bg-transparent py-5"
           aria-label="Principais funcionalidades"
           data-hero-capabilities=""
         >
@@ -81,16 +92,6 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="relative mt-12 w-full pt-8 sm:mt-16 sm:pt-10 perspective-[2000px]">
-          <BladeField />
-          <div className="hero-product-glow" aria-hidden="true" />
-          <div className="relative z-10 transform-gpu transition-all duration-700 hover:rotate-x-[1deg] hover:rotate-y-[-1deg] hover:scale-[1.005]">
-            <ProductCarousel
-              sizes="(max-width: 1216px) 100vw, 1216px"
-              className="shadow-[0_28px_80px_rgba(9,51,35,0.18)]"
-            />
-          </div>
-        </div>
       </div>
     </section>
   );

@@ -347,3 +347,15 @@ test("mantém a descrição do hero fora das lâminas", async () => {
     /className="mt-7 max-w-\[32ch\] text-lead text-muted lg:max-w-\[44ch\]"/,
   );
 });
+
+test("mantém as duas linhas do título alinhadas e próximas na vertical", async () => {
+  const hero = await readFile(
+    new URL("../src/components/site/Hero.tsx", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(
+    hero,
+    /<h1 className="mt-7 max-w-\[15ch\] text-display leading-\[0\.92\] text-balance">/,
+  );
+});

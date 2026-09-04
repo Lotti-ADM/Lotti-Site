@@ -58,15 +58,15 @@ export function Hero() {
 
 /**
  * Três lâminas ascendentes no ângulo do símbolo. Puramente decorativas:
- * ficam atrás do conteúdo, em cinza secundário, e nunca tocam o texto.
+ * ficam atrás do conteúdo e repetem o degradê preto-verde-preto da marca.
  */
 function BladeField() {
   // Larguras e folgas na proporção do símbolo: lâminas grossas, respiro fino,
-  // alturas decrescendo para a direita.
+  // inícios escalonados como no símbolo, com a base das três alinhada ao hero.
   const blades = [
-    { left: "64%", width: "5rem", top: "-26%", height: "96%" },
-    { left: "71%", width: "5rem", top: "-10%", height: "80%" },
-    { left: "78%", width: "5rem", top: "6%", height: "64%" },
+    { left: "64%", width: "5rem", top: "-26%", height: "126%" },
+    { left: "71%", width: "5rem", top: "-6%", height: "106%" },
+    { left: "78%", width: "5rem", top: "8%", height: "92%" },
   ];
 
   return (

@@ -295,9 +295,9 @@ test("apresenta uma proposta de valor direta na página principal", async () => 
 
   assert.equal(response.status, 200);
   for (const content of [
-    "Da captação ao repasse, tudo conectado.",
-    "Mais que um CRM. Uma operação que trabalha integrada.",
-    "Um plano para cada fase da sua operação.",
+    "Tudo o que você precisa para captar, negociar e administrar imóveis.",
+    "Não é um CRM genérico adaptado à sua rotina.",
+    "Comece com o que precisa hoje. Evolua quando sua operação pedir.",
   ]) {
     assert.ok(landing.includes(content), `faltando copy estratégica: ${content}`);
   }

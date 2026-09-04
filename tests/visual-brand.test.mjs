@@ -356,6 +356,6 @@ test("mantém as duas linhas do título alinhadas e próximas na vertical", asyn
 
   assert.match(
     hero,
-    /<h1 className="mt-7 max-w-\[15ch\] text-display leading-\[0\.92\] text-balance">/,
+    /<h1 className="mt-7 max-w-\[15ch\] text-display leading-\[0\.98\] text-balance">/,
   );
 });

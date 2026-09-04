@@ -16,7 +16,7 @@ export function Hero() {
       <div className="shell relative z-10">
         <p className="eyebrow">{hero.eyebrow}</p>
 
-        <h1 className="mt-7 max-w-[15ch] text-display leading-[0.92] text-balance">
+        <h1 className="mt-7 max-w-[15ch] text-display leading-[0.98] text-balance">
           <TextReveal as="span" className="block text-ink" text={hero.headline[0]} delay={100} />
           <TextReveal as="span" className="block text-gradient-forest pb-2" text={hero.headline[1]} delay={300} />
         </h1>

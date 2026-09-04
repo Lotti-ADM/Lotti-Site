@@ -89,7 +89,7 @@ export function ProductCarousel({ className, sizes }: ProductCarouselProps) {
       ]
         .filter(Boolean)
         .join(" ")}
-      style={{ aspectRatio: "1919 / 867" }}
+      style={{ aspectRatio: "1 / 1" }}
       data-product-carousel=""
       data-carousel-interval={CAROUSEL_INTERVAL_MS}
     >
@@ -99,7 +99,7 @@ export function ProductCarousel({ className, sizes }: ProductCarouselProps) {
           alt=""
           fill
           sizes={sizes}
-          className="object-contain object-top transition-opacity duration-500"
+          className="object-cover object-left-top transition-opacity duration-500"
         />
       ) : null}
       <Image
@@ -111,7 +111,7 @@ export function ProductCarousel({ className, sizes }: ProductCarouselProps) {
         sizes={sizes}
         onLoad={() => setCurrentLoaded(true)}
         className={[
-          "object-contain object-top transition-opacity duration-500",
+          "object-cover object-left-top transition-opacity duration-500",
           currentLoaded ? "opacity-100" : "opacity-0",
         ].join(" ")}
       />

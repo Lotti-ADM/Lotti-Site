@@ -40,7 +40,7 @@ test("não exibe vídeo no hero", async () => {
 
   assert.equal(response.status, 200);
   assert.doesNotMatch(body, /<video[^>]+src="\/product\/hero-demo\.mp4"/);
-  assert.match(body, /aspect-ratio:1919 \/ 867/);
+  assert.match(body, /aspect-ratio:1 \/ 1/);
 });
 
 test("usa verde Lotti no lado escuro do degradê do título do hero", async () => {
@@ -75,7 +75,7 @@ test("exibe no hero as telas do produto em carrossel a cada 3,5 segundos", async
   assert.match(carouselSource, /CAROUSEL_INTERVAL_MS = 3_500/);
   assert.match(carouselSource, /duration-500/);
   assert.match(carouselSource, /opacity-0/);
-  assert.match(carouselSource, /object-contain object-top/);
+  assert.match(carouselSource, /object-cover object-left-top/);
   assert.doesNotMatch(
     body.match(/data-product-carousel=""[^>]*class="[^"]*"/)?.[0] ?? "",
     /border-beam-wrapper/,
@@ -338,37 +338,22 @@ test("mantém o cabeçalho mais baixo e compacto", async () => {
   assert.doesNotMatch(header, /rounded-full px-6 py-3 transition-all/);
 });
 
-test("mantém as lâminas à direita do hero, como no site original", async () => {
+test("não usa mais o campo de lâminas no hero", async () => {
   const hero = await readFile(
     new URL("../src/components/site/Hero.tsx", import.meta.url),
     "utf8",
   );
 
-  assert.match(hero, /left: "64%"[^\n]*top: "-26%", height: "96%"/);
-  assert.match(hero, /left: "71%"[^\n]*top: "-10%", height: "80%"/);
-  assert.match(
-    hero,
-    /left: "78%"[^\n]*top: "6%", height: "64%"/,
-  );
-  assert.match(hero, /className="blade-field"/);
-  // O campo de lâminas é filho direto da section, não do quadro do produto.
-  assert.ok(
-    hero.indexOf("<BladeField />") < hero.indexOf('className="shell'),
-    "as lâminas devem ficar atrás do hero inteiro",
-  );
+  assert.doesNotMatch(hero, /BladeField|blade-field/);
 });
 
-test("mantém texto e lâminas em camadas separadas no hero", async () => {
+test("mantém o lead do hero na largura de leitura", async () => {
   const hero = await readFile(
     new URL("../src/components/site/Hero.tsx", import.meta.url),
     "utf8",
   );
 
   assert.match(hero, /className="mt-6 max-w-\[64ch\] text-lead text-muted"/);
-  assert.ok(
-    hero.indexOf("text={hero.lead}") < hero.indexOf("<BladeField />"),
-    "as lâminas devem começar somente atrás da área do produto",
-  );
 });
 
 test("apresenta funcionalidades e produto na primeira dobra", async () => {

@@ -9,8 +9,6 @@ import { hero } from "@/content/landing";
 export function Hero() {
   return (
     <section id="topo" className="relative overflow-hidden pt-[calc(var(--header-h)+clamp(2rem,4vw,3rem))] pb-[clamp(4rem,8vw,7rem)] hero-mesh">
-      <BladeField />
-
       <div className="shell relative z-10 flex flex-col items-center text-center">
         {/* Sem espaco morto na dobra: o que espia no rodape da tela e o
             print do app. */}
@@ -41,14 +39,15 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Quadro do produto na proporcao da referencia: no video o painel
-            ocupa quase toda a largura da janela, entao ele estoura o shell
-            em vez de respeitar o padding dele. */}
-        <div className="relative mt-12 w-[min(96vw,1600px)] max-w-none pt-8 sm:mt-16 sm:pt-10 perspective-[2000px]">
+        {/* Quadro quadrado: como o print e 2,21:1, o quadrado so existe
+            cortando as laterais (object-cover). A largura fica limitada a
+            900px porque em 96vw o lado do quadrado viraria a altura da
+            pagina inteira. */}
+        <div className="relative mt-12 w-[min(96vw,900px)] max-w-none pt-8 sm:mt-16 sm:pt-10 perspective-[2000px]">
           <div className="hero-product-glow" aria-hidden="true" />
           <div className="relative z-10 transform-gpu transition-all duration-700 hover:rotate-x-[1deg] hover:rotate-y-[-1deg] hover:scale-[1.005]">
             <ProductCarousel
-              sizes="(max-width: 1600px) 96vw, 1600px"
+              sizes="(max-width: 900px) 96vw, 900px"
               className="shadow-[0_28px_80px_rgba(9,51,35,0.18)]"
             />
           </div>
@@ -56,27 +55,5 @@ export function Hero() {
 
       </div>
     </section>
-  );
-}
-
-/**
- * Três lâminas ascendentes no ângulo do símbolo. Puramente decorativas:
- * ficam atrás do conteúdo, em cinza secundário, e nunca tocam o texto.
- */
-function BladeField() {
-  // Larguras e folgas na proporção do símbolo: lâminas grossas, respiro fino,
-  // espaçamento regular; as duas últimas têm o mesmo comprimento.
-  const blades = [
-    { left: "64%", width: "5rem", top: "-26%", height: "96%" },
-    { left: "71%", width: "5rem", top: "-10%", height: "80%" },
-    { left: "78%", width: "5rem", top: "6%", height: "64%" },
-  ];
-
-  return (
-    <div className="blade-field" aria-hidden="true">
-      {blades.map((blade) => (
-        <span key={blade.left} className="blade" style={blade} />
-      ))}
-    </div>
   );
 }

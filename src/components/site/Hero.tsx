@@ -37,7 +37,7 @@ export function Hero() {
       <div className="shell relative z-10 flex flex-col items-center text-center">
         {/* Primeira dobra: so a mensagem e os CTAs. A faixa e o produto
             ficam abaixo do fold, como na referencia. */}
-        <div className="flex min-h-[calc(100svh-var(--header-h)-clamp(2rem,4vw,3rem))] w-full flex-col items-center justify-center">
+        <div className="flex min-h-[calc(86svh-var(--header-h)-clamp(2rem,4vw,3rem))] w-full flex-col items-center justify-center">
           <p className="eyebrow">{hero.eyebrow}</p>
 
           <h1 className="mt-7 max-w-[22ch] text-display text-balance lg:max-w-none">

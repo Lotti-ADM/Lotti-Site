@@ -336,17 +336,17 @@ test("mantém o cabeçalho mais baixo e compacto", async () => {
   assert.doesNotMatch(header, /rounded-full px-6 py-3 transition-all/);
 });
 
-test("encerra as lâminas antes do fim do hero com espaçamento regular", async () => {
+test("estende as lâminas além do quadro do produto com espaçamento regular", async () => {
   const hero = await readFile(
     new URL("../src/components/site/Hero.tsx", import.meta.url),
     "utf8",
   );
 
-  assert.match(hero, /left: "62%"[^\n]*top: "-26%", height: "96%"/);
-  assert.match(hero, /left: "70%"[^\n]*top: "-10%", height: "80%"/);
+  assert.match(hero, /left: "62%"[^\n]*top: "-26%", height: "126%"/);
+  assert.match(hero, /left: "70%"[^\n]*top: "-10%", height: "110%"/);
   assert.match(
     hero,
-    /left: "78%"[^\n]*top: "-10%", height: "96%"/,
+    /left: "78%"[^\n]*top: "-10%", height: "126%"/,
   );
 });
 
@@ -378,30 +378,18 @@ test("apresenta funcionalidades e produto na primeira dobra", async () => {
   );
 
   assert.match(heroComponent, /items-center text-center/);
-  assert.match(heroComponent, /hero\.capabilities\.map/);
-  assert.match(heroComponent, /data-hero-capabilities/);
   assert.match(heroComponent, /data-hero-actions/);
-  assert.match(heroComponent, /hero-feature-track/);
-  assert.match(heroComponent, /HeroFeatureCopy copy="primary"/);
-  assert.match(heroComponent, /HeroFeatureCopy copy="duplicate"/);
-  assert.match(heroComponent, /HeroFeatureCopy copy="continuation"/);
-  assert.match(heroComponent, /HeroFeatureCopy copy="continuation-duplicate"/);
+  // A faixa animada de funcionalidades foi removida do hero.
+  assert.doesNotMatch(heroComponent, /hero-feature-track|hero-feature-viewport|HeroFeatureCopy/);
+  assert.doesNotMatch(styles, /hero-feature-track|hero-feature-viewport/);
   assert.ok(
-    heroComponent.indexOf("data-hero-actions") <
-      heroComponent.indexOf("data-hero-capabilities"),
-    "as ações devem permanecer com a mensagem principal, antes da faixa de funcionalidades",
+    heroComponent.indexOf("data-hero-actions") < heroComponent.indexOf("<ProductCarousel"),
+    "as ações devem permanecer com a mensagem principal, antes do produto",
   );
-  assert.match(heroComponent, /hero-feature-viewport[^\"]*bg-transparent/);
-  assert.doesNotMatch(heroComponent, /hero-feature-viewport[^\"]*bg-paper/);
-  assert.doesNotMatch(heroComponent, /hero-feature-viewport[^\"]*bg-\[linear-gradient/);
-  assert.doesNotMatch(heroComponent, /hero-feature-viewport[^\"]*shadow-/);
-  assert.doesNotMatch(heroComponent, /hero-feature-viewport[^\"]*border-y/);
   assert.match(
     heroComponent,
     /pt-\[calc\(var\(--header-h\)\+clamp\(2rem,4vw,3rem\)\)\]/,
   );
-  assert.match(styles, /\.hero-feature-viewport\s*\{[^}]*max-width:\s*100dvw;/s);
-  assert.doesNotMatch(styles, /\.hero-feature-viewport\s*\{[^}]*mask-image/s);
   assert.match(
     heroComponent,
     /aria-label=\{hero\.headline\[0\]\} className="block text-gradient-forest[^\"]*"/,

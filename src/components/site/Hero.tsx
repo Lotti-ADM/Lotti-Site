@@ -1,42 +1,17 @@
 import { Button } from "@/components/ui/Button";
 import { ProductCarousel } from "@/components/ui/ProductCarousel";
 import { hero } from "@/content/landing";
-import {
-  Banknote,
-  Building2,
-  FileSignature,
-  Gavel,
-  Images,
-  KanbanSquare,
-  KeyRound,
-  MessageSquareText,
-  QrCode,
-  Users,
-} from "lucide-react";
 
 /**
  * O hero é o LCP da página: nada aqui entra com fade ou observer.
  * O campo de lâminas ao fundo é a geometria do símbolo virando estrutura.
  */
-const capabilityIcons = [
-  Users,
-  Building2,
-  KanbanSquare,
-  QrCode,
-  FileSignature,
-  KeyRound,
-  Banknote,
-  MessageSquareText,
-  Gavel,
-  Images,
-] as const;
-
 export function Hero() {
   return (
     <section id="topo" className="relative overflow-hidden pt-[calc(var(--header-h)+clamp(2rem,4vw,3rem))] pb-[clamp(4rem,8vw,7rem)] hero-mesh">
       <div className="shell relative z-10 flex flex-col items-center text-center">
         {/* Sem espaco morto na dobra: o que espia no rodape da tela e o
-            print do app; a faixa animada vem depois dele. */}
+            print do app. */}
         <div className="flex w-full flex-col items-center">
           <p className="eyebrow">{hero.eyebrow}</p>
 
@@ -75,73 +50,27 @@ export function Hero() {
           </div>
         </div>
 
-        <div
-          className="hero-feature-viewport mt-16 w-[100dvw] shrink-0 overflow-hidden bg-transparent py-5"
-          aria-label="Principais funcionalidades"
-          data-hero-capabilities=""
-        >
-          <div className="hero-feature-track flex w-max gap-8">
-            <div className="flex shrink-0 gap-8">
-              <HeroFeatureCopy copy="primary" />
-              <HeroFeatureCopy copy="continuation" ariaHidden />
-            </div>
-            <div className="flex shrink-0 gap-8" aria-hidden="true">
-              <HeroFeatureCopy copy="duplicate" ariaHidden />
-              <HeroFeatureCopy copy="continuation-duplicate" ariaHidden />
-            </div>
-          </div>
-        </div>
-
       </div>
     </section>
   );
 }
 
-function HeroFeatureCopy({
-  copy,
-  ariaHidden = false,
-}: {
-  copy: "primary" | "continuation" | "duplicate" | "continuation-duplicate";
-  ariaHidden?: boolean;
-}) {
-  return (
-    <ul
-      className="flex shrink-0 items-center gap-8"
-      data-hero-feature-copy={copy}
-      aria-hidden={ariaHidden || undefined}
-    >
-      {hero.capabilities.map((capability, index) => {
-        const Icon = capabilityIcons[index];
-
-        return (
-          <li
-            key={capability}
-            className="flex shrink-0 items-center gap-3 text-[0.78rem] font-semibold uppercase tracking-[0.14em] text-ink sm:text-small"
-          >
-            <Icon size={19} strokeWidth={1.7} className="text-forest/70" aria-hidden="true" />
-            {capability}
-          </li>
-        );
-      })}
-    </ul>
-  );
-}
-
 /**
  * Três lâminas ascendentes no ângulo do símbolo. Puramente decorativas:
- * ficam atrás do conteúdo e repetem o degradê preto-verde-preto da marca.
+ * ficam atrás do conteúdo, repetem o degradê preto-verde-preto da marca e
+ * descem além do quadro do produto.
  */
 function BladeField() {
   // Larguras e folgas na proporção do símbolo: lâminas grossas, respiro fino,
   // espaçamento regular; as duas últimas têm o mesmo comprimento.
   const blades = [
-    { left: "62%", width: "5rem", top: "-26%", height: "96%" },
-    { left: "70%", width: "5rem", top: "-10%", height: "80%" },
-    { left: "78%", width: "5rem", top: "-10%", height: "96%" },
+    { left: "62%", width: "5rem", top: "-26%", height: "126%" },
+    { left: "70%", width: "5rem", top: "-10%", height: "110%" },
+    { left: "78%", width: "5rem", top: "-10%", height: "126%" },
   ];
 
   return (
-    <div className="blade-field" aria-hidden="true">
+    <div className="blade-field -bottom-[38%]" aria-hidden="true">
       {blades.map((blade) => (
         <span key={blade.left} className="blade" style={blade} />
       ))}

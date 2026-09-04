@@ -215,6 +215,11 @@
       #000000 100%
     );
     transform: skewX(var(--blade-skew));
+    /* Sem o mask a lâmina termina num corte reto e vira uma "parede":
+       o degradê zera a opacidade em 70% da altura, antes do corte da secao
+       (que cai entre 77% e 90% de cada lamina). */
+    -webkit-mask-image: linear-gradient(to bottom, #000 28%, transparent 70%);
+    mask-image: linear-gradient(to bottom, #000 28%, transparent 70%);
   }
 
   .hero-product-glow {
@@ -230,29 +235,6 @@
     );
     filter: blur(32px);
     pointer-events: none;
-  }
-
-  .hero-feature-track {
-    animation: marquee 130s linear infinite;
-    will-change: transform;
-    backface-visibility: hidden;
-  }
-
-  .hero-feature-viewport {
-    max-width: 100dvw;
-  }
-
-  .hero-feature-track:hover,
-  .hero-feature-track:focus-within {
-    animation-play-state: paused;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hero-feature-track {
-      animation: none;
-      transform: none;
-      will-change: auto;
-    }
   }
 
   /* Hachura fina na mesma inclinação, para faixas de transição */

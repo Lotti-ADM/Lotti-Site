@@ -384,6 +384,8 @@ test("apresenta funcionalidades e produto na primeira dobra", async () => {
   assert.match(heroComponent, /hero-feature-track/);
   assert.match(heroComponent, /HeroFeatureCopy copy="primary"/);
   assert.match(heroComponent, /HeroFeatureCopy copy="duplicate"/);
+  assert.match(heroComponent, /HeroFeatureCopy copy="continuation"/);
+  assert.match(heroComponent, /HeroFeatureCopy copy="continuation-duplicate"/);
   assert.ok(
     heroComponent.indexOf("data-hero-actions") <
       heroComponent.indexOf("data-hero-capabilities"),

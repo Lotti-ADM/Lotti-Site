@@ -73,8 +73,14 @@ export function Hero() {
           data-hero-capabilities=""
         >
           <div className="hero-feature-track flex w-max gap-8">
-            <HeroFeatureCopy copy="primary" />
-            <HeroFeatureCopy copy="duplicate" ariaHidden />
+            <div className="flex shrink-0 gap-8">
+              <HeroFeatureCopy copy="primary" />
+              <HeroFeatureCopy copy="continuation" ariaHidden />
+            </div>
+            <div className="flex shrink-0 gap-8" aria-hidden="true">
+              <HeroFeatureCopy copy="duplicate" ariaHidden />
+              <HeroFeatureCopy copy="continuation-duplicate" ariaHidden />
+            </div>
           </div>
         </div>
 
@@ -97,7 +103,7 @@ function HeroFeatureCopy({
   copy,
   ariaHidden = false,
 }: {
-  copy: "primary" | "duplicate";
+  copy: "primary" | "continuation" | "duplicate" | "continuation-duplicate";
   ariaHidden?: boolean;
 }) {
   return (

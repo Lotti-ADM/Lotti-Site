@@ -315,7 +315,7 @@ test("usa grafite no cabeçalho e verde Lotti no centro das lâminas", async () 
   assert.doesNotMatch(styles, /\.header-pill--top\s*\{[^}]*background:/s);
   assert.match(
     styles,
-    /\.header-pill--scrolled\s*\{[^}]*rgba\(0, 0, 0, 0\.9\)[^}]*backdrop-filter:\s*blur\(24px\)/s,
+    /\.header-pill--scrolled\s*\{[^}]*rgba\(0, 0, 0, 0\.995\)[^}]*backdrop-filter:\s*blur\(24px\)/s,
   );
   assert.match(
     styles,
@@ -398,7 +398,10 @@ test("apresenta funcionalidades e produto na primeira dobra", async () => {
     heroComponent,
     /pt-\[calc\(var\(--header-h\)\+clamp\(2rem,4vw,3rem\)\)\]/,
   );
-  assert.doesNotMatch(styles, /\.hero-feature-viewport\s*\{[^}]*mask-image/s);
+  assert.match(
+    styles,
+    /\.hero-feature-viewport\s*\{[^}]*max-width:\s*100vw;[^}]*mask-image:[^}]*1\.5rem/s,
+  );
   assert.match(
     heroComponent,
     /className="block text-gradient-forest[^\"]*" text=\{hero\.headline\[0\]\}/,

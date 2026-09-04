@@ -332,6 +332,6 @@ test("encerra as lâminas antes do fim do hero com espaçamento regular", async 
   assert.match(hero, /left: "70%"[^\n]*top: "-10%", height: "80%"/);
   assert.match(
     hero,
-    /left: "calc\(78% - 3rem\)"[^\n]*top: "6%", height: "80%"/,
+    /left: "78%"[^\n]*top: "-10%", height: "96%"/,
   );
 });

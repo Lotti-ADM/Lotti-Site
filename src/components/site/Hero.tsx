@@ -66,7 +66,7 @@ function BladeField() {
   const blades = [
     { left: "62%", width: "5rem", top: "-26%", height: "96%" },
     { left: "70%", width: "5rem", top: "-10%", height: "80%" },
-    { left: "calc(78% - 3rem)", width: "5rem", top: "6%", height: "80%" },
+    { left: "78%", width: "5rem", top: "-10%", height: "96%" },
   ];
 
   return (

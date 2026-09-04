@@ -39,14 +39,15 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Quadro do produto na largura da referencia: 64rem centralizado,
-            nao a largura cheia do shell. */}
-        <div className="relative mt-12 w-full max-w-5xl pt-8 sm:mt-16 sm:pt-10 perspective-[2000px]">
+        {/* Quadro do produto na proporcao da referencia: no video o painel
+            ocupa ~91% da largura da janela, entao ele estoura o shell em vez
+            de respeitar o padding dele. */}
+        <div className="relative mt-12 w-[min(91vw,1400px)] max-w-none pt-8 sm:mt-16 sm:pt-10 perspective-[2000px]">
           <BladeField />
           <div className="hero-product-glow" aria-hidden="true" />
           <div className="relative z-10 transform-gpu transition-all duration-700 hover:rotate-x-[1deg] hover:rotate-y-[-1deg] hover:scale-[1.005]">
             <ProductCarousel
-              sizes="(max-width: 64rem) 100vw, 1024px"
+              sizes="(max-width: 1400px) 91vw, 1400px"
               className="shadow-[0_28px_80px_rgba(9,51,35,0.18)]"
             />
           </div>

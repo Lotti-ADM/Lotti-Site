@@ -215,6 +215,22 @@ test("apresenta os limites comerciais revisados nos três planos", async () => {
   }
 });
 
+test("oferece somente os três planos com os novos valores mensais", async () => {
+  const { response, body } = await get("/planos");
+  const renderedText = body
+    .replace(/<!--[\s\S]*?-->/g, "")
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ");
+
+  assert.equal(response.status, 200);
+  assert.match(renderedText, /Lotti Essencial[\s\S]*?R\$ 129/);
+  assert.match(renderedText, /Lotti Profissional[\s\S]*?R\$ 249/);
+  assert.match(renderedText, /Lotti Imobiliária[\s\S]*?R\$ 499/);
+  assert.doesNotMatch(renderedText, /Enterprise/i);
+});
+
 test("usa o símbolo oficial da Lotti no ícone da aba", async () => {
   const icon = await readFile(
     new URL("../src/app/icon.svg", import.meta.url),

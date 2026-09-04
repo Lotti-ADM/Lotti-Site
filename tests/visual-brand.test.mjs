@@ -292,7 +292,6 @@ test("apresenta uma proposta de valor direta na página principal", async () => 
     new URL("../src/content/landing.ts", import.meta.url),
     "utf8",
   );
-
   assert.equal(response.status, 200);
   for (const content of [
     "Tudo o que você precisa para captar, negociar e administrar imóveis.",
@@ -358,6 +357,10 @@ test("apresenta funcionalidades e produto na primeira dobra", async () => {
     new URL("../src/content/landing.ts", import.meta.url),
     "utf8",
   );
+  const styles = await readFile(
+    new URL("../src/app/globals.css", import.meta.url),
+    "utf8",
+  );
 
   assert.match(heroComponent, /items-center text-center/);
   assert.match(heroComponent, /hero\.capabilities\.map/);
@@ -373,6 +376,11 @@ test("apresenta funcionalidades e produto na primeira dobra", async () => {
   );
   assert.match(heroComponent, /hero-feature-viewport[^\"]*bg-paper/);
   assert.doesNotMatch(heroComponent, /hero-feature-viewport[^\"]*bg-\[linear-gradient/);
+  assert.match(
+    heroComponent,
+    /pt-\[calc\(var\(--header-h\)\+clamp\(2rem,4vw,3rem\)\)\]/,
+  );
+  assert.doesNotMatch(styles, /\.hero-feature-viewport\s*\{[^}]*mask-image/s);
   assert.match(
     heroComponent,
     /className="block text-gradient-forest[^\"]*" text=\{hero\.headline\[0\]\}/,

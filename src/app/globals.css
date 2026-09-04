@@ -232,10 +232,6 @@
     pointer-events: none;
   }
 
-  .hero-feature-viewport {
-    mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
-  }
-
   .hero-feature-track {
     animation: marquee 38s linear infinite;
     will-change: transform;

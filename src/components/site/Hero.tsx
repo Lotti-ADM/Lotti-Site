@@ -35,7 +35,7 @@ const capabilityIcons = [
 
 export function Hero() {
   return (
-    <section id="topo" className="relative overflow-hidden pt-[calc(var(--header-h)+clamp(4rem,8vw,7rem))] pb-[clamp(4rem,8vw,7rem)] hero-mesh">
+    <section id="topo" className="relative overflow-hidden pt-[calc(var(--header-h)+clamp(2rem,4vw,3rem))] pb-[clamp(4rem,8vw,7rem)] hero-mesh">
       <div className="shell relative z-10 flex flex-col items-center text-center">
         <p className="eyebrow">{hero.eyebrow}</p>
 

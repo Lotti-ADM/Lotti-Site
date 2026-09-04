@@ -315,7 +315,7 @@ test("usa grafite no cabeçalho e verde Lotti no centro das lâminas", async () 
   assert.doesNotMatch(styles, /\.header-pill--top\s*\{[^}]*background:/s);
   assert.match(
     styles,
-    /\.header-pill--scrolled\s*\{[^}]*background:\s*linear-gradient\([^}]*rgba\(/s,
+    /\.header-pill--scrolled\s*\{[^}]*rgba\(0, 0, 0, 0\.9\)[^}]*backdrop-filter:\s*blur\(24px\)/s,
   );
   assert.match(
     styles,
@@ -389,7 +389,8 @@ test("apresenta funcionalidades e produto na primeira dobra", async () => {
       heroComponent.indexOf("data-hero-capabilities"),
     "as ações devem permanecer com a mensagem principal, antes da faixa de funcionalidades",
   );
-  assert.match(heroComponent, /hero-feature-viewport[^\"]*bg-paper/);
+  assert.match(heroComponent, /hero-feature-viewport[^\"]*bg-transparent/);
+  assert.doesNotMatch(heroComponent, /hero-feature-viewport[^\"]*bg-paper/);
   assert.doesNotMatch(heroComponent, /hero-feature-viewport[^\"]*bg-\[linear-gradient/);
   assert.doesNotMatch(heroComponent, /hero-feature-viewport[^\"]*shadow-/);
   assert.doesNotMatch(heroComponent, /hero-feature-viewport[^\"]*border-y/);

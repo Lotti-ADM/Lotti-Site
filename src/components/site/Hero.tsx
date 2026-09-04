@@ -101,7 +101,7 @@ function HeroFeatureCopy({
 }) {
   return (
     <ul
-      className="flex shrink-0 items-center gap-8 px-4"
+      className="flex shrink-0 items-center gap-8"
       data-hero-feature-copy={copy}
       aria-hidden={ariaHidden || undefined}
     >

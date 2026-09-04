@@ -232,6 +232,29 @@
     pointer-events: none;
   }
 
+  .hero-feature-viewport {
+    mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+  }
+
+  .hero-feature-track {
+    animation: marquee 38s linear infinite;
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  .hero-feature-track:hover,
+  .hero-feature-track:focus-within {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-feature-track {
+      animation: none;
+      transform: none;
+      will-change: auto;
+    }
+  }
+
   /* Hachura fina na mesma inclinação, para faixas de transição */
   .blade-hatch {
     background-image: repeating-linear-gradient(

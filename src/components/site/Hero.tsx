@@ -1,7 +1,18 @@
 import { Button } from "@/components/ui/Button";
 import { ProductCarousel } from "@/components/ui/ProductCarousel";
 import { hero } from "@/content/landing";
-import { Banknote, Building2, FileSignature, KanbanSquare } from "lucide-react";
+import {
+  Banknote,
+  Building2,
+  FileSignature,
+  Gavel,
+  Images,
+  KanbanSquare,
+  KeyRound,
+  MessageSquareText,
+  QrCode,
+  Users,
+} from "lucide-react";
 
 /**
  * O hero é o LCP da página: nada aqui entra com fade ou observer.
@@ -9,7 +20,18 @@ import { Banknote, Building2, FileSignature, KanbanSquare } from "lucide-react";
  */
 import { TextReveal } from "@/components/ui/TextReveal";
 
-const capabilityIcons = [KanbanSquare, FileSignature, Building2, Banknote] as const;
+const capabilityIcons = [
+  Users,
+  Building2,
+  KanbanSquare,
+  QrCode,
+  FileSignature,
+  KeyRound,
+  Banknote,
+  MessageSquareText,
+  Gavel,
+  Images,
+] as const;
 
 export function Hero() {
   return (
@@ -29,29 +51,16 @@ export function Hero() {
           className="mt-6 max-w-[64ch] text-lead text-muted"
         />
 
-        <ul
-          className="mt-10 grid w-full max-w-5xl gap-3 text-left sm:grid-cols-2 lg:grid-cols-4"
+        <div
+          className="hero-feature-viewport relative left-1/2 mt-11 w-screen -translate-x-1/2 overflow-hidden border-y border-white/10 bg-[linear-gradient(100deg,#000000_0%,#041b13_55%,#093323_100%)] py-5"
           aria-label="Principais funcionalidades"
           data-hero-capabilities=""
         >
-          {hero.capabilities.map((capability, index) => {
-            const Icon = capabilityIcons[index];
-            return (
-              <li
-                key={capability.title}
-                className="group flex min-h-24 items-center gap-3.5 rounded-2xl border border-line bg-paper/85 p-4 shadow-[0_12px_35px_rgba(9,51,35,0.07)] backdrop-blur-sm transition-transform duration-300 hover:-translate-y-1"
-              >
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-forest text-paper shadow-sm">
-                  <Icon size={19} strokeWidth={1.8} aria-hidden="true" />
-                </span>
-                <span>
-                  <strong className="block text-small font-semibold text-ink">{capability.title}</strong>
-                  <span className="mt-1 block text-[0.75rem] leading-5 text-muted">{capability.description}</span>
-                </span>
-              </li>
-            );
-          })}
-        </ul>
+          <div className="hero-feature-track flex w-max gap-8">
+            <HeroFeatureCopy copy="primary" />
+            <HeroFeatureCopy copy="duplicate" ariaHidden />
+          </div>
+        </div>
 
         <div className="mt-11 flex w-full flex-col items-center" data-hero-actions="">
           <span className="mb-7 h-px w-24 bg-gradient-to-r from-transparent via-forest/40 to-transparent" aria-hidden="true" />
@@ -82,6 +91,36 @@ export function Hero() {
         </div>
       </div>
     </section>
+  );
+}
+
+function HeroFeatureCopy({
+  copy,
+  ariaHidden = false,
+}: {
+  copy: "primary" | "duplicate";
+  ariaHidden?: boolean;
+}) {
+  return (
+    <ul
+      className="flex shrink-0 items-center gap-8 px-4"
+      data-hero-feature-copy={copy}
+      aria-hidden={ariaHidden || undefined}
+    >
+      {hero.capabilities.map((capability, index) => {
+        const Icon = capabilityIcons[index];
+
+        return (
+          <li
+            key={capability}
+            className="flex shrink-0 items-center gap-3 text-[0.78rem] font-semibold uppercase tracking-[0.14em] text-white sm:text-small"
+          >
+            <Icon size={19} strokeWidth={1.7} className="text-white/65" aria-hidden="true" />
+            {capability}
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 

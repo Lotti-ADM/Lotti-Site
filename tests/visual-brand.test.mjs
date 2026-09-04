@@ -363,6 +363,9 @@ test("apresenta funcionalidades e produto na primeira dobra", async () => {
   assert.match(heroComponent, /hero\.capabilities\.map/);
   assert.match(heroComponent, /data-hero-capabilities/);
   assert.match(heroComponent, /data-hero-actions/);
+  assert.match(heroComponent, /hero-feature-track/);
+  assert.match(heroComponent, /HeroFeatureCopy copy="primary"/);
+  assert.match(heroComponent, /HeroFeatureCopy copy="duplicate"/);
   assert.ok(
     heroComponent.indexOf("data-hero-capabilities") <
       heroComponent.indexOf("data-hero-actions"),
@@ -380,6 +383,12 @@ test("apresenta funcionalidades e produto na primeira dobra", async () => {
     "Contratos com IA",
     "Gestão de aluguéis",
     "Financeiro integrado",
+    "Gestão de imóveis",
+    "Funil de vendas",
+    "Fachadas Inteligentes",
+    "Assistente de IA",
+    "Gestão jurídica",
+    "Mídias com IA",
   ]) {
     assert.ok(landing.includes(capability), `funcionalidade ausente no hero: ${capability}`);
   }

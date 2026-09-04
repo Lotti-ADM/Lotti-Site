@@ -208,7 +208,14 @@
     position: absolute;
     top: -20%;
     height: 140%;
-    background-color: var(--color-surface);
+    background: linear-gradient(
+      to bottom,
+      var(--color-ink) 0%,
+      var(--color-forest) 43%,
+      var(--color-forest) 57%,
+      var(--color-ink) 100%
+    );
+    opacity: 0.16;
     transform: skewX(var(--blade-skew));
   }
 
@@ -635,9 +642,9 @@
   .header-pill--top {
     background: linear-gradient(
       135deg,
-      rgba(5, 30, 20, 0.92) 0%,
-      rgba(9, 51, 35, 0.88) 50%,
-      rgba(5, 30, 20, 0.92) 100%
+      rgba(8, 10, 9, 0.94) 0%,
+      rgba(20, 24, 22, 0.93) 50%,
+      rgba(8, 10, 9, 0.94) 100%
     );
     border-color: rgba(255, 255, 255, 0.08);
     box-shadow:
@@ -650,9 +657,9 @@
   .header-pill--scrolled {
     background: linear-gradient(
       135deg,
-      rgba(3, 22, 14, 0.97) 0%,
-      rgba(7, 42, 28, 0.95) 50%,
-      rgba(3, 22, 14, 0.97) 100%
+      rgba(3, 4, 4, 0.98) 0%,
+      rgba(17, 20, 19, 0.97) 50%,
+      rgba(3, 4, 4, 0.98) 100%
     );
     border-color: rgba(255, 255, 255, 0.12);
     box-shadow:

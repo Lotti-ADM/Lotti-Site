@@ -51,7 +51,10 @@ test("usa verde Lotti no lado escuro do degradê do título do hero", async () =
   );
 
   assert.match(body, /text-gradient-forest/);
-  assert.match(body, /class="block text-ink" aria-label="Pare de operar\."/);
+  assert.match(
+    body,
+    /class="block text-ink" aria-label="Sua operação imobiliária,"/,
+  );
   assert.match(
     styles,
     /\.text-gradient-forest\s*\{\s*background:\s*linear-gradient\(to right, #093323, #000000\)/,
@@ -281,4 +284,39 @@ test("usa o verde Lotti como acento em ações e progresso", async () => {
   // No header escuro o verde aparece como acento no botão "Entrar".
   assert.match(header, /bg-\[#093323\]/);
   assert.match(steps, /text-eyebrow uppercase text-forest/);
+});
+
+test("apresenta uma proposta de valor direta na página principal", async () => {
+  const { response } = await get("/");
+  const landing = await readFile(
+    new URL("../src/content/landing.ts", import.meta.url),
+    "utf8",
+  );
+
+  assert.equal(response.status, 200);
+  for (const content of [
+    "Sua operação imobiliária,",
+    "organizada do primeiro lead ao repasse.",
+    "Da captação ao repasse, tudo conectado.",
+    "Mais que um CRM. Uma operação que trabalha integrada.",
+    "Um plano para cada fase da sua operação.",
+  ]) {
+    assert.ok(landing.includes(content), `faltando copy estratégica: ${content}`);
+  }
+});
+
+test("usa grafite no cabeçalho e verde Lotti no centro das lâminas", async () => {
+  const styles = await readFile(
+    new URL("../src/app/globals.css", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(
+    styles,
+    /\.header-pill--top\s*\{[^}]*rgba\(8, 10, 9, 0\.94\)/s,
+  );
+  assert.match(
+    styles,
+    /\.blade\s*\{[\s\S]*?background:\s*linear-gradient\([\s\S]*?var\(--color-ink\)[\s\S]*?var\(--color-forest\)[\s\S]*?var\(--color-ink\)[\s\S]*?\);/,
+  );
 });

@@ -18,7 +18,7 @@ export const siteConfig = {
   name: "Lotti",
   tagline: "Gestão Imobiliária Inteligente",
   description:
-    "CRM imobiliário com IA para corretores e pequenas imobiliárias. Captação por QR Code, funil de vendas, contratos gerados por IA e aluguéis com financeiro automático.",
+    "Centralize imóveis, clientes, negociações, contratos e aluguéis. A Lotti conecta CRM, IA e gestão financeira para reduzir tarefas manuais e dar mais controle à operação imobiliária.",
 
   /**
    * Domínio de produção — usado em canonical, sitemap e Open Graph.

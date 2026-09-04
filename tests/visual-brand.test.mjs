@@ -53,7 +53,7 @@ test("usa verde Lotti no lado escuro do degradê do título do hero", async () =
   assert.match(body, /text-gradient-forest/);
   assert.match(
     body,
-    /class="block text-ink" aria-label="Toda a sua operação imobiliária\."/,
+    /aria-label="Gestão imobiliária completa\."/,
   );
   assert.match(
     styles,
@@ -361,6 +361,17 @@ test("apresenta funcionalidades e produto na primeira dobra", async () => {
 
   assert.match(heroComponent, /items-center text-center/);
   assert.match(heroComponent, /hero\.capabilities\.map/);
+  assert.match(heroComponent, /data-hero-capabilities/);
+  assert.match(heroComponent, /data-hero-actions/);
+  assert.ok(
+    heroComponent.indexOf("data-hero-capabilities") <
+      heroComponent.indexOf("data-hero-actions"),
+    "funcionalidades devem formar um bloco separado antes das ações",
+  );
+  assert.match(
+    heroComponent,
+    /className="block text-gradient-forest[^\"]*" text=\{hero\.headline\[0\]\}/,
+  );
   assert.match(heroComponent, /hero-product-glow/);
   assert.match(heroComponent, /<ProductCarousel/);
 

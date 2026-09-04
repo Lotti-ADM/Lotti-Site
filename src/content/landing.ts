@@ -31,13 +31,13 @@ export const nav = [
 
 export const hero = {
   eyebrow: "Gestão imobiliária inteligente",
-  headline: ["Toda a sua operação imobiliária.", "Em um só lugar."],
+  headline: ["Gestão imobiliária completa.", "Do lead ao repasse."],
   lead: "Organize clientes, imóveis, negociações, contratos e aluguéis em uma plataforma feita para reduzir tarefas manuais e dar clareza à sua gestão.",
   capabilities: [
-    "CRM imobiliário",
-    "Contratos com IA",
-    "Gestão de aluguéis",
-    "Financeiro integrado",
+    { title: "CRM imobiliário", description: "Leads e negociações" },
+    { title: "Contratos com IA", description: "Geração e análise" },
+    { title: "Gestão de aluguéis", description: "Cobranças e repasses" },
+    { title: "Financeiro integrado", description: "Controle e indicadores" },
   ],
   primaryCta: "Começar teste grátis",
   secondaryCta: "Ver funcionalidades",

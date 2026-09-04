@@ -89,7 +89,7 @@ export function ProductCarousel({ className, sizes }: ProductCarouselProps) {
       ]
         .filter(Boolean)
         .join(" ")}
-      style={{ aspectRatio: "1 / 1" }}
+      style={{ aspectRatio: "16 / 9" }}
       data-product-carousel=""
       data-carousel-interval={CAROUSEL_INTERVAL_MS}
     >

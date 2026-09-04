@@ -39,15 +39,14 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Quadro quadrado: como o print e 2,21:1, o quadrado so existe
-            cortando as laterais (object-cover). A largura fica limitada a
-            900px porque em 96vw o lado do quadrado viraria a altura da
-            pagina inteira. */}
-        <div className="relative mt-12 w-[min(96vw,900px)] max-w-none pt-8 sm:mt-16 sm:pt-10 perspective-[2000px]">
+        {/* Quadro perto da borda (96vw) e um pouco mais quadrado que o
+            print: 16:9 no lugar de 2,21:1, o que corta ~20% da largura da
+            direita. Mais quadrado que isso come o conteudo da tela. */}
+        <div className="relative mt-12 w-[min(96vw,1600px)] max-w-none pt-8 sm:mt-16 sm:pt-10 perspective-[2000px]">
           <div className="hero-product-glow" aria-hidden="true" />
           <div className="relative z-10 transform-gpu transition-all duration-700 hover:rotate-x-[1deg] hover:rotate-y-[-1deg] hover:scale-[1.005]">
             <ProductCarousel
-              sizes="(max-width: 900px) 96vw, 900px"
+              sizes="(max-width: 1600px) 96vw, 1600px"
               className="shadow-[0_28px_80px_rgba(9,51,35,0.18)]"
             />
           </div>

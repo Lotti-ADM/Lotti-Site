@@ -10,13 +10,11 @@ import { TextReveal } from "@/components/ui/TextReveal";
 
 export function Hero() {
   return (
-    <section id="topo" className="relative overflow-hidden pt-[calc(var(--header-h)+clamp(3rem,7vw,5.5rem))] pb-[clamp(3rem,7vw,6rem)] hero-mesh">
-      <BladeField />
-
-      <div className="shell relative z-10">
+    <section id="topo" className="relative overflow-hidden pt-[calc(var(--header-h)+clamp(2.5rem,6vw,4.5rem))] pb-[clamp(4rem,8vw,7rem)] hero-mesh">
+      <div className="shell relative z-10 flex flex-col items-center text-center">
         <p className="eyebrow">{hero.eyebrow}</p>
 
-        <h1 className="mt-7 max-w-[15ch] text-display text-balance">
+        <h1 className="mt-6 max-w-[19ch] text-display text-balance">
           <TextReveal as="span" className="block text-ink" text={hero.headline[0]} delay={100} />
           <TextReveal as="span" className="block text-gradient-forest pb-2" text={hero.headline[1]} delay={300} />
         </h1>
@@ -25,10 +23,21 @@ export function Hero() {
           as="p"
           text={hero.lead}
           delay={500}
-          className="mt-7 max-w-[32ch] text-lead text-muted lg:max-w-[44ch]"
+          className="mt-6 max-w-[64ch] text-lead text-muted"
         />
 
-        <div className="mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
+        <ul className="mt-7 flex max-w-4xl flex-wrap justify-center gap-2.5" aria-label="Principais funcionalidades">
+          {hero.capabilities.map((capability) => (
+            <li
+              key={capability}
+              className="rounded-full border border-forest/15 bg-paper/80 px-4 py-2 text-small font-medium text-ink shadow-sm backdrop-blur-sm"
+            >
+              {capability}
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-8 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center">
           <Button href="https://olivercrm.vercel.app/" arrow className="btn-shimmer w-full shadow-lg sm:w-auto" target="_blank" rel="noopener noreferrer">
             {hero.primaryCta}
           </Button>
@@ -43,11 +52,13 @@ export function Hero() {
 
         <p className="mt-5 text-small text-muted">{hero.footnote}</p>
 
-        <div className="mt-16 lg:mt-20 perspective-[2000px]">
-          <div className="transform-gpu transition-all duration-700 hover:rotate-x-[2deg] hover:rotate-y-[-2deg] hover:scale-[1.01]">
+        <div className="relative mt-12 w-full pt-8 sm:mt-16 sm:pt-10 perspective-[2000px]">
+          <BladeField />
+          <div className="hero-product-glow" aria-hidden="true" />
+          <div className="relative z-10 transform-gpu transition-all duration-700 hover:rotate-x-[1deg] hover:rotate-y-[-1deg] hover:scale-[1.005]">
             <ProductCarousel
               sizes="(max-width: 1216px) 100vw, 1216px"
-              className="shadow-[0_20px_50px_rgba(0,0,0,0.1)]"
+              className="shadow-[0_28px_80px_rgba(9,51,35,0.18)]"
             />
           </div>
         </div>

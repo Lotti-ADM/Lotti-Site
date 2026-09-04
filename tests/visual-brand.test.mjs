@@ -53,7 +53,7 @@ test("usa verde Lotti no lado escuro do degradê do título do hero", async () =
   assert.match(body, /text-gradient-forest/);
   assert.match(
     body,
-    /class="block text-ink" aria-label="Pare de operar\."/,
+    /class="block text-ink" aria-label="Toda a sua operação imobiliária\."/,
   );
   assert.match(
     styles,
@@ -336,14 +336,40 @@ test("encerra as lâminas antes do fim do hero com espaçamento regular", async 
   );
 });
 
-test("mantém a descrição do hero fora das lâminas", async () => {
+test("mantém texto e lâminas em camadas separadas no hero", async () => {
   const hero = await readFile(
     new URL("../src/components/site/Hero.tsx", import.meta.url),
     "utf8",
   );
 
-  assert.match(
-    hero,
-    /className="mt-7 max-w-\[32ch\] text-lead text-muted lg:max-w-\[44ch\]"/,
+  assert.match(hero, /className="mt-6 max-w-\[64ch\] text-lead text-muted"/);
+  assert.ok(
+    hero.indexOf("text={hero.lead}") < hero.indexOf("<BladeField />"),
+    "as lâminas devem começar somente atrás da área do produto",
   );
+});
+
+test("apresenta funcionalidades e produto na primeira dobra", async () => {
+  const heroComponent = await readFile(
+    new URL("../src/components/site/Hero.tsx", import.meta.url),
+    "utf8",
+  );
+  const landing = await readFile(
+    new URL("../src/content/landing.ts", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(heroComponent, /items-center text-center/);
+  assert.match(heroComponent, /hero\.capabilities\.map/);
+  assert.match(heroComponent, /hero-product-glow/);
+  assert.match(heroComponent, /<ProductCarousel/);
+
+  for (const capability of [
+    "CRM imobiliário",
+    "Contratos com IA",
+    "Gestão de aluguéis",
+    "Financeiro integrado",
+  ]) {
+    assert.ok(landing.includes(capability), `funcionalidade ausente no hero: ${capability}`);
+  }
 });

@@ -217,6 +217,21 @@
     transform: skewX(var(--blade-skew));
   }
 
+  .hero-product-glow {
+    position: absolute;
+    z-index: 1;
+    inset: -8% 10% 8%;
+    border-radius: 999px;
+    background: radial-gradient(
+      ellipse at center,
+      color-mix(in srgb, var(--color-forest) 25%, transparent) 0%,
+      color-mix(in srgb, var(--color-forest) 10%, transparent) 42%,
+      transparent 72%
+    );
+    filter: blur(32px);
+    pointer-events: none;
+  }
+
   /* Hachura fina na mesma inclinação, para faixas de transição */
   .blade-hatch {
     background-image: repeating-linear-gradient(

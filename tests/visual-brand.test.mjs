@@ -335,3 +335,15 @@ test("encerra as lâminas antes do fim do hero com espaçamento regular", async 
     /left: "78%"[^\n]*top: "-10%", height: "96%"/,
   );
 });
+
+test("mantém a descrição do hero fora das lâminas", async () => {
+  const hero = await readFile(
+    new URL("../src/components/site/Hero.tsx", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(
+    hero,
+    /className="mt-7 max-w-\[32ch\] text-lead text-muted lg:max-w-\[44ch\]"/,
+  );
+});

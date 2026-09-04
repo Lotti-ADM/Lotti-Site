@@ -25,7 +25,7 @@ export function Hero() {
           as="p"
           text={hero.lead}
           delay={500}
-          className="mt-7 max-w-[56ch] text-lead text-muted"
+          className="mt-7 max-w-[32ch] text-lead text-muted lg:max-w-[44ch]"
         />
 
         <div className="mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">

@@ -18,8 +18,6 @@ import {
  * O hero é o LCP da página: nada aqui entra com fade ou observer.
  * O campo de lâminas ao fundo é a geometria do símbolo virando estrutura.
  */
-import { TextReveal } from "@/components/ui/TextReveal";
-
 const capabilityIcons = [
   Users,
   Building2,
@@ -40,16 +38,11 @@ export function Hero() {
         <p className="eyebrow">{hero.eyebrow}</p>
 
         <h1 className="mt-7 max-w-[22ch] text-display text-balance lg:max-w-none">
-          <TextReveal as="span" className="block text-gradient-forest lg:whitespace-nowrap" text={hero.headline[0]} delay={100} />
-          <TextReveal as="span" className="block text-gradient-forest pb-2 lg:whitespace-nowrap" text={hero.headline[1]} delay={300} />
+          <span aria-label={hero.headline[0]} className="block text-gradient-forest lg:whitespace-nowrap">{hero.headline[0]}</span>
+          <span aria-label={hero.headline[1]} className="block text-gradient-forest pb-2 lg:whitespace-nowrap">{hero.headline[1]}</span>
         </h1>
 
-        <TextReveal
-          as="p"
-          text={hero.lead}
-          delay={500}
-          className="mt-6 max-w-[64ch] text-lead text-muted"
-        />
+        <p className="mt-6 max-w-[64ch] text-lead text-muted">{hero.lead}</p>
 
         <div className="mt-8 flex w-full flex-col items-center" data-hero-actions="">
           <div className="flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center">
@@ -68,7 +61,7 @@ export function Hero() {
         </div>
 
         <div
-          className="hero-feature-viewport relative left-1/2 mt-12 w-screen -translate-x-1/2 overflow-hidden bg-transparent py-5"
+          className="hero-feature-viewport mt-12 w-[100dvw] shrink-0 overflow-hidden bg-transparent py-5"
           aria-label="Principais funcionalidades"
           data-hero-capabilities=""
         >

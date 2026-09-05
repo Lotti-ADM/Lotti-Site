@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const CAROUSEL_INTERVAL_MS = 3_500;
 
@@ -57,21 +57,58 @@ export function ProductCarousel({ className, sizes }: ProductCarouselProps) {
   const [screenIndex, setScreenIndex] = useState(0);
   const [previousScreenIndex, setPreviousScreenIndex] = useState<number | null>(null);
   const [currentLoaded, setCurrentLoaded] = useState(true);
+  const frameRef = useRef<HTMLDivElement>(null);
   const screen = PRODUCT_SCREENSHOTS[screenIndex];
   const previousScreen = previousScreenIndex === null
     ? null
     : PRODUCT_SCREENSHOTS[previousScreenIndex];
 
+  // O carrossel só gira enquanto está na tela e a aba está em primeiro plano:
+  // fora disso cada troca custava um PNG novo e um repaint por nada.
   useEffect(() => {
-    const interval = window.setInterval(() => {
-      setScreenIndex((current) => {
-        setPreviousScreenIndex(current);
-        setCurrentLoaded(false);
-        return (current + 1) % PRODUCT_SCREENSHOTS.length;
-      });
-    }, CAROUSEL_INTERVAL_MS);
+    const frame = frameRef.current;
+    if (!frame) return;
 
-    return () => window.clearInterval(interval);
+    let interval: number | null = null;
+
+    const stop = () => {
+      if (interval === null) return;
+      window.clearInterval(interval);
+      interval = null;
+    };
+
+    const start = () => {
+      if (interval !== null) return;
+      interval = window.setInterval(() => {
+        setScreenIndex((current) => {
+          setPreviousScreenIndex(current);
+          setCurrentLoaded(false);
+          return (current + 1) % PRODUCT_SCREENSHOTS.length;
+        });
+      }, CAROUSEL_INTERVAL_MS);
+    };
+
+    // Começa girando: se o IntersectionObserver não responder, o carrossel
+    // cai no comportamento antigo em vez de congelar.
+    let onScreen = true;
+    const sync = () => (onScreen && !document.hidden ? start() : stop());
+    sync();
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        onScreen = entry.isIntersecting;
+        sync();
+      },
+      { threshold: 0 },
+    );
+    observer.observe(frame);
+    document.addEventListener("visibilitychange", sync);
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", sync);
+      stop();
+    };
   }, []);
 
   useEffect(() => {
@@ -83,6 +120,7 @@ export function ProductCarousel({ className, sizes }: ProductCarouselProps) {
 
   return (
     <div
+      ref={frameRef}
       className={[
         "relative w-full overflow-hidden border border-line bg-paper",
         className,

@@ -221,18 +221,21 @@
     mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
   }
 
+  /* Brilho verde discreto atrás do topo do quadro do produto, no lugar do
+     halo alaranjado da referência. */
   .hero-product-glow {
     position: absolute;
     z-index: 1;
-    inset: -8% 10% 8%;
+    inset: -6% 8% auto;
+    height: 48%;
     border-radius: 999px;
     background: radial-gradient(
-      ellipse at center,
-      color-mix(in srgb, var(--color-forest) 25%, transparent) 0%,
-      color-mix(in srgb, var(--color-forest) 10%, transparent) 42%,
+      ellipse 70% 100% at 50% 100%,
+      color-mix(in srgb, var(--color-forest) 20%, transparent) 0%,
+      color-mix(in srgb, var(--color-forest) 8%, transparent) 45%,
       transparent 72%
     );
-    filter: blur(32px);
+    filter: blur(44px);
     pointer-events: none;
   }
 

@@ -155,8 +155,9 @@
      de seção — é aqui que layouts assim costumam brigar consigo mesmos. */
   .section {
     padding-block: clamp(4.5rem, 9vw, 8rem);
-    content-visibility: auto;
-    contain-intrinsic-size: auto 800px;
+    /* Sem content-visibility aqui: o contain-intrinsic-size de 800px era um
+       chute alto demais para os blocos curtos e reservava centenas de pixels
+       de vao no lugar do conteudo real. */
   }
 
   .shell {

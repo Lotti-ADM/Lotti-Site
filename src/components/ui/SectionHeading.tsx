@@ -39,14 +39,14 @@ export function SectionHeading({
           text={title}
           delay={100}
           className={[
-            "mt-6 max-w-[19ch] text-h2 text-balance",
+            "mt-6 max-w-[30ch] text-h2 text-balance",
             isPaper ? "text-paper" : "text-ink",
           ].join(" ")}
         />
       ) : (
         <h2
           className={[
-            "mt-6 max-w-[19ch] text-h2 text-balance",
+            "mt-6 max-w-[30ch] text-h2 text-balance",
             isPaper ? "text-paper" : "text-ink",
           ].join(" ")}
         >
@@ -59,7 +59,6 @@ export function SectionHeading({
           className={[
             "mt-5 max-w-[52ch] text-lead",
             isPaper ? "text-white/70" : "text-muted",
-            "reveal"
           ].join(" ")}
         >
           {lead}

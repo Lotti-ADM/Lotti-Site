@@ -40,7 +40,8 @@ test("não exibe vídeo no hero", async () => {
 
   assert.equal(response.status, 200);
   assert.doesNotMatch(body, /<video[^>]+src="\/product\/hero-demo\.mp4"/);
-  assert.match(body, /aspect-ratio:16 \/ 9/);
+  assert.match(body, /aspect-ratio:2 \/ 1/);
+  assert.match(body, /max-height:31svh/);
 });
 
 test("usa verde Lotti no lado escuro do degradê do título do hero", async () => {

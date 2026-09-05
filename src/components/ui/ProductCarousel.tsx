@@ -84,12 +84,12 @@ export function ProductCarousel({ className, sizes }: ProductCarouselProps) {
   return (
     <div
       className={[
-        "relative overflow-hidden border border-line bg-paper",
+        "relative w-full overflow-hidden border border-line bg-paper",
         className,
       ]
         .filter(Boolean)
         .join(" ")}
-      style={{ aspectRatio: "16 / 9" }}
+      style={{ aspectRatio: "2 / 1", maxHeight: "31svh" }}
       data-product-carousel=""
       data-carousel-interval={CAROUSEL_INTERVAL_MS}
     >

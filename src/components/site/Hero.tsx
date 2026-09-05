@@ -39,10 +39,10 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Quadro perto da borda (96vw) e um pouco mais quadrado que o
-            print: 16:9 no lugar de 2,21:1, o que corta ~20% da largura da
-            direita. Mais quadrado que isso come o conteudo da tela. */}
-        <div className="relative mt-12 w-[min(96vw,1600px)] max-w-none pt-8 sm:mt-16 sm:pt-10 perspective-[2000px]">
+        {/* Quadro perto da borda (96vw), 2:1 e com teto de 52svh para caber
+            na tela junto com o texto. O que passar do teto e cortado embaixo
+            pelo object-cover. */}
+        <div className="relative mt-8 w-[min(96vw,1600px)] max-w-none pt-4 sm:mt-10 sm:pt-6 perspective-[2000px]">
           <div className="hero-product-glow" aria-hidden="true" />
           <div className="relative z-10 transform-gpu transition-all duration-700 hover:rotate-x-[1deg] hover:rotate-y-[-1deg] hover:scale-[1.005]">
             <ProductCarousel

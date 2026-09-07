@@ -43,9 +43,11 @@ export function Hero() {
             entao cada 100px de largura custam 74px de altura. */}
         <div className="relative mt-8 w-[min(94vw,1280px)] max-w-none pt-4 sm:mt-10 sm:pt-6">
           <div className="hero-product-glow" aria-hidden="true" />
+          {/* object-cover: com o contain sobrava uma fresta de sub-pixel na
+              direita, que o proprio <video> pinta de preto. */}
           <video
             data-hero-video=""
-            className="relative z-10 w-full border border-line bg-paper shadow-[0_28px_80px_rgba(9,51,35,0.18)]"
+            className="relative z-10 w-full border border-line bg-paper object-cover shadow-[0_28px_80px_rgba(9,51,35,0.18)]"
             src="/product/hero-demo.mp4"
             poster="/product/hero-demo-poster.jpg"
             style={{ aspectRatio: "1400 / 1034" }}

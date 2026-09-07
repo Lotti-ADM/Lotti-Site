@@ -75,15 +75,16 @@ test("exibe a captura de Kanban no recurso de funil de vendas", async () => {
   const { response, body } = await get("/");
 
   assert.equal(response.status, 200);
-  assert.match(body, /<img[^>]+funil-pipeline\.png/);
-  assert.match(body, /<img(?=[^>]+funil-pipeline\.png)(?=[^>]+object-cover)/);
-  assert.match(body, /aspect-ratio:1466 \/ 1267/);
+  assert.match(body, /<img[^>]+funil-pipeline-crop\.png/);
+  assert.match(body, /<img(?=[^>]+funil-pipeline-crop\.png)(?=[^>]+object-cover)/);
+  assert.match(body, /aspect-ratio:1466 \/ 1000/);
+  // O print ocupa a largura inteira do card, embaixo do texto.
   assert.match(
     body,
-    /<article[^>]*class="[^"]*lg:grid-cols-2/,
+    /<article[^>]*class="[^"]*card flex flex-col/,
   );
 
-  const image = await fetch(`${baseUrl}/product/funil-pipeline.png`, { method: "HEAD" });
+  const image = await fetch(`${baseUrl}/product/funil-pipeline-crop.png`, { method: "HEAD" });
   assert.equal(image.status, 200);
   assert.match(image.headers.get("content-type") ?? "", /image\/png/);
 });
@@ -92,12 +93,12 @@ test("exibe a captura real do app no recurso de fachadas", async () => {
   const { response, body } = await get("/");
 
   assert.equal(response.status, 200);
-  assert.match(body, /<img[^>]+fachadas-painel\.png/);
-  assert.match(body, /<img(?=[^>]+fachadas-painel\.png)(?=[^>]+object-cover)/);
-  assert.match(body, /aspect-ratio:1462 \/ 1267/);
+  assert.match(body, /<img[^>]+fachadas-painel-crop\.png/);
+  assert.match(body, /<img(?=[^>]+fachadas-painel-crop\.png)(?=[^>]+object-cover)/);
+  assert.match(body, /aspect-ratio:1462 \/ 760/);
   assert.match(body, /leading-\[1\.15\] pt-1/);
 
-  const image = await fetch(`${baseUrl}/product/fachadas-painel.png`, { method: "HEAD" });
+  const image = await fetch(`${baseUrl}/product/fachadas-painel-crop.png`, { method: "HEAD" });
   assert.equal(image.status, 200);
   assert.match(image.headers.get("content-type") ?? "", /image\/png/);
 });

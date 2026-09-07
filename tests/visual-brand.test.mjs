@@ -385,7 +385,7 @@ test("apresenta funcionalidades e produto na primeira dobra", async () => {
   );
   assert.match(
     heroComponent,
-    /aria-label=\{hero\.headline\[0\]\} className="block text-gradient-forest[^\"]*"/,
+    /aria-label=\{hero\.headline\[1\]\} className="block text-gradient-forest[^\"]*"/,
   );
   assert.match(heroComponent, /hero-product-glow/);
   assert.match(heroComponent, /<ProductCarousel/);

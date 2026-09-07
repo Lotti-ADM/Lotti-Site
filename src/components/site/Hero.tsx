@@ -13,10 +13,8 @@ export function Hero() {
         {/* Sem espaco morto na dobra: o que espia no rodape da tela e o
             print do app. */}
         <div className="flex w-full flex-col items-center">
-          <p className="eyebrow">{hero.eyebrow}</p>
-
-          <h1 className="mt-7 max-w-[22ch] text-display text-balance lg:max-w-none">
-            <span aria-label={hero.headline[0]} className="block text-gradient-forest lg:whitespace-nowrap">{hero.headline[0]}</span>
+          <h1 className="max-w-[22ch] text-display text-balance lg:max-w-none">
+            <span aria-label={hero.headline[0]} className="block text-ink lg:whitespace-nowrap">{hero.headline[0]}</span>
             <span aria-label={hero.headline[1]} className="block text-gradient-forest pb-2 lg:whitespace-nowrap">{hero.headline[1]}</span>
           </h1>
 

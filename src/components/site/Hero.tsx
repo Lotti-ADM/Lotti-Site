@@ -41,7 +41,7 @@ export function Hero() {
         {/* Video do produto no lugar do carrossel de prints. Fica perto da
             borda, mas nao colado: a gravacao e quase quadrada (1400x1034),
             entao cada 100px de largura custam 74px de altura. */}
-        <div className="relative mt-8 w-[min(92vw,1150px)] max-w-none pt-4 sm:mt-10 sm:pt-6">
+        <div className="relative mt-8 w-[min(94vw,1280px)] max-w-none pt-4 sm:mt-10 sm:pt-6">
           <div className="hero-product-glow" aria-hidden="true" />
           <video
             data-hero-video=""

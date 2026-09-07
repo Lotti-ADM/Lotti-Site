@@ -7,19 +7,19 @@ import { features } from "@/content/landing";
 const primaryVisuals = [
   <ProductShot
     key="funil"
-    src="/product/funil-pipeline-crop.png"
+    src="/product/funil-pipeline.png"
     alt="Funil de vendas em Kanban, com negócios distribuídos por etapa"
-    aspect="1466/1000"
+    aspect="1466/1267"
     showScreenshot
-    sizes="(max-width: 1216px) 100vw, 1136px"
+    sizes="(max-width: 1024px) 100vw, 46vw"
   />,
   <ProductShot
     key="fachadas"
-    src="/product/fachadas-painel-crop.png"
+    src="/product/fachadas-painel.png"
     alt="Painel de Fachadas Inteligentes com métricas, cards de imóveis e QR Code em atividade"
-    aspect="1462/760"
+    aspect="1462/1267"
     showScreenshot
-    sizes="(max-width: 1216px) 100vw, 1136px"
+    sizes="(max-width: 1024px) 100vw, 46vw"
   />,
 ];
 
@@ -49,22 +49,20 @@ export function Features() {
         <div className="mt-14 flex flex-col gap-6">
           {features.primary.map((feature, index) => {
             const Icon = feature.icon;
+            const flip = index % 2 === 1;
 
             return (
-              /* Texto em cima e print na largura inteira do card: lado a lado
-                 a captura ficava com 501px de largura e o texto dentro dela
-                 era ilegivel. */
               <Reveal
                 as="article"
                 key={feature.label}
-                className="card flex flex-col gap-8 p-6 sm:p-8 lg:gap-10 lg:p-10"
+                className="card grid items-center gap-8 p-6 sm:p-8 lg:grid-cols-2 lg:gap-12 lg:p-10"
               >
-                <div>
+                <div className={flip ? "lg:order-2" : undefined}>
                   <FeatureLabel icon={Icon} label={feature.label} />
                   <h3 className="mt-5 max-w-[20ch] text-h2 text-balance leading-[1.15] pt-1">
                     {feature.title}
                   </h3>
-                  <p className="mt-4 max-w-[68ch] text-muted">{feature.description}</p>
+                  <p className="mt-4 max-w-[52ch] text-muted">{feature.description}</p>
 
                   {feature.points ? (
                     <ul className="mt-6 flex flex-col gap-2.5">
@@ -83,7 +81,9 @@ export function Features() {
                   ) : null}
                 </div>
 
-                <div>{primaryVisuals[index]}</div>
+                <div className={flip ? "lg:order-1" : undefined}>
+                  {primaryVisuals[index]}
+                </div>
               </Reveal>
             );
           })}

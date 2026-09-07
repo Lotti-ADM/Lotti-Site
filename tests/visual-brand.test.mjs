@@ -385,7 +385,8 @@ test("apresenta funcionalidades e produto na primeira dobra", async () => {
   );
   assert.match(
     heroComponent,
-    /aria-label=\{hero\.headline\[1\]\} className="block text-gradient-forest[^\"]*"/,
+    // O degradê cobre o h1 inteiro, não uma linha só.
+    /<h1 className="[^"]*text-gradient-forest[^"]*"/,
   );
   assert.match(heroComponent, /hero-product-glow/);
   assert.match(heroComponent, /<ProductCarousel/);

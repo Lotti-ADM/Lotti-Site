@@ -13,9 +13,11 @@ export function Hero() {
         {/* Sem espaco morto na dobra: o que espia no rodape da tela e o
             print do app. */}
         <div className="flex w-full flex-col items-center">
-          <h1 className="max-w-[22ch] text-display text-balance lg:max-w-none">
-            <span aria-label={hero.headline[0]} className="block text-ink lg:whitespace-nowrap">{hero.headline[0]}</span>
-            <span aria-label={hero.headline[1]} className="block text-gradient-forest pb-2 lg:whitespace-nowrap">{hero.headline[1]}</span>
+          {/* O degrade fica no h1 inteiro: assim ele varre as duas linhas de
+              uma vez, em vez de recomecar em cada uma. */}
+          <h1 className="max-w-[22ch] text-display text-balance text-gradient-forest lg:max-w-none">
+            <span aria-label={hero.headline[0]} className="block lg:whitespace-nowrap">{hero.headline[0]}</span>
+            <span aria-label={hero.headline[1]} className="block pb-2 lg:whitespace-nowrap">{hero.headline[1]}</span>
           </h1>
 
           <p className="mt-6 max-w-[64ch] text-lead text-muted">{hero.lead}</p>

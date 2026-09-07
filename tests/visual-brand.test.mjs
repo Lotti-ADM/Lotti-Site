@@ -35,12 +35,22 @@ test("renderiza a assinatura clara sobre as superfícies escuras", async () => {
   assert.match(body, /<title>Lotti<\/title>/);
 });
 
-test("não exibe vídeo no hero", async () => {
+test("exibe o vídeo do produto no hero, mudo e em loop", async () => {
   const { response, body } = await get("/");
 
   assert.equal(response.status, 200);
-  assert.doesNotMatch(body, /<video[^>]+src="\/product\/hero-demo\.mp4"/);
-  assert.match(body, /aspect-ratio:2 \/ 1/);
+  assert.match(body, /data-hero-video=""/);
+  assert.match(body, /src="\/product\/hero-demo\.mp4"/);
+  assert.match(body, /poster="\/product\/hero-demo-poster\.jpg"/);
+  assert.match(body, /aspect-ratio:1400 \/ 1034/);
+  // Sem áudio e sem controles: é decoração, não um player.
+  assert.match(body, /muted/);
+  assert.match(body, /loop/);
+  assert.doesNotMatch(body, /<video[^>]*\scontrols/);
+
+  const video = await fetch(`${baseUrl}/product/hero-demo.mp4`, { method: "HEAD" });
+  assert.equal(video.status, 200);
+  assert.match(video.headers.get("content-type") ?? "", /video\/mp4/);
 });
 
 test("usa verde Lotti no lado escuro do degradê do título do hero", async () => {
@@ -59,82 +69,6 @@ test("usa verde Lotti no lado escuro do degradê do título do hero", async () =
     styles,
     /\.text-gradient-forest\s*\{\s*background:\s*linear-gradient\(to right, #093323, #000000\)/,
   );
-});
-
-test("exibe no hero as telas do produto em carrossel a cada 3,5 segundos", async () => {
-  const { response, body } = await get("/");
-
-  assert.equal(response.status, 200);
-  assert.match(body, /data-product-carousel=""/);
-  assert.match(body, /data-carousel-interval="3500"/);
-
-  const carouselSource = await readFile(
-    new URL("../src/components/ui/ProductCarousel.tsx", import.meta.url),
-    "utf8",
-  );
-  assert.match(carouselSource, /CAROUSEL_INTERVAL_MS = 3_500/);
-  assert.match(carouselSource, /duration-500/);
-  assert.match(carouselSource, /opacity-0/);
-  assert.match(carouselSource, /object-cover object-left-top/);
-  assert.doesNotMatch(
-    body.match(/data-product-carousel=""[^>]*class="[^"]*"/)?.[0] ?? "",
-    /border-beam-wrapper/,
-  );
-  for (const src of [
-    "/product/tela-funil.png",
-    "/product/tela-midias.png",
-    "/product/tela-fachadas.png",
-    "/product/tela-assistente-ia.png",
-    "/product/tela-juridico.png",
-    "/product/tela-financeiro.png",
-    "/product/tela-alugueis.png",
-    "/product/tela-imoveis.png",
-    "/product/tela-clientes.png",
-    "/product/tela-inicio.png",
-  ]) {
-    assert.ok(carouselSource.includes(src), `faltando ${src}`);
-  }
-
-  const expectedOrder = [
-    "/product/tela-inicio.png",
-    "/product/tela-clientes.png",
-    "/product/tela-imoveis.png",
-    "/product/tela-funil.png",
-    "/product/tela-alugueis.png",
-    "/product/tela-financeiro.png",
-    "/product/tela-juridico.png",
-    "/product/tela-midias.png",
-    "/product/tela-fachadas.png",
-    "/product/tela-assistente-ia.png",
-  ];
-  assert.deepEqual(
-    expectedOrder.map((src) => carouselSource.indexOf(src)),
-    [...expectedOrder.map((src) => carouselSource.indexOf(src))].sort((a, b) => a - b),
-  );
-});
-
-test("mantém todas as telas do hero no mesmo enquadramento", async () => {
-  const screenshots = [
-    "tela-inicio",
-    "tela-clientes",
-    "tela-imoveis",
-    "tela-funil",
-    "tela-alugueis",
-    "tela-financeiro",
-    "tela-juridico",
-    "tela-midias",
-    "tela-fachadas",
-    "tela-assistente-ia",
-  ];
-
-  for (const name of screenshots) {
-    const response = await fetch(`${baseUrl}/product/${name}.png`);
-    const image = Buffer.from(await response.arrayBuffer());
-
-    assert.equal(response.status, 200);
-    assert.equal(image.readUInt32BE(16), 1919, name);
-    assert.equal(image.readUInt32BE(20), 867, name);
-  }
 });
 
 test("exibe a captura de Kanban no recurso de funil de vendas", async () => {
@@ -376,7 +310,7 @@ test("apresenta funcionalidades e produto na primeira dobra", async () => {
   assert.doesNotMatch(heroComponent, /hero-feature-track|hero-feature-viewport|HeroFeatureCopy/);
   assert.doesNotMatch(styles, /hero-feature-track|hero-feature-viewport/);
   assert.ok(
-    heroComponent.indexOf("data-hero-actions") < heroComponent.indexOf("<ProductCarousel"),
+    heroComponent.indexOf("data-hero-actions") < heroComponent.indexOf("data-hero-video"),
     "as ações devem permanecer com a mensagem principal, antes do produto",
   );
   assert.match(
@@ -389,7 +323,7 @@ test("apresenta funcionalidades e produto na primeira dobra", async () => {
     /<h1 className="[^"]*text-gradient-forest[^"]*"/,
   );
   assert.match(heroComponent, /hero-product-glow/);
-  assert.match(heroComponent, /<ProductCarousel/);
+  assert.match(heroComponent, /data-hero-video/);
 
   for (const capability of [
     "CRM imobiliário",

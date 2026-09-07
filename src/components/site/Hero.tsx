@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/Button";
-import { ProductCarousel } from "@/components/ui/ProductCarousel";
 import { hero } from "@/content/landing";
 
 /**
@@ -39,16 +38,24 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Quadro colado na borda (96vw) e 2:1 — um pouco mais baixo que o
-            16:9 anterior, sem virar uma tira. */}
-        <div className="relative mt-8 w-[min(96vw,1600px)] max-w-none pt-4 sm:mt-10 sm:pt-6 perspective-[2000px]">
+        {/* Video do produto no lugar do carrossel de prints. Largura menor
+            que os 96vw porque a gravacao e quase quadrada (1400x1034): em
+            96vw ela ficaria com mais de 1000px de altura. */}
+        <div className="relative mt-8 w-[min(96vw,1000px)] max-w-none pt-4 sm:mt-10 sm:pt-6">
           <div className="hero-product-glow" aria-hidden="true" />
-          <div className="relative z-10 transform-gpu transition-all duration-700 hover:rotate-x-[1deg] hover:rotate-y-[-1deg] hover:scale-[1.005]">
-            <ProductCarousel
-              sizes="(max-width: 1600px) 96vw, 1600px"
-              className="shadow-[0_28px_80px_rgba(9,51,35,0.18)]"
-            />
-          </div>
+          <video
+            data-hero-video=""
+            className="relative z-10 w-full border border-line bg-paper shadow-[0_28px_80px_rgba(9,51,35,0.18)]"
+            src="/product/hero-demo.mp4"
+            poster="/product/hero-demo-poster.jpg"
+            style={{ aspectRatio: "1400 / 1034" }}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-label="Demonstracao da plataforma Lotti"
+          />
         </div>
 
       </div>

@@ -86,6 +86,7 @@ async function asaasFetch<T>(
       headers: {
         accept: "application/json",
         access_token: apiKey,
+        "user-agent": "Lotti/1.0 (checkout-saas)",
         ...(init.body ? { "content-type": "application/json" } : {}),
         ...init.headers,
       },

@@ -459,7 +459,7 @@ export function CheckoutForm({ initialPlanCode }: CheckoutFormProps) {
                   <label className="mt-8 flex cursor-pointer items-start gap-3 rounded-xl border border-line bg-surface/55 p-4 text-sm text-muted">
                     <input type="checkbox" className="mt-0.5 h-4 w-4 accent-[#093323]" checked={acceptedTerms} disabled={isBusy} onChange={(event) => setAcceptedTerms(event.target.checked)} />
                     {paymentMethod === "PIX" ? (
-                      <span>Confirmo que os dados estão corretos e autorizo a cobrança anual de <strong className="font-semibold text-ink">{formatCurrency(amount)}</strong>, referente a 12 mensalidades de <strong className="font-semibold text-ink">{formatCurrency(monthlyAmount)}</strong>, com renovação a cada 12 meses até o cancelamento.</span>
+                      <span>Confirmo que os dados estão corretos e autorizo a cobrança anual de <strong className="font-semibold text-ink">{formatCurrency(amount)}</strong>, com 12 meses de acesso pelo preço de 10 mensalidades de <strong className="font-semibold text-ink">{formatCurrency(monthlyAmount)}</strong>, com renovação a cada 12 meses até o cancelamento.</span>
                     ) : (
                       <span>Confirmo que os dados estão corretos e autorizo a cobrança mensal recorrente de <strong className="font-semibold text-ink">{formatCurrency(amount)}</strong>, até o cancelamento.</span>
                     )}
@@ -524,7 +524,7 @@ export function CheckoutForm({ initialPlanCode }: CheckoutFormProps) {
                 </div>
                 <p className="mt-2 text-right text-xs text-muted">
                   {paymentMethod === "PIX"
-                    ? `Referente a 12 meses de ${formatCurrency(monthlyAmount)} · renovação anual`
+                    ? `12 meses pelo preço de 10 mensalidades de ${formatCurrency(monthlyAmount)} · renovação anual`
                     : "Renovação mensal"}
                 </p>
               </div>

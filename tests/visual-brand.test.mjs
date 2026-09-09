@@ -362,6 +362,7 @@ test("renderiza cartão à esquerda e Pix anual com 10 mensalidades", async () =
   assert.ok(body.indexOf("<strong>Cartão</strong>") < body.indexOf("<strong>Pix</strong>"));
   assert.match(body, /12 meses em um pagamento/);
   assert.match(body, /pelo preço de 10 mensalidades de/);
+  assert.doesNotMatch(body, /referente a 12 mensalidades|Referente a 12 meses de/);
   assert.match(body, /R\$\s*3\.990,00/);
   assert.match(body, /R\$\s*399,00/);
   assert.match(body, /único endereço autorizado a criar a senha inicial/);

@@ -13,3 +13,5 @@ A migration 20260909180000_planos_agente_ia.sql atualiza o catálogo da platafor
 Os limites de imóveis, fachadas e contratos foram alinhados ao banco consultado. Publicar a oferta não ativa o agente: integração do atendimento, deduplicação mensal por contato, contagem de abandonos e homologação do canal ainda precisam ser verificadas antes de operar o serviço.
 
 Validações: checkout 7/7, verificações de página 22/22, lint e build. Checkout financeiro depende das configurações documentadas em ASAAS_CHECKOUT.md.
+
+A campanha antiga de fundador (20%) foi encerrada pela migration 20260909183000_encerrar_campanha_fundador.sql, sem alterar assinaturas existentes. Produção do checkout retorna 503 CHECKOUT_NOT_CONFIGURED até configurar o backend.

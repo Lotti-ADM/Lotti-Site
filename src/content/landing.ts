@@ -30,35 +30,47 @@ export const nav = [
 ] as const;
 
 export const hero = {
-  eyebrow: "CRM imobiliário com IA",
-  headline: ["Pare de operar.", "Comece a gerir."],
-  lead: "A Lotti reúne captação, funil de vendas, contratos por IA e aluguéis com financeiro automático no mesmo lugar. A capacidade operacional de uma grande administradora, no tamanho do seu negócio.",
-  primaryCta: "Acessar plataforma",
-  secondaryCta: "Ver recursos",
-  footnote: "Acesso gratuito por 14 dias, sem cartão.",
+  eyebrow: "Gestão imobiliária inteligente",
+  headline: ["Gestão imobiliária completa.", "Do lead ao repasse."],
+  lead: "Organize clientes, imóveis, negociações, contratos e aluguéis em uma plataforma feita para reduzir tarefas manuais e dar clareza à sua gestão.",
+  capabilities: [
+    "CRM imobiliário",
+    "Gestão de imóveis",
+    "Funil de vendas",
+    "Fachadas Inteligentes",
+    "Contratos com IA",
+    "Gestão de aluguéis",
+    "Financeiro integrado",
+    "Assistente de IA",
+    "Gestão jurídica",
+    "Mídias com IA",
+  ],
+  primaryCta: "Começar teste grátis",
+  secondaryCta: "Ver funcionalidades",
+  footnote: "Teste por 14 dias. Sem cartão de crédito.",
 } as const;
 
 export const problem = {
-  eyebrow: "Problema → Solução",
-  title: "O problema nunca foi falta de esforço. É a operação manual.",
-  lead: "Quatro pontos onde o dia do corretor vaza. A Lotti fecha os quatro.",
+  eyebrow: "Menos tarefas. Mais controle.",
+  title: "Sua operação não precisa depender de planilhas, memória e retrabalho.",
+  lead: "Da entrada do lead ao repasse do aluguel, a Lotti mantém cada etapa conectada, organizada e fácil de acompanhar.",
   columns: { before: "Como é hoje", after: "Com a Lotti" },
   rows: [
     {
-      before: "A placa na fachada gera ligação que ninguém registra. A captação evapora.",
-      after: "Cada leitura do QR Code vira lead no funil, com nome, telefone, origem e horário.",
+      before: "Contatos de placas e anúncios se perdem antes de chegar ao corretor.",
+      after: "Cada leitura do QR Code gera um lead identificado e registrado no funil.",
     },
     {
-      before: "Cliente e follow-up moram na memória, no bloco de notas e na conversa perdida.",
-      after: "Funil visual com etapa, valor em negociação, histórico e retorno agendado com alerta.",
+      before: "O acompanhamento depende de memória, anotações e conversas espalhadas.",
+      after: "O funil mostra etapa, histórico e próxima ação de cada oportunidade.",
     },
     {
-      before: "O contrato leva dias, depende de modelo antigo e volta com correção.",
-      after: "A IA redige o contrato completo em minutos ou lê o que já existe e extrai os dados.",
+      before: "Contratos consomem horas de preenchimento, revisão e conferência.",
+      after: "A IA gera contratos e organiza os dados dos documentos que você já utiliza.",
     },
     {
-      before: "Cobrança, baixa e repasse feitos na mão, um a um, sujeitos a erro.",
-      after: "Fatura mensal automática, baixa via Asaas e repasse calculado, com trilha de auditoria.",
+      before: "Cobranças, baixas e repasses manuais aumentam o risco de erro.",
+      after: "A Lotti automatiza o fluxo financeiro com integração ao Asaas e histórico auditável.",
     },
   ],
 } as const;
@@ -72,16 +84,16 @@ export type Feature = {
 };
 
 export const features = {
-  eyebrow: "Recursos",
-  title: "Seis módulos que conversam entre si.",
-  lead: "Nada de sistema para captar, planilha para o funil e outro para o financeiro. Um dado entra uma vez e vale para tudo.",
+  eyebrow: "Uma plataforma. Toda a operação.",
+  title: "Tudo o que você precisa para captar, negociar e administrar imóveis.",
+  lead: "A informação entra uma vez e acompanha toda a jornada. Sua equipe trabalha com contexto, agilidade e uma visão clara do que precisa acontecer.",
   primary: [
     {
       icon: KanbanSquare,
       label: "Funil de vendas",
-      title: "O negócio inteiro numa tela, arrastando de etapa.",
+      title: "Conduza cada oportunidade até o fechamento.",
       description:
-        "Kanban de arrastar e soltar com o valor em negociação somado por etapa. Cada cliente carrega o histórico e os follow-ups agendados disparam alerta. O retorno deixa de depender de você lembrar.",
+        "Visualize todas as negociações, acompanhe o histórico de cada cliente e receba alertas para agir na hora certa — sem depender da memória.",
       points: [
         "Valor em negociação por etapa",
         "Histórico completo por cliente",
@@ -91,9 +103,9 @@ export const features = {
     {
       icon: QrCode,
       label: "Fachadas Inteligentes",
-      title: "A placa na rua vira lead no funil, sozinha.",
+      title: "Transforme cada fachada em uma nova oportunidade.",
       description:
-        "Gere a placa ou o banner com QR Code em formatos prontos para impressão. Quem passa na frente do imóvel escaneia, encontra uma página profissional, deixa nome e telefone e entra no funil automaticamente.",
+        "Crie placas com QR Code prontas para impressão. O interessado conhece o imóvel, deixa o contato e entra automaticamente no seu funil.",
       points: [
         "Formatos prontos para impressão",
         "Página do imóvel com captura de contato",
@@ -106,28 +118,28 @@ export const features = {
     {
       icon: FileSignature,
       label: "Contratos por IA",
-      title: "Duas vias: a IA escreve e a IA lê.",
+      title: "Prepare contratos em minutos, não em horas.",
       description:
-        "Gere contratos completos em minutos a partir dos dados do CRM. Ou envie um PDF ou uma foto de contrato que já existe e a IA extrai inquilino, proprietário, imóvel, valor, prazo e taxa.",
+        "Use os dados do CRM para gerar contratos com IA ou importe um documento existente para identificar automaticamente as informações mais importantes.",
     },
     {
       icon: Banknote,
       label: "Aluguéis",
-      title: "Financeiro que roda sem você digitar.",
+      title: "Administre aluguéis com menos trabalho manual.",
       description:
-        "Faturas mensais geradas automaticamente, baixa de boleto e PIX pelo Asaas, cálculo do repasse ao proprietário, proteção contra repasse duplicado e trilha de auditoria de cada operação.",
+        "Automatize faturas, baixas e repasses com integração ao Asaas. Cada movimentação fica registrada para sua equipe acompanhar com segurança.",
     },
     {
       icon: MessageSquareText,
       label: "Assistente de IA",
-      title: "Um chat que conhece os seus números.",
+      title: "Encontre respostas sem procurar em várias telas.",
       description:
-        "Pergunte sobre clientes, imóveis, contratos e finanças e receba a resposta com base nos dados reais do seu CRM. O assistente sugere a próxima ação e toda ação passa pela sua confirmação.",
+        "Pergunte sobre clientes, imóveis, contratos e finanças em linguagem simples. A IA consulta os dados reais da sua operação e ajuda você a decidir o próximo passo.",
     },
     {
       icon: FileStack,
       label: "Módulos de apoio",
-      title: "O resto da operação, no mesmo lugar.",
+      title: "Tenha toda a rotina no mesmo ambiente.",
       description:
         "Imóveis com fotos e vídeos, Financeiro com KPIs e gráficos, Jurídico com documentos e vencimentos, e Mídias com melhoria de fotos por IA.",
     },
@@ -141,92 +153,92 @@ export const features = {
 } as const;
 
 export const differentiators = {
-  eyebrow: "Diferenciais",
-  title: "Por que a Lotti e não mais um CRM.",
+  eyebrow: "Feita para o mercado imobiliário",
+  title: "Não é um CRM genérico adaptado à sua rotina.",
   items: [
     {
       icon: Sparkles,
-      title: "IA que trabalha, não que enfeita.",
+      title: "IA aplicada a tarefas reais",
       description:
-        "A IA da Lotti redige contrato, lê documento antigo e consulta os seus números. Não é um chat solto no canto da tela para dizer que tem IA.",
+        "A IA ajuda a gerar contratos, interpretar documentos e consultar os números da operação. Tecnologia aplicada onde realmente economiza tempo.",
     },
     {
       icon: ScanLine,
-      title: "A única ponte entre a placa e o CRM.",
+      title: "Captação conectada ao CRM",
       description:
-        "O imóvel na rua e o funil no computador viram a mesma coisa. O lead que nasce na calçada chega registrado, com origem e horário.",
+        "O interesse gerado na fachada chega ao CRM com origem e horário. Sua equipe recebe a oportunidade pronta para ser atendida.",
     },
     {
       icon: ShieldCheck,
-      title: "Financeiro autônomo com auditoria imutável.",
+      title: "Automação financeira com rastreabilidade",
       description:
-        "Fatura, baixa e repasse ficam registrados e conferíveis depois. Repasse duplicado é bloqueado pelo sistema, não pela sua atenção.",
+        "Faturas, baixas e repasses ficam registrados e fáceis de conferir. O sistema reduz falhas e protege sua rotina contra duplicidades.",
     },
     {
       icon: BadgeCheck,
-      title: "O tripé que o nicho não entrega junto.",
+      title: "Uma base única para toda a operação",
       description:
-        "Contrato por IA, financeiro de aluguéis autônomo e inteligência de inadimplência. Separados, existem. No mesmo lugar, é a Lotti.",
+        "Clientes, imóveis, negociações, contratos e financeiro compartilham os mesmos dados. Menos sistemas, menos retrabalho e mais clareza.",
     },
   ],
 } as const;
 
 export const howItWorks = {
   eyebrow: "Como funciona",
-  title: "Quatro passos até parar de digitar.",
+  title: "Comece simples. Ganhe controle desde o primeiro dia.",
   steps: [
     {
-      title: "Crie sua conta",
+      title: "Configure sua operação",
       description:
-        "Cadastro self-service com o seu CRECI. Sua base nasce isolada, os seus dados não dividem espaço com os de ninguém.",
+        "Crie sua conta e organize o acesso da sua operação em um ambiente seguro e exclusivo.",
     },
     {
-      title: "Traga imóveis e clientes",
+      title: "Centralize sua carteira",
       description:
-        "Cadastre o portfólio com fotos e vídeos e organize os clientes nas etapas do funil.",
+        "Cadastre imóveis, proprietários e clientes e acompanhe as oportunidades em um funil visual.",
     },
     {
-      title: "Gere placa e contrato com IA",
+      title: "Automatize tarefas repetitivas",
       description:
-        "Placa com QR Code pronta para imprimir e contrato redigido em minutos, a partir dos dados que já estão lá.",
+        "Crie fachadas inteligentes e gere contratos com os dados que já estão organizados na plataforma.",
     },
     {
-      title: "Cobre e repasse no automático",
+      title: "Acompanhe e faça sua operação crescer",
       description:
-        "Fatura mensal, baixa via Asaas e repasse calculado ao proprietário. Você confere e não digita.",
+        "Automatize a rotina de aluguéis, acompanhe resultados e tome decisões com uma visão completa do negócio.",
     },
   ],
 } as const;
 
 export const trust = {
-  eyebrow: "Confiança e segurança",
-  title: "Dinheiro de terceiros exige mais do que boa intenção.",
+  eyebrow: "Sua operação protegida",
+  title: "Segurança para os dados. Clareza para a gestão.",
   items: [
     {
       icon: ShieldCheck,
       title: "Isolamento total por conta",
       description:
-        "Os dados da sua imobiliária ficam separados dos de qualquer outra. Sem base compartilhada, sem vizinho de tabela.",
+        "Os dados da sua operação permanecem separados dos de outras contas e protegidos em um ambiente exclusivo.",
     },
     {
       icon: Landmark,
       title: "Pagamentos por instituição regulada",
       description:
-        "Boleto e PIX passam pelo Asaas. A Lotti organiza e registra; o processamento financeiro é de quem tem licença para isso.",
+        "Boletos e Pix são processados pelo Asaas. A Lotti organiza as informações e mantém cada movimentação registrada.",
     },
     {
       icon: CalendarClock,
       title: "Trilha de auditoria de cada centavo",
       description:
-        "Cada fatura, baixa e repasse fica registrado com data e origem. Dá para reconstruir qualquer operação meses depois.",
+        "Cada fatura, baixa e repasse registra data e origem para facilitar conferências e manter o histórico da operação.",
     },
   ],
 } as const;
 
 export const plans = {
-  eyebrow: "Planos e Assinaturas",
-  title: "Tudo o que sua operação precisa.",
-  lead: "Organize clientes, imóveis, contratos, finanças, aluguéis e oportunidades em uma plataforma criada para o mercado imobiliário. Escolha o plano ideal para o tamanho do seu negócio.",
+  eyebrow: "Planos para crescer",
+  title: "Comece com o que precisa hoje. Evolua quando sua operação pedir.",
+  lead: "Escolha a capacidade ideal para sua carteira. Clientes, funil e lançamentos financeiros continuam sem limite em todos os planos.",
   points: [
     "Teste grátis por 14 dias sem cartão.",
     "Planos que acompanham seu crescimento.",
@@ -236,9 +248,9 @@ export const plans = {
 } as const;
 
 export const finalCta = {
-  eyebrow: "Demonstração",
-  title: "Agende sua demonstração.",
-  lead: "Trinta minutos. A gente monta o seu funil, gera uma placa com QR Code e redige um contrato usando os seus dados reais. Você decide depois.",
+  eyebrow: "Conheça a Lotti",
+  title: "Veja como simplificar sua operação imobiliária.",
+  lead: "Em uma conversa rápida, mostramos como a Lotti pode organizar sua carteira, acelerar o atendimento e reduzir tarefas manuais na sua rotina.",
   reassurance: [
     "Sem compromisso",
     "Conversa com quem construiu o produto",
@@ -284,7 +296,7 @@ export const form = {
 
 export const footer = {
   description:
-    "SaaS e CRM para imobiliárias e corretores. Gestão imobiliária inteligente, do primeiro lead ao repasse do aluguel.",
+    "Gestão imobiliária inteligente para centralizar clientes, imóveis, contratos e aluguéis — do primeiro contato ao repasse.",
   columns: [
     {
       title: "Produto",

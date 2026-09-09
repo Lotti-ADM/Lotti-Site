@@ -7,17 +7,17 @@ import { features } from "@/content/landing";
 const primaryVisuals = [
   <ProductShot
     key="funil"
-    src="/product/funil-etapas.png"
+    src="/product/funil-pipeline.png"
     alt="Funil de vendas em Kanban, com negócios distribuídos por etapa"
-    aspect="1608/857"
+    aspect="1466/1267"
     showScreenshot
     sizes="(max-width: 1024px) 100vw, 46vw"
   />,
   <ProductShot
     key="fachadas"
-    src="/product/fachadas-qr-atual.png"
-    alt="Painel de Fachadas Inteligentes com métricas e QR Code em atividade"
-    aspect="1901/866"
+    src="/product/fachadas-painel.png"
+    alt="Painel de Fachadas Inteligentes com métricas, cards de imóveis e QR Code em atividade"
+    aspect="1462/1267"
     showScreenshot
     sizes="(max-width: 1024px) 100vw, 46vw"
   />,

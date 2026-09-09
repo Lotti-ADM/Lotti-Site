@@ -1,79 +1,66 @@
 import { Button } from "@/components/ui/Button";
-import { ProductCarousel } from "@/components/ui/ProductCarousel";
 import { hero } from "@/content/landing";
 
 /**
  * O hero é o LCP da página: nada aqui entra com fade ou observer.
  * O campo de lâminas ao fundo é a geometria do símbolo virando estrutura.
  */
-import { TextReveal } from "@/components/ui/TextReveal";
-
 export function Hero() {
   return (
-    <section id="topo" className="relative overflow-hidden pt-[calc(var(--header-h)+clamp(3rem,7vw,5.5rem))] pb-[clamp(3rem,7vw,6rem)] hero-mesh">
-      <BladeField />
+    <section id="topo" className="relative overflow-hidden pt-[calc(var(--header-h)+clamp(2rem,4vw,3rem))] pb-[clamp(4rem,8vw,7rem)] hero-mesh">
+      <div className="shell relative z-10 flex flex-col items-center text-center">
+        {/* Sem espaco morto na dobra: o que espia no rodape da tela e o
+            print do app. */}
+        <div className="flex w-full flex-col items-center">
+          {/* O degrade fica no h1 inteiro: assim ele varre as duas linhas de
+              uma vez, em vez de recomecar em cada uma. */}
+          <h1 className="max-w-[22ch] text-display text-balance text-gradient-forest lg:max-w-none">
+            <span aria-label={hero.headline[0]} className="block lg:whitespace-nowrap">{hero.headline[0]}</span>
+            <span aria-label={hero.headline[1]} className="block pb-2 lg:whitespace-nowrap">{hero.headline[1]}</span>
+          </h1>
 
-      <div className="shell relative z-10">
-        <p className="eyebrow">{hero.eyebrow}</p>
+          <p className="mt-6 max-w-[64ch] text-lead text-muted">{hero.lead}</p>
 
-        <h1 className="mt-7 max-w-[15ch] text-display text-balance">
-          <TextReveal as="span" className="block text-ink" text={hero.headline[0]} delay={100} />
-          <TextReveal as="span" className="block text-gradient-forest pb-2" text={hero.headline[1]} delay={300} />
-        </h1>
-
-        <TextReveal
-          as="p"
-          text={hero.lead}
-          delay={500}
-          className="mt-7 max-w-[56ch] text-lead text-muted"
-        />
-
-        <div className="mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-          <Button href="https://olivercrm.vercel.app/" arrow className="btn-shimmer w-full shadow-lg sm:w-auto" target="_blank" rel="noopener noreferrer">
-            {hero.primaryCta}
-          </Button>
-          <Button
-            href="#recursos"
-            variant="secondary"
-            className="glass w-full transition-transform hover:scale-105 sm:w-auto"
-          >
-            {hero.secondaryCta}
-          </Button>
-        </div>
-
-        <p className="mt-5 text-small text-muted">{hero.footnote}</p>
-
-        <div className="mt-16 lg:mt-20 perspective-[2000px]">
-          <div className="transform-gpu transition-all duration-700 hover:rotate-x-[2deg] hover:rotate-y-[-2deg] hover:scale-[1.01]">
-            <ProductCarousel
-              sizes="(max-width: 1216px) 100vw, 1216px"
-              className="shadow-[0_20px_50px_rgba(0,0,0,0.1)]"
-            />
+          <div className="mt-8 flex w-full flex-col items-center" data-hero-actions="">
+            <div className="flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center">
+              <Button href="https://olivercrm.vercel.app/" arrow className="btn-shimmer w-full shadow-lg sm:w-auto" target="_blank" rel="noopener noreferrer">
+                {hero.primaryCta}
+              </Button>
+              <Button
+                href="#recursos"
+                variant="secondary"
+                className="glass w-full transition-transform hover:scale-105 sm:w-auto"
+              >
+                {hero.secondaryCta}
+              </Button>
+            </div>
+            <p className="mt-5 text-small text-muted">{hero.footnote}</p>
           </div>
         </div>
+
+        {/* Video do produto no lugar do carrossel de prints. Fica perto da
+            borda, mas nao colado: a gravacao e quase quadrada (1400x1034),
+            entao cada 100px de largura custam 74px de altura. */}
+        <div className="relative mt-8 w-[min(94vw,1280px)] max-w-none pt-4 sm:mt-10 sm:pt-6">
+          <div className="hero-product-glow" aria-hidden="true" />
+          {/* object-cover: com o contain sobrava uma fresta de sub-pixel na
+              direita, que o proprio <video> pinta de preto. */}
+          <video
+            data-hero-video=""
+            className="relative z-10 w-full border border-line bg-paper object-cover shadow-[0_28px_80px_rgba(9,51,35,0.18)]"
+            src="/product/hero-demo.mp4"
+            poster="/product/hero-demo-poster.jpg"
+            style={{ aspectRatio: "1400 / 1034" }}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-label="Demonstracao da plataforma Lotti"
+          />
+        </div>
+
       </div>
     </section>
-  );
-}
-
-/**
- * Três lâminas ascendentes no ângulo do símbolo. Puramente decorativas:
- * ficam atrás do conteúdo, em cinza secundário, e nunca tocam o texto.
- */
-function BladeField() {
-  // Larguras e folgas na proporção do símbolo: lâminas grossas, respiro fino,
-  // alturas decrescendo para a direita.
-  const blades = [
-    { left: "64%", width: "5rem", top: "-26%", height: "96%" },
-    { left: "71%", width: "5rem", top: "-10%", height: "80%" },
-    { left: "78%", width: "5rem", top: "6%", height: "64%" },
-  ];
-
-  return (
-    <div className="blade-field" aria-hidden="true">
-      {blades.map((blade) => (
-        <span key={blade.left} className="blade" style={blade} />
-      ))}
-    </div>
   );
 }

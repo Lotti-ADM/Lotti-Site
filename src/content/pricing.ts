@@ -11,8 +11,8 @@ import {
 } from 'lucide-react';
 
 export const pricingCopy = {
-  title: 'Tudo o que sua operação imobiliária precisa em um só lugar',
-  subtitle: 'Organize clientes, imóveis, contratos, finanças, aluguéis e oportunidades em uma plataforma criada para o mercado imobiliário.',
+  title: 'Planos que acompanham o crescimento da sua operação',
+  subtitle: 'Escolha a capacidade ideal para sua carteira. Clientes, funil e lançamentos financeiros continuam sem limite em todos os planos.',
   trialBadge: 'Teste grátis por 14 dias sem cartão de crédito',
   annualSaveBadge: 'Economize 2 meses',
   founderBadge: 'Preço especial de lançamento',
@@ -21,8 +21,8 @@ export const pricingCopy = {
   addonsSubtitle: 'Expanda seu plano conforme a operação cresce.',
   faqTitle: 'Perguntas frequentes',
   ctaFinal: {
-    title: 'Pronto para parar de operar e começar a gerir?',
-    subtitle: 'Comece com 14 dias grátis. Sem cartão, sem compromisso.',
+    title: 'Pronto para organizar sua operação em um só lugar?',
+    subtitle: 'Teste a Lotti por 14 dias. Sem cartão de crédito e sem compromisso.',
     cta: 'Começar teste gratuito',
   },
 } as const;
@@ -32,9 +32,9 @@ export const plansData = [
     code: 'essencial',
     name: 'Lotti Essencial',
     icon: Rocket,
-    audience: 'Corretor autônomo',
-    monthlyPrice: 99,
-    annualPrice: 990,
+    audience: 'Corretor autônomo ou operação pequena',
+    monthlyPrice: 129,
+    annualPrice: 1290,
     highlighted: false,
     cta: 'Começar teste gratuito',
     features: [
@@ -52,9 +52,9 @@ export const plansData = [
     code: 'profissional',
     name: 'Lotti Profissional',
     icon: Crown,
-    audience: 'Corretores e pequenas equipes',
-    monthlyPrice: 149,
-    annualPrice: 1490,
+    audience: 'Equipes menores em crescimento',
+    monthlyPrice: 249,
+    annualPrice: 2490,
     highlighted: true,
     cta: 'Começar teste gratuito',
     features: [
@@ -74,9 +74,9 @@ export const plansData = [
     code: 'imobiliaria',
     name: 'Lotti Imobiliária',
     icon: Building2,
-    audience: 'Imobiliárias com equipe',
-    monthlyPrice: 299,
-    annualPrice: 2990,
+    audience: 'Imobiliárias com operação maior',
+    monthlyPrice: 499,
+    annualPrice: 4990,
     highlighted: false,
     cta: 'Começar teste gratuito',
     secondaryCta: 'Falar com especialista',

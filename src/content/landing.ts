@@ -238,7 +238,7 @@ export const trust = {
 export const plans = {
   eyebrow: "Planos para crescer",
   title: "Comece com o que precisa hoje. Evolua quando sua operação pedir.",
-  lead: "Escolha a capacidade ideal para sua carteira. Clientes, funil e lançamentos financeiros continuam sem limite em todos os planos.",
+  lead: "Plataforma e agente de IA no mesmo plano: seus leads são atendidos, suas necessidades são organizadas e o corretor recebe contexto para buscar o imóvel certo.",
   points: [
     "Valores mensais claros.",
     "Limites definidos por faixa de operação.",

@@ -5,7 +5,7 @@ import { ArrowRight, Menu, X } from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
 import { nav } from "@/content/landing";
 
-const PLATFORM_URL = "https://olivercrm.vercel.app/";
+const PLATFORM_URL = "https://app.plataformalotti.com.br/";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);

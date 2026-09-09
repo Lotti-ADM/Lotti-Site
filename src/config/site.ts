@@ -25,8 +25,8 @@ export const siteConfig = {
    * Provisório: aponta para o domínio da Vercel enquanto o definitivo não
    * é conectado. Não use lotti.com.br — pertence a outro negócio.
    */
-  domain: "lotti-site.vercel.app",
-  url: "https://lotti-site.vercel.app",
+  domain: "plataformalotti.com.br",
+  url: "https://plataformalotti.com.br",
 
   /** Só dígitos, com DDI e DDD. Ex.: "5511987654321" */
   whatsapp: PENDING as string,

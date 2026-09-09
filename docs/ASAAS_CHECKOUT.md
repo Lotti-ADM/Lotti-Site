@@ -4,7 +4,7 @@
 
 O site oferece checkout próprio em `/checkout`, com PIX e cartão de crédito para
 os três planos do catálogo. O cartão é cobrado mensalmente; o PIX cobra de uma vez
-o equivalente a 12 mensalidades. Os valores nunca são aceitos do navegador: o
+o equivalente a 10 mensalidades, com 12 meses de acesso. Os valores nunca são aceitos do navegador: o
 backend recalcula preço, ciclo e descrição a partir do catálogo versionado.
 
 Fluxo de ativação:

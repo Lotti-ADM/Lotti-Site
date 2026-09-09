@@ -9,7 +9,7 @@ import { PricingFAQ } from "@/components/site/pricing/PricingFAQ";
 export const metadata: Metadata = {
   title: "Planos e Preços",
   description:
-    "Compare os planos mensais da Lotti: Essencial por R$ 99, Profissional por R$ 149 e Imobiliária por R$ 299.",
+    "Compare os planos mensais da Lotti: Inteligente por R$ 279, Profissional por R$ 399 e Eficazes por R$ 799, com plataforma e leads atendidos por IA.",
   alternates: { canonical: "/planos" },
 };
 

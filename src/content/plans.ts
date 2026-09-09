@@ -8,10 +8,11 @@ export type OfficialPlan = {
   readonly audience: string;
   readonly monthlyPrice: number;
   readonly capacity: {
-    readonly properties: number;
-    readonly rentalContracts: number;
-    readonly facades: number;
+    readonly properties: number | null;
+    readonly rentalContracts: number | null;
+    readonly facades: number | null;
     readonly aiContracts: number;
+    readonly attendedLeads: number;
   };
   readonly benefits: readonly string[];
   readonly support: string;
@@ -22,16 +23,19 @@ export type OfficialPlan = {
 export const officialPlans: Record<PlanCode, OfficialPlan> = {
   essencial: {
     code: "essencial",
-    name: "Lotti Essencial",
+    name: "Lotti Inteligente",
     audience: "Para corretor autônomo começando",
-    monthlyPrice: 99,
+    monthlyPrice: 279,
     capacity: {
-      properties: 5,
+      properties: 250,
       rentalContracts: 5,
-      facades: 5,
+      facades: 15,
       aiContracts: 10,
+      attendedLeads: 100,
     },
     benefits: [
+      "Agente de IA para atendimento e qualificação de leads",
+      "Resumo das necessidades do cliente para o corretor",
       "CRM, clientes, funil e lançamentos financeiros sem limite",
       "Integração com Asaas",
       "Financeiro básico",
@@ -44,14 +48,17 @@ export const officialPlans: Record<PlanCode, OfficialPlan> = {
     code: "profissional",
     name: "Lotti Profissional",
     audience: "Para corretores com operação maior ou pequenas equipes",
-    monthlyPrice: 149,
+    monthlyPrice: 399,
     capacity: {
-      properties: 20,
-      rentalContracts: 15,
-      facades: 20,
-      aiContracts: 20,
+      properties: 1500,
+      rentalContracts: 30,
+      facades: 60,
+      aiContracts: 25,
+      attendedLeads: 250,
     },
     benefits: [
+      "Agente de IA para atendimento e qualificação de leads",
+      "Resumo das necessidades do cliente para o corretor",
       "CRM, clientes, funil e lançamentos financeiros sem limite",
       "Financeiro completo",
       "Gestão de aluguéis",
@@ -61,20 +68,23 @@ export const officialPlans: Record<PlanCode, OfficialPlan> = {
     ],
     support: "Prioritário",
     onboarding: "—",
-    migrationNote: "A migração acontece quando os limites do Essencial são ultrapassados.",
+    migrationNote: "A migração acontece quando os limites do Inteligente são ultrapassados.",
   },
   imobiliaria: {
     code: "imobiliaria",
-    name: "Lotti Imobiliária",
+    name: "Lotti Eficazes",
     audience: "Para imobiliárias com equipe e carteira maior",
-    monthlyPrice: 299,
+    monthlyPrice: 799,
     capacity: {
-      properties: 100,
-      rentalContracts: 100,
-      facades: 100,
-      aiContracts: 60,
+      properties: null,
+      rentalContracts: null,
+      facades: null,
+      aiContracts: 40,
+      attendedLeads: 600,
     },
     benefits: [
+      "Agente de IA para atendimento e qualificação de leads",
+      "Resumo das necessidades do cliente para o corretor",
       "Onboarding orientado",
       "Suporte prioritário",
     ],
@@ -83,11 +93,16 @@ export const officialPlans: Record<PlanCode, OfficialPlan> = {
   },
 };
 
+export function capacityLabel(value: number | null): string {
+  return value === null ? "Sem limite" : `Até ${value}`;
+}
+
 export function planCapacityItems(plan: OfficialPlan) {
   return [
-    { label: "Imóveis ativos", value: `Até ${plan.capacity.properties}` },
-    { label: "Contratos de aluguel ativos", value: `Até ${plan.capacity.rentalContracts}` },
-    { label: "Fachadas Inteligentes", value: String(plan.capacity.facades) },
+    { label: "Leads atendidos pela IA", value: `${plan.capacity.attendedLeads}/mês` },
+    { label: "Imóveis ativos", value: capacityLabel(plan.capacity.properties) },
+    { label: "Contratos de aluguel ativos", value: capacityLabel(plan.capacity.rentalContracts) },
+    { label: "Fachadas Inteligentes", value: capacityLabel(plan.capacity.facades) },
     { label: "Gerações ou análises com IA", value: `${plan.capacity.aiContracts}/mês` },
   ] as const;
 }

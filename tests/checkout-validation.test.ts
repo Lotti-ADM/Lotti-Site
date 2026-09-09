@@ -71,12 +71,12 @@ test("exige endereço do titular apenas no cartão", () => {
 });
 
 test("mantém os preços cobrados no catálogo do servidor", () => {
-  assert.equal(planPrice(checkoutPlans.essencial, "monthly"), 99);
-  assert.equal(planPrice(checkoutPlans.profissional, "monthly"), 149);
-  assert.equal(planPrice(checkoutPlans.imobiliaria, "monthly"), 299);
-  assert.equal(planPrice(checkoutPlans.essencial, "annual"), 1188);
-  assert.equal(planPrice(checkoutPlans.profissional, "annual"), 1788);
-  assert.equal(planPrice(checkoutPlans.imobiliaria, "annual"), 3588);
+  assert.equal(planPrice(checkoutPlans.essencial, "monthly"), 279);
+  assert.equal(planPrice(checkoutPlans.profissional, "monthly"), 399);
+  assert.equal(planPrice(checkoutPlans.imobiliaria, "monthly"), 799);
+  assert.equal(planPrice(checkoutPlans.essencial, "annual"), 2790);
+  assert.equal(planPrice(checkoutPlans.profissional, "annual"), 3990);
+  assert.equal(planPrice(checkoutPlans.imobiliaria, "annual"), 7990);
   assert.equal(billingCycleForPayment("CREDIT_CARD"), "monthly");
   assert.equal(billingCycleForPayment("PIX"), "annual");
 });
@@ -115,20 +115,9 @@ test("aceita Pix anual e cartão mensal, sem combinações divergentes", () => {
   assert.equal(checkoutRequestSchema.safeParse({ ...creditCardBase, billingCycle: "annual" }).success, false);
 });
 
-test("mantém no checkout os limites oficiais dos três planos", () => {
-  assert.deepEqual(checkoutPlans.essencial.checkoutFeatures.slice(0, 3), [
-    "Até 5 imóveis e 5 contratos de aluguel ativos",
-    "5 Fachadas Inteligentes",
-    "10 gerações ou análises de contrato com IA por mês",
-  ]);
-  assert.deepEqual(checkoutPlans.profissional.checkoutFeatures.slice(0, 3), [
-    "Até 20 imóveis e 15 contratos de aluguel ativos",
-    "20 Fachadas Inteligentes",
-    "20 gerações ou análises de contrato com IA por mês",
-  ]);
-  assert.deepEqual(checkoutPlans.imobiliaria.checkoutFeatures.slice(0, 3), [
-    "Até 100 imóveis e 100 contratos de aluguel ativos",
-    "100 Fachadas Inteligentes",
-    "60 gerações ou análises de contrato com IA por mês",
-  ]);
+test("mantém nomes e franquias de leads no checkout", () => {
+  for (const [code, name, limit] of [["essencial", "Lotti Inteligente", 100], ["profissional", "Lotti Profissional", 250], ["imobiliaria", "Lotti Eficazes", 600]] as const) {
+    assert.equal(checkoutPlans[code].name, name);
+    assert.equal(checkoutPlans[code].checkoutFeatures[0], `${limit} leads atendidos pela IA por mês`);
+  }
 });

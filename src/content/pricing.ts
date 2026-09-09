@@ -5,12 +5,12 @@ import {
   Headphones,
   Rocket,
 } from "lucide-react";
-import { officialPlans, planCodes } from "@/content/plans";
+import { officialPlans, planCodes, capacityLabel } from "@/content/plans";
 
 export const pricingCopy = {
   title: "Planos claros para cada fase da sua operação imobiliária",
   subtitle:
-    "Escolha a capacidade que acompanha sua carteira hoje. Todos os valores são mensais e os limites aparecem sem letras miúdas.",
+    "Plataforma completa e agente de IA no mesmo plano. Atendimento dos leads, qualificação e resumo para o corretor encontrar o imóvel certo.",
   highlightBadge: "PARA QUEM ESTÁ CRESCENDO",
   faqTitle: "Perguntas frequentes",
   ctaFinal: {
@@ -39,55 +39,28 @@ export const comparisonCategories = [
 ] as const;
 
 export const comparisonFeatures = [
-  {
-    category: "capacidade",
-    label: "Imóveis ativos",
-    essencial: "Até 5",
-    profissional: "Até 20",
-    imobiliaria: "Até 100",
-  },
-  {
-    category: "capacidade",
-    label: "Contratos de aluguel ativos",
-    essencial: "Até 5",
-    profissional: "Até 15",
-    imobiliaria: "Até 100",
-  },
-  {
-    category: "capacidade",
-    label: "Fachadas Inteligentes",
-    essencial: "5",
-    profissional: "20",
-    imobiliaria: "100",
-  },
-  {
-    category: "capacidade",
-    label: "Gerações ou análises de contrato com IA",
-    essencial: "10/mês",
-    profissional: "20/mês",
-    imobiliaria: "60/mês",
-  },
-  {
-    category: "atendimento",
-    label: "Suporte",
-    essencial: officialPlans.essencial.support,
-    profissional: officialPlans.profissional.support,
-    imobiliaria: officialPlans.imobiliaria.support,
-  },
-  {
-    category: "atendimento",
-    label: "Onboarding",
-    essencial: officialPlans.essencial.onboarding,
-    profissional: officialPlans.profissional.onboarding,
-    imobiliaria: officialPlans.imobiliaria.onboarding,
-  },
-] as const;
+  ...[
+    ["Leads atendidos pela IA / mês", "attendedLeads"],
+    ["Imóveis ativos", "properties"],
+    ["Contratos de aluguel ativos", "rentalContracts"],
+    ["Fachadas Inteligentes", "facades"],
+    ["Gerações ou análises de contrato com IA / mês", "aiContracts"],
+  ].map(([label, key]) => ({
+    category: "capacidade", label,
+    ...Object.fromEntries(planCodes.map(code => [code, capacityLabel(officialPlans[code].capacity[key as keyof typeof officialPlans.essencial.capacity])])),
+  })) as Array<{ category: string; label: string; essencial: string; profissional: string; imobiliaria: string }>,
+  { category: "atendimento", label: "Suporte", essencial: "Por e-mail", profissional: "Prioritário", imobiliaria: "Prioritário" },
+  { category: "atendimento", label: "Onboarding", essencial: "—", profissional: "—", imobiliaria: "Orientado" },
+];
 
 export const pricingFAQ = [
+  { question: "O agente de IA está incluído no preço?", answer: "Sim. Todos os planos incluem a plataforma e a franquia mensal de atendimento por IA: 100 leads no Inteligente, 250 no Profissional e 600 no Eficazes. O agente entende região, orçamento, preferências e prazo e organiza um resumo para o corretor." },
+  { question: "O que conta como lead atendido?", answer: "Um contato que responde e inicia a qualificação. Mensagens e retomadas da mesma pessoa no mesmo mês não são novos leads. Spam, mensagens sem resposta e falhas do sistema não entram na franquia." },
+  { question: "E quando a franquia de leads acabar?", answer: "Você pode contratar capacidade adicional ou mudar de plano. Não há cobrança automática de excedente sem sua autorização." },
   {
-    question: "Quando acontece a migração do Essencial para o Profissional?",
+    question: "Quando acontece a migração do Inteligente para o Profissional?",
     answer:
-      "A migração acontece quando o cliente ultrapassa os limites do plano Essencial.",
+      "A migração acontece quando o cliente ultrapassa os limites do plano Inteligente.",
   },
   {
     question: "O que significa um item ativo?",
@@ -97,12 +70,12 @@ export const pricingFAQ = [
   {
     question: "Quais recursos não têm limite?",
     answer:
-      "Nos planos Essencial e Profissional, CRM, clientes, funil e lançamentos financeiros não têm limite.",
+      "Nos planos Inteligente e Profissional, CRM, clientes, funil e lançamentos financeiros não têm limite.",
   },
   {
     question: "Como posso pagar a assinatura?",
     answer:
-      "O checkout aceita cartão com cobrança mensal ou Pix anual, no valor equivalente a 12 mensalidades. O pagamento é processado com segurança pelo Asaas.",
+      "O checkout aceita cartão com cobrança mensal ou Pix anual, no valor equivalente a 10 mensalidades, com 12 meses de acesso. O pagamento é processado com segurança pelo Asaas.",
   },
   {
     question: "Como recebo meu acesso depois do pagamento?",
@@ -112,6 +85,6 @@ export const pricingFAQ = [
   {
     question: "A integração com Asaas está incluída?",
     answer:
-      "A integração com Asaas está incluída nos planos Essencial e Profissional, conforme os benefícios de cada plano.",
+      "A integração com Asaas está incluída nos planos Inteligente e Profissional, conforme os benefícios de cada plano.",
   },
 ] as const;

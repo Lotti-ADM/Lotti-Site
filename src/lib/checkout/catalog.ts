@@ -1,5 +1,6 @@
 import {
   officialPlans,
+  capacityLabel,
   planCodes,
   type PlanCode,
 } from "@/content/plans";
@@ -32,8 +33,9 @@ function toCheckoutPlan(code: PlanCode): CheckoutPlan {
     monthlyPrice: plan.monthlyPrice,
     highlighted: code === "profissional",
     checkoutFeatures: [
-      `Até ${plan.capacity.properties} imóveis e ${plan.capacity.rentalContracts} contratos de aluguel ativos`,
-      `${plan.capacity.facades} Fachadas Inteligentes`,
+      `${plan.capacity.attendedLeads} leads atendidos pela IA por mês`,
+      `Imóveis: ${capacityLabel(plan.capacity.properties)} · Contratos de aluguel: ${capacityLabel(plan.capacity.rentalContracts)}`,
+      `Fachadas Inteligentes: ${capacityLabel(plan.capacity.facades)}`,
       `${plan.capacity.aiContracts} gerações ou análises de contrato com IA por mês`,
       ...plan.benefits,
     ],
@@ -53,7 +55,7 @@ export function isBillingCycle(value: unknown): value is BillingCycle {
 }
 
 export function planPrice(plan: CheckoutPlan, cycle: BillingCycle): number {
-  return cycle === "annual" ? plan.monthlyPrice * 12 : plan.monthlyPrice;
+  return cycle === "annual" ? plan.monthlyPrice * 10 : plan.monthlyPrice;
 }
 
 export function billingCycleForPayment(method: PaymentMethod): BillingCycle {

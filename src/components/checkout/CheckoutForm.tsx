@@ -448,7 +448,7 @@ export function CheckoutForm({ initialPlanCode }: CheckoutFormProps) {
                           <div>
                             <h3 className="font-semibold text-ink">Pagamento anual via Pix</h3>
                             <p className="mt-2 max-w-[55ch] text-sm text-muted">
-                              O total de <strong className="font-semibold text-ink">{formatCurrency(amount)}</strong> é referente a 12 meses de <strong className="font-semibold text-ink">{formatCurrency(monthlyAmount)}</strong>. Seu acesso só será liberado quando o Asaas confirmar o recebimento.
+                              O total de <strong className="font-semibold text-ink">{formatCurrency(amount)}</strong> garante 12 meses de acesso pelo preço de 10 mensalidades de <strong className="font-semibold text-ink">{formatCurrency(monthlyAmount)}</strong>. Seu acesso só será liberado quando o Asaas confirmar o recebimento.
                             </p>
                           </div>
                         </div>

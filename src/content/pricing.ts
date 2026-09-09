@@ -8,9 +8,9 @@ import {
 import { officialPlans, planCodes, capacityLabel } from "@/content/plans";
 
 export const pricingCopy = {
-  title: "Planos claros para cada fase da sua operação imobiliária",
+  title: "Sua plataforma e o primeiro atendimento no mesmo plano",
   subtitle:
-    "Plataforma completa e agente de IA no mesmo plano. Atendimento dos leads, qualificação e resumo para o corretor encontrar o imóvel certo.",
+    "Escolha uma franquia de leads atendidos pela IA. O agente entende a procura e organiza as informações; o corretor busca os imóveis e conduz a negociação.",
   highlightBadge: "PARA QUEM ESTÁ CRESCENDO",
   faqTitle: "Perguntas frequentes",
   ctaFinal: {
@@ -54,6 +54,9 @@ export const comparisonFeatures = [
 ];
 
 export const pricingFAQ = [
+  { question: "O que significa qualificar um lead?", answer: "É entender a necessidade de quem demonstrou interesse: compra ou aluguel, região, orçamento, tipo de imóvel e prazo. O resultado é um resumo para orientar o trabalho do corretor." },
+  { question: "O agente já começa a responder após a contratação?", answer: "O agente está em implantação. A ativação exige configuração do canal e validação do atendimento com a equipe Lotti. Confirme as condições e o prazo de ativação antes de contratar." },
+  { question: "A IA escolhe o imóvel ou fecha a venda?", answer: "O agente apoia a qualificação inicial. O corretor procura opções, verifica disponibilidade, conduz visitas e negocia com o cliente. A qualificação não garante uma venda." },
   { question: "O agente de IA está incluído no preço?", answer: "Sim. Todos os planos incluem a plataforma e a franquia mensal de atendimento por IA: 100 leads no Inteligente, 250 no Profissional e 600 no Eficazes. O agente entende região, orçamento, preferências e prazo e organiza um resumo para o corretor." },
   { question: "O que conta como lead atendido?", answer: "Um contato que responde e inicia a qualificação. Mensagens e retomadas da mesma pessoa no mesmo mês não são novos leads. Spam, mensagens sem resposta e falhas do sistema não entram na franquia." },
   { question: "E quando a franquia de leads acabar?", answer: "Você pode contratar capacidade adicional ou mudar de plano. Não há cobrança automática de excedente sem sua autorização." },

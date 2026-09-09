@@ -31,8 +31,8 @@ export const nav = [
 
 export const hero = {
   eyebrow: "Gestão imobiliária inteligente",
-  headline: ["Gestão imobiliária completa.", "Do lead ao repasse."],
-  lead: "Organize clientes, imóveis, negociações, contratos e aluguéis em uma plataforma feita para reduzir tarefas manuais e dar clareza à sua gestão.",
+  headline: ["A IA qualifica seus leads.", "Você encontra o imóvel."],
+  lead: "Um agente de IA para conversar com quem procura um imóvel, entender região, orçamento e preferências e preparar um resumo para você continuar o atendimento. Tudo junto da sua plataforma imobiliária.",
   capabilities: [
     "CRM imobiliário",
     "Gestão de imóveis",
@@ -45,32 +45,32 @@ export const hero = {
     "Gestão jurídica",
     "Mídias com IA",
   ],
-  primaryCta: "Começar teste grátis",
-  secondaryCta: "Ver funcionalidades",
-  footnote: "Teste por 14 dias. Sem cartão de crédito.",
+  primaryCta: "Conhecer o atendimento com IA",
+  secondaryCta: "Ver como funciona",
+  footnote: "Agente em implantação. Consulte a equipe sobre a ativação na sua operação.",
 } as const;
 
 export const problem = {
-  eyebrow: "Menos tarefas. Mais controle.",
-  title: "Sua operação não precisa depender de planilhas, memória e retrabalho.",
-  lead: "Da entrada do lead ao repasse do aluguel, a Lotti mantém cada etapa conectada, organizada e fácil de acompanhar.",
+  eyebrow: "Menos perguntas repetidas. Mais contexto.",
+  title: "O primeiro contato precisa virar uma conversa útil.",
+  lead: "Quem chega perguntando por um imóvel nem sempre sabe explicar tudo o que precisa. A proposta da Lotti é organizar essa conversa para orientar o próximo passo do corretor.",
   columns: { before: "Como é hoje", after: "Com a Lotti" },
   rows: [
     {
-      before: "Contatos de placas e anúncios se perdem antes de chegar ao corretor.",
-      after: "Cada leitura do QR Code gera um lead identificado e registrado no funil.",
+      before: "Você recebe um “tenho interesse” e precisa descobrir tudo do zero.",
+      after: "O agente pergunta se a pessoa quer comprar ou alugar e em qual região procura.",
     },
     {
-      before: "O acompanhamento depende de memória, anotações e conversas espalhadas.",
-      after: "O funil mostra etapa, histórico e próxima ação de cada oportunidade.",
+      before: "As preferências ficam espalhadas em várias mensagens.",
+      after: "Orçamento, tipo de imóvel, características e prazo ficam organizados em um resumo.",
     },
     {
-      before: "Contratos consomem horas de preenchimento, revisão e conferência.",
-      after: "A IA gera contratos e organiza os dados dos documentos que você já utiliza.",
+      before: "Você apresenta opções antes de entender o que é indispensável.",
+      after: "A qualificação ajuda a separar o que o cliente precisa do que ele apenas prefere.",
     },
     {
-      before: "Cobranças, baixas e repasses manuais aumentam o risco de erro.",
-      after: "A Lotti automatiza o fluxo financeiro com integração ao Asaas e histórico auditável.",
+      before: "O corretor precisa reler a conversa inteira para continuar.",
+      after: "Você recebe o contexto e as dúvidas pendentes para buscar opções e seguir a conversa.",
     },
   ],
 } as const;
@@ -84,16 +84,16 @@ export type Feature = {
 };
 
 export const features = {
-  eyebrow: "Uma plataforma. Toda a operação.",
-  title: "Tudo o que você precisa para captar, negociar e administrar imóveis.",
-  lead: "A informação entra uma vez e acompanha toda a jornada. Sua equipe trabalha com contexto, agilidade e uma visão clara do que precisa acontecer.",
+  eyebrow: "Do interesse à busca do imóvel.",
+  title: "Entenda a procura. Organize o próximo passo.",
+  lead: "Qualificar um lead é entender o que aquela pessoa procura. A Lotti reúne esse contexto com clientes, imóveis e negociações para apoiar seu atendimento.",
   primary: [
     {
       icon: KanbanSquare,
       label: "Funil de vendas",
-      title: "Conduza cada oportunidade até o fechamento.",
+      title: "Continue a conversa sabendo o que o cliente procura.",
       description:
-        "Visualize todas as negociações, acompanhe o histórico de cada cliente e receba alertas para agir na hora certa — sem depender da memória.",
+        "Organize o histórico, a etapa da negociação e a próxima ação no CRM. O corretor usa as informações da qualificação para procurar imóveis, apresentar opções e acompanhar o interessado.",
       points: [
         "Valor em negociação por etapa",
         "Histórico completo por cliente",
@@ -103,7 +103,7 @@ export const features = {
     {
       icon: QrCode,
       label: "Fachadas Inteligentes",
-      title: "Transforme cada fachada em uma nova oportunidade.",
+      title: "Dê um próximo passo ao interesse que vem da fachada.",
       description:
         "Crie placas com QR Code prontas para impressão. O interessado conhece o imóvel, deixa o contato e entra automaticamente no seu funil.",
       points: [
@@ -154,58 +154,58 @@ export const features = {
 
 export const differentiators = {
   eyebrow: "Feita para o mercado imobiliário",
-  title: "Não é um CRM genérico adaptado à sua rotina.",
+  title: "Uma conversa clara para o cliente. Um resumo útil para você.",
   items: [
     {
       icon: Sparkles,
-      title: "IA aplicada a tarefas reais",
+      title: "Perguntas que ajudam a entender a procura",
       description:
-        "A IA ajuda a gerar contratos, interpretar documentos e consultar os números da operação. Tecnologia aplicada onde realmente economiza tempo.",
+        "Compra ou aluguel, região, orçamento, características e prazo: a qualificação reúne as informações que orientam a busca de um imóvel.",
     },
     {
       icon: ScanLine,
-      title: "Captação conectada ao CRM",
+      title: "Linguagem simples, sem jargão",
       description:
-        "O interesse gerado na fachada chega ao CRM com origem e horário. Sua equipe recebe a oportunidade pronta para ser atendida.",
+        "O agente deve fazer perguntas claras e confirmar o que entendeu, para o interessado conseguir explicar sua necessidade com as próprias palavras.",
     },
     {
       icon: ShieldCheck,
-      title: "Automação financeira com rastreabilidade",
+      title: "O corretor continua no controle",
       description:
-        "Faturas, baixas e repasses ficam registrados e fáceis de conferir. O sistema reduz falhas e protege sua rotina contra duplicidades.",
+        "Você avalia as opções, confirma a disponibilidade dos imóveis e conduz visitas e negociação. A IA apoia o primeiro atendimento.",
     },
     {
       icon: BadgeCheck,
-      title: "Uma base única para toda a operação",
+      title: "Contexto para dar continuidade",
       description:
-        "Clientes, imóveis, negociações, contratos e financeiro compartilham os mesmos dados. Menos sistemas, menos retrabalho e mais clareza.",
+        "O resumo ajuda a retomar o contato sem repetir todas as perguntas. O CRM mantém clientes, imóveis e oportunidades organizados para acompanhar a jornada.",
     },
   ],
 } as const;
 
 export const howItWorks = {
   eyebrow: "Como funciona",
-  title: "Comece simples. Ganhe controle desde o primeiro dia.",
+  title: "Da primeira mensagem ao resumo para o corretor.",
   steps: [
     {
-      title: "Configure sua operação",
+      title: "Prepare o atendimento com a equipe",
       description:
-        "Crie sua conta e organize o acesso da sua operação em um ambiente seguro e exclusivo.",
+        "Na implantação, defina o canal, as perguntas e o momento de passar a conversa ao corretor. A ativação depende da configuração e validação do atendimento.",
     },
     {
-      title: "Centralize sua carteira",
+      title: "Entenda o que a pessoa procura",
       description:
-        "Cadastre imóveis, proprietários e clientes e acompanhe as oportunidades em um funil visual.",
+        "O agente conversa com o interessado sobre compra ou aluguel, região, orçamento e características desejadas, usando linguagem simples.",
     },
     {
-      title: "Automatize tarefas repetitivas",
+      title: "Receba um resumo da necessidade",
       description:
-        "Crie fachadas inteligentes e gere contratos com os dados que já estão organizados na plataforma.",
+        "As respostas formam um perfil de procura com preferências, prazo e informações que ainda precisam ser confirmadas.",
     },
     {
-      title: "Acompanhe e faça sua operação crescer",
+      title: "Encontre opções e continue o atendimento",
       description:
-        "Automatize a rotina de aluguéis, acompanhe resultados e tome decisões com uma visão completa do negócio.",
+        "Com o contexto em mãos, o corretor pesquisa os imóveis adequados, confirma os detalhes e combina os próximos passos com o cliente.",
     },
   ],
 } as const;
@@ -237,8 +237,8 @@ export const trust = {
 
 export const plans = {
   eyebrow: "Planos para crescer",
-  title: "Comece com o que precisa hoje. Evolua quando sua operação pedir.",
-  lead: "Plataforma e agente de IA no mesmo plano: seus leads são atendidos, suas necessidades são organizadas e o corretor recebe contexto para buscar o imóvel certo.",
+  title: "Escolha quantos leads sua IA vai atender.",
+  lead: "Inteligente, Profissional ou Eficazes: plataforma e franquia de atendimento por IA no mesmo preço. Escolha pelo volume de interessados que chegam à sua operação.",
   points: [
     "Valores mensais claros.",
     "Limites definidos por faixa de operação.",
@@ -249,8 +249,8 @@ export const plans = {
 
 export const finalCta = {
   eyebrow: "Conheça a Lotti",
-  title: "Veja como simplificar sua operação imobiliária.",
-  lead: "Em uma conversa rápida, mostramos como a Lotti pode organizar sua carteira, acelerar o atendimento e reduzir tarefas manuais na sua rotina.",
+  title: "Planeje seu atendimento com IA.",
+  lead: "Conte como os interessados chegam até você. Vamos conversar sobre o que o agente deve perguntar, o resumo que o corretor precisa receber e as etapas de ativação.",
   reassurance: [
     "Sem compromisso",
     "Conversa com quem construiu o produto",
@@ -296,7 +296,7 @@ export const form = {
 
 export const footer = {
   description:
-    "Gestão imobiliária inteligente para centralizar clientes, imóveis, contratos e aluguéis — do primeiro contato ao repasse.",
+    "Qualificação de leads com IA e gestão imobiliária no mesmo lugar. Entenda a procura do cliente e organize o trabalho do primeiro contato ao contrato.",
   columns: [
     {
       title: "Produto",

@@ -36,6 +36,7 @@ export const officialPlans: Record<PlanCode, OfficialPlan> = {
     benefits: [
       "Agente de IA para atendimento e qualificação de leads",
       "Resumo das necessidades do cliente para o corretor",
+      "Agente em implantação: ativação com a equipe Lotti",
       "CRM, clientes, funil e lançamentos financeiros sem limite",
       "Integração com Asaas",
       "Financeiro básico",
@@ -59,6 +60,7 @@ export const officialPlans: Record<PlanCode, OfficialPlan> = {
     benefits: [
       "Agente de IA para atendimento e qualificação de leads",
       "Resumo das necessidades do cliente para o corretor",
+      "Agente em implantação: ativação com a equipe Lotti",
       "CRM, clientes, funil e lançamentos financeiros sem limite",
       "Financeiro completo",
       "Gestão de aluguéis",
@@ -85,6 +87,7 @@ export const officialPlans: Record<PlanCode, OfficialPlan> = {
     benefits: [
       "Agente de IA para atendimento e qualificação de leads",
       "Resumo das necessidades do cliente para o corretor",
+      "Agente em implantação: ativação com a equipe Lotti",
       "Onboarding orientado",
       "Suporte prioritário",
     ],

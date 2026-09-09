@@ -19,7 +19,7 @@ export const metadata: Metadata = {
      * de conhecê-la. Começa pelo nome, para quem já busca a Lotti, e emenda o
      * que o mercado procura. ~60 caracteres, o limite que o Google exibe.
      */
-    default: `${siteConfig.name} - CRM Imobiliário com IA para Corretores e Imobiliárias`,
+    default: `${siteConfig.name} - Qualificação de Leads com IA e CRM Imobiliário`,
     template: `%s - ${siteConfig.name}`,
   },
   description: siteConfig.description,

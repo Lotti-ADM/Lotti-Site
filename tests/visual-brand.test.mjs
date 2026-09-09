@@ -63,7 +63,7 @@ test("usa verde Lotti no lado escuro do degradê do título do hero", async () =
   assert.match(body, /text-gradient-forest/);
   assert.match(
     body,
-    /aria-label="Gestão imobiliária completa\."/,
+    /aria-label="A IA qualifica seus leads\."/,
   );
   assert.match(
     styles,
@@ -224,9 +224,9 @@ test("apresenta uma proposta de valor direta na página principal", async () => 
   );
   assert.equal(response.status, 200);
   for (const content of [
-    "Tudo o que você precisa para captar, negociar e administrar imóveis.",
-    "Não é um CRM genérico adaptado à sua rotina.",
-    "Comece com o que precisa hoje. Evolua quando sua operação pedir.",
+    "Entenda a procura. Organize o próximo passo.",
+    "Uma conversa clara para o cliente. Um resumo útil para você.",
+    "Escolha quantos leads sua IA vai atender.",
   ]) {
     assert.ok(landing.includes(content), `faltando copy estratégica: ${content}`);
   }

@@ -23,11 +23,11 @@ export function Hero() {
 
           <div className="mt-8 flex w-full flex-col items-center" data-hero-actions="">
             <div className="flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center">
-              <Button href="https://app.plataformalotti.com.br/" arrow className="btn-shimmer w-full shadow-lg sm:w-auto" target="_blank" rel="noopener noreferrer">
+              <Button href="#demo" arrow className="btn-shimmer w-full shadow-lg sm:w-auto">
                 {hero.primaryCta}
               </Button>
               <Button
-                href="#recursos"
+                href="#como-funciona"
                 variant="secondary"
                 className="glass w-full transition-transform hover:scale-105 sm:w-auto"
               >

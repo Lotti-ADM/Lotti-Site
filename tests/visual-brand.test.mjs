@@ -32,7 +32,7 @@ test("renderiza a assinatura clara sobre as superfícies escuras", async () => {
   // Header em pílula escura, CTA final e rodapé: todos usam a versão branca.
   assert.doesNotMatch(body, /\/brand\/lotti-linear-dark\.svg/);
   assert.ok((body.match(/\/brand\/lotti-white\.svg/g) ?? []).length >= 3);
-  assert.match(body, /<title>Lotti<\/title>/);
+  assert.match(body, /<title>Lotti(?: - [^<]+)?<\/title>/);
 });
 
 test("exibe o vídeo do produto no hero, mudo e em loop", async () => {

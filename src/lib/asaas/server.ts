@@ -216,8 +216,8 @@ export async function createAsaasSubscription(input: {
       nextDueDate: todayIsoDate(),
       cycle: input.billingCycle === "annual" ? "YEARLY" : "MONTHLY",
       description: input.billingCycle === "annual"
-        ? `${input.plan.name} — assinatura anual via Pix`
-        : `${input.plan.name} — assinatura mensal no cartão`,
+        ? `${input.plan.name}: assinatura anual via Pix`
+        : `${input.plan.name}: assinatura mensal no cartão`,
       externalReference: input.orderId,
       ...cardPayload,
     }),

@@ -50,7 +50,7 @@ export const comparisonFeatures = [
     ...Object.fromEntries(planCodes.map(code => [code, capacityLabel(officialPlans[code].capacity[key as keyof typeof officialPlans.essencial.capacity])])),
   })) as Array<{ category: string; label: string; essencial: string; profissional: string; imobiliaria: string }>,
   { category: "atendimento", label: "Suporte", essencial: "Por e-mail", profissional: "Prioritário", imobiliaria: "Prioritário" },
-  { category: "atendimento", label: "Onboarding", essencial: "—", profissional: "—", imobiliaria: "Orientado" },
+  { category: "atendimento", label: "Onboarding", essencial: "Não incluído", profissional: "Não incluído", imobiliaria: "Orientado" },
 ];
 
 export const pricingFAQ = [

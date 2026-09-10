@@ -158,7 +158,7 @@ export async function scheduleDemo(
         from,
         to: [to],
         reply_to: lead.email,
-        subject: `🏠 Novo Lead — ${lead.name}`,
+        subject: `🏠 Novo Lead: ${lead.name}`,
         html: `
           <div style="font-family: 'Segoe UI', Tahoma, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; border: 1px solid #e5e7eb;">
             <div style="background: linear-gradient(135deg, #093323, #0d4a32); padding: 32px 24px; text-align: center;">

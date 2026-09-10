@@ -25,7 +25,7 @@ export function AgentExample() {
         <SectionHeading
           eyebrow="O agente na conversa"
           title="De uma mensagem solta a uma procura bem definida."
-          lead="Veja como as perguntas podem ajudar o interessado a explicar o que precisa — e o corretor a saber por onde começar."
+          lead="Veja como as perguntas podem ajudar o interessado a explicar o que precisa e o corretor a saber por onde começar."
         />
         <p className="mt-5 text-small text-muted">Exemplo ilustrativo com dados fictícios. Não é uma conversa real nem uma demonstração ao vivo.</p>
         <div className="mt-10 grid items-start gap-6 lg:grid-cols-2 lg:gap-8">

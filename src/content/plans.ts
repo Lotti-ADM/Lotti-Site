@@ -43,7 +43,7 @@ export const officialPlans: Record<PlanCode, OfficialPlan> = {
       "Suporte por e-mail",
     ],
     support: "Por e-mail",
-    onboarding: "—",
+    onboarding: "Não incluído",
   },
   profissional: {
     code: "profissional",
@@ -69,7 +69,7 @@ export const officialPlans: Record<PlanCode, OfficialPlan> = {
       "Suporte prioritário",
     ],
     support: "Prioritário",
-    onboarding: "—",
+    onboarding: "Não incluído",
     migrationNote: "A migração acontece quando os limites do Inteligente são ultrapassados.",
   },
   imobiliaria: {

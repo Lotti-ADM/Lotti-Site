@@ -1,4 +1,6 @@
 import { Header } from "@/components/site/Header";
+import { AgentExample } from "@/components/site/AgentExample";
+import { PricingFAQ } from "@/components/site/pricing/PricingFAQ";
 import { Hero } from "@/components/site/Hero";
 import { ProblemSolution } from "@/components/site/ProblemSolution";
 import { Features } from "@/components/site/Features";
@@ -17,12 +19,14 @@ export default function Page() {
       <Header />
       <main>
         <Hero />
+        <AgentExample />
         <ProblemSolution />
+        <HowItWorks />
         <Features />
         <Differentiators />
-        <HowItWorks />
         <Trust />
         <Plans />
+        <PricingFAQ />
         <FinalCta />
       </main>
       <Footer />

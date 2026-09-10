@@ -13,3 +13,9 @@ São referências de posicionamento público; não provam aumento de conversão 
 
 ## Conversão e expectativa
 CTA principal direciona à conversa com a equipe em #demo. Como funciona explica implantação, perguntas, resumo e continuidade humana. Hero, planos e FAQ informam que o agente está em implantação; configuração e validação precedem a ativação. Não há promessa de disponibilidade 24/7, venda garantida ou ativação imediata. Preços e franquias aprovados preservados.
+
+## Referência fornecida pelo usuário: Ventture
+
+https://www.venttureai.com.br/ — consultada em 09/09/2026. Inspiração apenas na sequência: benefício do atendimento, exemplo de conversa, passagem à equipe, plataforma de apoio e dúvidas. A Lotti apresenta um exemplo imobiliário fictício com resumo de procura. Não foram importados números de conversão, garantias, agendamento automático ou promessas de atendimento contínuo da referência.
+
+Página reorganizada: hero → exemplo imobiliário → problema → funcionamento → CRM e recursos → diferenciais → confiança → planos → FAQ → contato.

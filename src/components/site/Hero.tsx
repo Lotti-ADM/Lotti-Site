@@ -23,7 +23,7 @@ export function Hero() {
 
           <div className="mt-8 flex w-full flex-col items-center" data-hero-actions="">
             <div className="flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center">
-              <Button href="#demo" arrow className="btn-shimmer w-full shadow-lg sm:w-auto">
+              <Button href="#agente" arrow className="btn-shimmer w-full shadow-lg sm:w-auto">
                 {hero.primaryCta}
               </Button>
               <Button

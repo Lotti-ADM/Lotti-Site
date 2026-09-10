@@ -24,6 +24,7 @@ import {
  */
 
 export const nav = [
+  { label: "O agente", href: "/#agente" },
   { label: "Recursos", href: "/#recursos" },
   { label: "Como funciona", href: "/#como-funciona" },
   { label: "Preços", href: "/#planos" },
@@ -45,15 +46,15 @@ export const hero = {
     "Gestão jurídica",
     "Mídias com IA",
   ],
-  primaryCta: "Conhecer o atendimento com IA",
+  primaryCta: "Ver exemplo de qualificação",
   secondaryCta: "Ver como funciona",
   footnote: "Agente em implantação. Consulte a equipe sobre a ativação na sua operação.",
 } as const;
 
 export const problem = {
   eyebrow: "Menos perguntas repetidas. Mais contexto.",
-  title: "O primeiro contato precisa virar uma conversa útil.",
-  lead: "Quem chega perguntando por um imóvel nem sempre sabe explicar tudo o que precisa. A proposta da Lotti é organizar essa conversa para orientar o próximo passo do corretor.",
+  title: "Entre uma visita e outra, quem entende o novo interessado?",
+  lead: "Enquanto você acompanha uma visita, chegam perguntas sobre preço, região e condições. O agente foi pensado para conduzir essa conversa inicial e organizar a necessidade antes de você assumir.",
   columns: { before: "Como é hoje", after: "Com a Lotti" },
   rows: [
     {
@@ -166,7 +167,7 @@ export const differentiators = {
       icon: ScanLine,
       title: "Linguagem simples, sem jargão",
       description:
-        "O agente deve fazer perguntas claras e confirmar o que entendeu, para o interessado conseguir explicar sua necessidade com as próprias palavras.",
+        "Perguntas claras e confirmação do que foi entendido ajudam o interessado a explicar sua necessidade com as próprias palavras.",
     },
     {
       icon: ShieldCheck,
@@ -249,7 +250,7 @@ export const plans = {
 
 export const finalCta = {
   eyebrow: "Conheça a Lotti",
-  title: "Planeje seu atendimento com IA.",
+  title: "Seu próximo atendimento pode começar com mais contexto.",
   lead: "Conte como os interessados chegam até você. Vamos conversar sobre o que o agente deve perguntar, o resumo que o corretor precisa receber e as etapas de ativação.",
   reassurance: [
     "Sem compromisso",
@@ -259,7 +260,7 @@ export const finalCta = {
 } as const;
 
 export const form = {
-  title: "Fale com a gente",
+  title: "Conte como você atende hoje",
   fields: {
     name: { label: "Nome completo", placeholder: "Como podemos te chamar" },
     whatsapp: { label: "WhatsApp", placeholder: "(00) 00000-0000" },

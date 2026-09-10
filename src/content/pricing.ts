@@ -54,6 +54,9 @@ export const comparisonFeatures = [
 ];
 
 export const pricingFAQ = [
+  { question: "E se o interessado quiser falar com o corretor?", answer: "O atendimento deve permitir que a pessoa peça ajuda humana. Na implantação, combinamos com você quando interromper a qualificação e como encaminhar o contexto para a equipe." },
+  { question: "O agente serve para compra e aluguel?", answer: "A qualificação considera os dois objetivos. As perguntas devem se adaptar à procura: região, orçamento, tipo de imóvel, características e prazo. As regras são definidas com a sua operação." },
+  { question: "Ele confirma preço e disponibilidade do imóvel?", answer: "O corretor confirma valores, despesas e disponibilidade antes de apresentar uma oferta. O agente organiza o que a pessoa procura; não deve inventar informações sobre imóveis." },
   { question: "O que significa qualificar um lead?", answer: "É entender a necessidade de quem demonstrou interesse: compra ou aluguel, região, orçamento, tipo de imóvel e prazo. O resultado é um resumo para orientar o trabalho do corretor." },
   { question: "O agente já começa a responder após a contratação?", answer: "O agente está em implantação. A ativação exige configuração do canal e validação do atendimento com a equipe Lotti. Confirme as condições e o prazo de ativação antes de contratar." },
   { question: "A IA escolhe o imóvel ou fecha a venda?", answer: "O agente apoia a qualificação inicial. O corretor procura opções, verifica disponibilidade, conduz visitas e negocia com o cliente. A qualificação não garante uma venda." },

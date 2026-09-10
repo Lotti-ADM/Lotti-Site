@@ -4,12 +4,12 @@ import { useActionState, useId, useRef, useState } from "react";
 import { CheckCircle2, ArrowRight, ArrowLeft } from "lucide-react";
 import { type DemoFormState, scheduleDemo } from "@/app/actions/schedule-demo";
 import { form as copy } from "@/content/landing";
-import { quizQuestions } from "@/content/demo-quiz";
+import { contactConsent, quizQuestions } from "@/content/demo-quiz";
 import { demoSchema } from "@/lib/demo-validation";
 import { whatsappUrl } from "@/config/site";
 
 const initialState: DemoFormState = { status: "idle" };
-const emptyValues = { name: "", whatsapp: "", email: "", creci: "", portfolio: "", leadVolume: "", attendance: "" };
+const emptyValues = { name: "", whatsapp: "", email: "", creci: "", portfolio: "", leadVolume: "", attendance: "", consent: "" };
 type Field = keyof typeof emptyValues;
 
 export function DemoForm() {
@@ -86,7 +86,14 @@ export function DemoForm() {
           {(errors[name] || state.fieldErrors?.[name]) && <p id={`${ids}-${name}-error`} className="mt-1 text-sm text-[#a52424]">{errors[name] || state.fieldErrors?.[name]}</p>}
         </div>)}
       </div>
-      <p className="mt-4 text-xs leading-relaxed text-[#56625c]">Ao enviar, você solicita um contato da Lotti sobre sua operação.</p>
+      <div className="mt-5">
+        <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-[#56625c]" htmlFor={`${ids}-consent`}>
+          <input id={`${ids}-consent`} type="checkbox" name="consent" value="accepted" checked={values.consent === "accepted"} onChange={event => change("consent", event.target.checked ? "accepted" : "")} required disabled={pending} aria-invalid={Boolean(errors.consent || state.fieldErrors?.consent)} aria-describedby={`${ids}-consent-help${errors.consent || state.fieldErrors?.consent ? ` ${ids}-consent-error` : ""}`} className="mt-1 h-5 w-5 shrink-0 accent-[#093323]" />
+          <span>{contactConsent.text}</span>
+        </label>
+        {(errors.consent || state.fieldErrors?.consent) && <p role="alert" id={`${ids}-consent-error`} className="mt-2 text-sm text-[#a52424]">{errors.consent || state.fieldErrors?.consent}</p>}
+        <p id={`${ids}-consent-help`} className="mt-3 text-xs leading-relaxed text-[#56625c]">Você pode revogar esta autorização a qualquer momento, respondendo ao nosso contato ou escrevendo para <a href="mailto:uselottiapp@gmail.com" className="underline">uselottiapp@gmail.com</a>.</p>
+      </div>
     </div>
     {state.status === "error" && <p role="alert" className="mt-4 text-sm text-[#a52424]">{state.message}</p>}
     <div className="mt-6 flex items-center gap-3">

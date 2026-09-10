@@ -1,10 +1,11 @@
 import { z } from "zod";
 import { form as formCopy } from "../content/landing";
-import { quizQuestions } from "../content/demo-quiz";
+import { contactConsent, quizQuestions } from "../content/demo-quiz";
 
 const onlyDigits = (value: string) => value.replace(/\D/g, "");
 
 export const demoSchema = z.object({
+  consent: z.literal("accepted", { error: contactConsent.error }),
   name: z
     .string()
     .trim()

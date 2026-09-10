@@ -1,11 +1,12 @@
 "use server";
 
+import { contactConsent } from "@/content/demo-quiz";
 import { headers } from "next/headers";
 import { demoSchema } from "@/lib/demo-validation";
 import { siteConfig, isPending } from "@/config/site";
 import { form as formCopy } from "@/content/landing";
 
-type FieldName = "name" | "whatsapp" | "email" | "creci" | "portfolio" | "leadVolume" | "attendance";
+type FieldName = "name" | "whatsapp" | "email" | "creci" | "portfolio" | "leadVolume" | "attendance" | "consent";
 
 export type DemoFormState = {
   status: "idle" | "success" | "error";
@@ -71,6 +72,7 @@ export async function scheduleDemo(
   }
 
   const raw = {
+    consent: String(formData.get("consent") ?? ""),
     name: String(formData.get("name") ?? ""),
     whatsapp: String(formData.get("whatsapp") ?? ""),
     email: String(formData.get("email") ?? ""),
@@ -121,7 +123,8 @@ export async function scheduleDemo(
   }
 
   try {
-    const now = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+    const consentReceivedAt = new Date().toISOString();
+    const now = new Date(consentReceivedAt).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
 
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -169,6 +172,7 @@ export async function scheduleDemo(
                 </tr>
                 <tr><td style="padding:12px 0;color:#6b7280;">Leads por mês</td><td style="padding:12px 0;color:#111827;">${esc(lead.leadVolume)}</td></tr>
                 <tr><td style="padding:12px 0;color:#6b7280;">Atendimento atual</td><td style="padding:12px 0;color:#111827;">${esc(lead.attendance)}</td></tr>
+                <tr><td style="padding:12px 0;color:#6b7280;">Autorização de contato</td><td style="padding:12px 0;color:#111827;">Confirmada pelo formulário.<br/>${esc(contactConsent.text)}<br/>Versão: ${esc(contactConsent.version)}<br/>Recebida em (UTC): ${esc(consentReceivedAt)}</td></tr>
               </table>
             </div>
 
@@ -190,6 +194,10 @@ export async function scheduleDemo(
           "",
           `Recebido em: ${now}`,
           `Origem: ${siteConfig.url}`,
+          `Autorização de contato: confirmada pelo formulário`,
+          `Texto aceito: ${contactConsent.text}`,
+          `Versão: ${contactConsent.version}`,
+          `Autorização recebida em (UTC): ${consentReceivedAt}`,
         ].join("\n"),
       }),
     });

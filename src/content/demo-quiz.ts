@@ -5,3 +5,9 @@ export const quizQuestions: { name: "leadVolume" | "attendance" | "portfolio"; t
   { name: "attendance", title: "Como esses leads são atendidos hoje?", hint: "Escolha a opção que mais se aproxima da sua rotina.", options: ["Eu faço o atendimento", "Minha equipe faz o atendimento", "Respondemos quando sobra tempo", "Já usamos uma automação"] },
   { name: "portfolio", title: "Quantos imóveis você administra hoje?", hint: "Isso ajuda a entender o tamanho da sua operação.", options: form.portfolioOptions },
 ];
+
+export const contactConsent = {
+  version: "2026-09-10-v1",
+  text: "Autorizo a Lotti a usar os dados e as respostas deste formulário para entrar em contato comigo por WhatsApp e e-mail sobre esta solicitação.",
+  error: "Confirme a autorização de contato para enviar sua solicitação.",
+};

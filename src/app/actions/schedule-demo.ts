@@ -1,11 +1,11 @@
 "use server";
 
 import { headers } from "next/headers";
-import { z } from "zod";
+import { demoSchema } from "@/lib/demo-validation";
 import { siteConfig, isPending } from "@/config/site";
 import { form as formCopy } from "@/content/landing";
 
-type FieldName = "name" | "whatsapp" | "email" | "creci" | "portfolio";
+type FieldName = "name" | "whatsapp" | "email" | "creci" | "portfolio" | "leadVolume" | "attendance";
 
 export type DemoFormState = {
   status: "idle" | "success" | "error";
@@ -13,31 +13,6 @@ export type DemoFormState = {
   fieldErrors?: Partial<Record<FieldName, string>>;
   values?: Partial<Record<FieldName, string>>;
 };
-
-const onlyDigits = (value: string) => value.replace(/\D/g, "");
-
-const schema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(2, "Diga como podemos te chamar.")
-    .max(120, "Nome muito longo."),
-  whatsapp: z
-    .string()
-    .trim()
-    .transform(onlyDigits)
-    .refine((digits) => digits.length >= 10 && digits.length <= 13, {
-      message: "Informe DDD e número, ex.: (11) 98765-4321.",
-    }),
-  email: z.string().email("Confira o e-mail, parece incompleto.").max(160),
-  creci: z.string().trim().max(40, "CRECI muito longo.").optional(),
-  portfolio: z
-    .string()
-    .trim()
-    .refine((value) => formCopy.portfolioOptions.includes(value as never), {
-      message: "Escolha uma das opções.",
-    }),
-});
 
 /**
  * Throttle best-effort por IP. Em serverless a memória é por instância, então
@@ -100,10 +75,12 @@ export async function scheduleDemo(
     whatsapp: String(formData.get("whatsapp") ?? ""),
     email: String(formData.get("email") ?? ""),
     creci: String(formData.get("creci") ?? ""),
+    leadVolume: String(formData.get("leadVolume") ?? ""),
+    attendance: String(formData.get("attendance") ?? ""),
     portfolio: String(formData.get("portfolio") ?? ""),
   };
 
-  const parsed = schema.safeParse(raw);
+  const parsed = demoSchema.safeParse(raw);
 
   if (!parsed.success) {
     const fieldErrors: Partial<Record<FieldName, string>> = {};
@@ -137,10 +114,8 @@ export async function scheduleDemo(
   const from = process.env.RESEND_FROM ?? "Lotti <onboarding@resend.dev>";
 
   if (!apiKey) {
-    // Sem API key do Resend — registra no servidor para recuperação manual
     console.error(
-      "[lotti] RESEND_API_KEY ausente. Lead recebido:",
-      lead,
+      "[lotti] RESEND_API_KEY ausente.",
     );
     return { status: "error", values: raw, message: failureMessage() };
   }
@@ -192,6 +167,8 @@ export async function scheduleDemo(
                   <td style="padding: 12px 0; color: #6b7280; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Carteira</td>
                   <td style="padding: 12px 0; color: #111827; font-size: 15px; font-weight: 500;">${esc(lead.portfolio)}</td>
                 </tr>
+                <tr><td style="padding:12px 0;color:#6b7280;">Leads por mês</td><td style="padding:12px 0;color:#111827;">${esc(lead.leadVolume)}</td></tr>
+                <tr><td style="padding:12px 0;color:#6b7280;">Atendimento atual</td><td style="padding:12px 0;color:#111827;">${esc(lead.attendance)}</td></tr>
               </table>
             </div>
 
@@ -208,6 +185,8 @@ export async function scheduleDemo(
           `E-mail:    ${lead.email}`,
           `CRECI:     ${lead.creci || "-"}`,
           `Carteira:  ${lead.portfolio}`,
+          `Leads por mês: ${lead.leadVolume}`,
+          `Atendimento atual: ${lead.attendance}`,
           "",
           `Recebido em: ${now}`,
           `Origem: ${siteConfig.url}`,
@@ -216,12 +195,11 @@ export async function scheduleDemo(
     });
 
     if (!response.ok) {
-      const detail = await response.text();
-      console.error("[lotti] Resend respondeu", response.status, detail, lead);
+      console.error("[lotti] Resend respondeu", response.status);
       return { status: "error", values: raw, message: failureMessage() };
     }
   } catch (error) {
-    console.error("[lotti] Falha ao enviar lead:", error, lead);
+    console.error("[lotti] Falha ao enviar lead:", error instanceof Error ? error.name : "Erro de rede");
     return { status: "error", values: raw, message: failureMessage() };
   }
 

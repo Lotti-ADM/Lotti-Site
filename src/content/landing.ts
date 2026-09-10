@@ -251,7 +251,7 @@ export const plans = {
 export const finalCta = {
   eyebrow: "Conheça a Lotti",
   title: "Seu próximo atendimento pode começar com mais contexto.",
-  lead: "Conte como os interessados chegam até você. Vamos conversar sobre o que o agente deve perguntar, o resumo que o corretor precisa receber e as etapas de ativação.",
+  lead: "Responda quatro etapas rápidas sobre sua operação. Vamos conversar sobre como a IA pode qualificar seus leads e entregar ao corretor o contexto para buscar o imóvel certo.",
   reassurance: [
     "Sem compromisso",
     "Conversa com quem construiu o produto",

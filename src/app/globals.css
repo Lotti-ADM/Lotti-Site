@@ -1263,3 +1263,6 @@
     box-shadow: 0 2px 8px rgba(9, 51, 35, 0.5);
   }
 }
+
+/* O quiz usa uma superfície clara dentro da seção escura. */
+.on-ink .demo-quiz :focus-visible { outline: 2px solid #093323; outline-offset: 4px; }

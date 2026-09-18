@@ -49,6 +49,9 @@
   --text-eyebrow--font-weight: 600;
 
   --radius-card: 12px;
+
+  /* Aurora animation — referenced by the aurora-background component */
+  --animate-aurora: aurora 60s linear infinite;
 }
 
 @layer components {
@@ -354,6 +357,13 @@
   --blade-skew: -28deg;
 
   --header-h: 5.75rem;
+
+  /* Aurora — paleta verde Lotti, derivada do forest #093323 */
+  --lotti-green-deep: #04261a;
+  --lotti-green-mid: #0d5c3d;
+  --lotti-green-bright: #14a06a;
+  --lotti-green-soft: #a3e4c4;
+  --transparent: transparent;
 }
 
 /* Keyframes ficam no root do arquivo, fora de @layer.
@@ -368,6 +378,15 @@
        O + (-1rem) compensa o gap entre os dois conjuntos: sem ele o
        segundo A B C chega 16px cedo demais e a costura fica visível. */
     transform: translate3d(calc(-50% - 1rem), 0, 0);
+  }
+}
+
+@keyframes aurora {
+  from {
+    background-position: 50% 50%, 50% 50%;
+  }
+  to {
+    background-position: 350% 50%, 350% 50%;
   }
 }
 
@@ -1171,6 +1190,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .animate-marquee,
+    .animate-aurora,
     .btn-shimmer::before,
     .border-beam-wrapper::before,
     .hero-mesh {

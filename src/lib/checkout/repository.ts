@@ -79,7 +79,11 @@ export async function updateCheckoutOrder(
   values: Partial<CheckoutOrder> & { failure_code?: string | null },
 ): Promise<void> {
   const supabase = getSupabaseAdmin();
-  const { error } = await supabase.from("checkout_orders").update(values).eq("id", id);
+  let mutation = supabase.from("checkout_orders").update(values).eq("id", id);
+  if (values.status && ["creating", "awaiting_payment", "processing", "failed"].includes(values.status)) {
+    mutation = mutation.not("status", "in", "(active,overdue,refunded)");
+  }
+  const { error } = await mutation;
   if (error) throw new Error(`CHECKOUT_ORDER_UPDATE_FAILED:${error.code ?? "unknown"}`);
 }
 

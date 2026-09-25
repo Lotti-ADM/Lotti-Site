@@ -1,9 +1,10 @@
+import { createHmac } from "node:crypto";
 import { NextResponse, type NextRequest } from "next/server";
 import { isAsaasConfigured, AsaasApiError, createAsaasSubscription, findOrCreateAsaasCustomer, getAsaasPixQrCode } from "@/lib/asaas/server";
 import { checkoutPlans, planPrice } from "@/lib/checkout/catalog";
 import { createCheckoutOrder, getCheckoutOrder, tokensMatch, updateCheckoutOrder } from "@/lib/checkout/repository";
 import { checkoutRequestSchema } from "@/lib/checkout/validation";
-import { isSupabaseConfigured } from "@/lib/supabase/admin";
+import { getSupabaseAdmin, isSupabaseConfigured } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
 
@@ -38,13 +39,18 @@ export async function POST(request: NextRequest) {
     return errorResponse("PAYLOAD_TOO_LARGE", "Os dados enviados excedem o limite permitido.", 413);
   }
 
-  if (!isAsaasConfigured() || !isSupabaseConfigured()) {
+  if (process.env.CHECKOUT_ENABLED !== "true" || !isAsaasConfigured() || !isSupabaseConfigured() || !process.env.ASAAS_WEBHOOK_TOKEN || !process.env.LOTTI_APP_PASSWORD_SETUP_URL) {
     return errorResponse(
       "CHECKOUT_NOT_CONFIGURED",
       "O pagamento online está em configuração. Tente novamente em instantes.",
       503,
     );
   }
+
+  const rateKey = createHmac('sha256', process.env.ASAAS_WEBHOOK_TOKEN!).update(requestIp(request)).digest('hex');
+  const rate = await getSupabaseAdmin().rpc('consume_checkout_rate_limit', { p_key: rateKey });
+  if (rate.error) return errorResponse('CHECKOUT_UNAVAILABLE','Não foi possível iniciar o pagamento agora.',503);
+  if (rate.data !== true) return errorResponse('TOO_MANY_ATTEMPTS','Aguarde um minuto antes de tentar novamente.',429);
 
   const rawBody = await request.json().catch(() => null);
   const parsed = checkoutRequestSchema.safeParse(rawBody);
@@ -63,6 +69,7 @@ export async function POST(request: NextRequest) {
   const statusToken = checkout.checkoutAttemptToken;
   let orderPersisted = false;
   let subscriptionCreated = false;
+  let subscriptionRequested = false;
 
   try {
     const existing = await getCheckoutOrder(orderId);
@@ -77,7 +84,7 @@ export async function POST(request: NextRequest) {
         return errorResponse("CHECKOUT_ATTEMPT_CONFLICT", "Esta tentativa de pagamento não pode ser reutilizada.", 409);
       }
 
-      if (existing.asaas_subscription_id || existing.status !== "failed") {
+      if (existing) {
         const pix = existing.payment_method === "PIX" && existing.asaas_payment_id
           ? await getAsaasPixQrCode(existing.asaas_payment_id).catch(() => undefined)
           : undefined;
@@ -85,7 +92,7 @@ export async function POST(request: NextRequest) {
           ok: true,
           orderId,
           statusToken,
-          status: existing.status === "failed" ? "processing" : existing.status,
+          status: existing.status,
           paymentMethod: existing.payment_method,
           pix,
         });
@@ -109,6 +116,7 @@ export async function POST(request: NextRequest) {
     const customer = await findOrCreateAsaasCustomer(orderId, checkout);
     await updateCheckoutOrder(orderId, { asaas_customer_id: customer.id });
 
+    subscriptionRequested = true;
     const result = await createAsaasSubscription({
       orderId,
       customerId: customer.id,
@@ -146,14 +154,15 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     const publicCode = error instanceof AsaasApiError ? error.publicCode : "CHECKOUT_FAILED";
+    const uncertain = subscriptionRequested && (!(error instanceof AsaasApiError) || error.publicCode === "GATEWAY_UNAVAILABLE");
     if (orderPersisted) {
       await updateCheckoutOrder(orderId, {
-        status: subscriptionCreated ? "processing" : "failed",
+        status: subscriptionCreated || uncertain ? "processing" : "failed",
         failure_code: publicCode,
       }).catch(() => undefined);
     }
 
-    if (subscriptionCreated) {
+    if (subscriptionCreated || uncertain) {
       return NextResponse.json({
         ok: true,
         orderId,

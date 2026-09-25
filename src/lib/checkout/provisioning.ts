@@ -1,5 +1,6 @@
 import "server-only";
 
+import type { AsaasPayment } from "@/lib/asaas/server";
 import type { User } from "@supabase/supabase-js";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import {
@@ -13,18 +14,12 @@ type CorretorRow = {
   user_id: string;
 };
 
-function periodEnd(cycle: CheckoutOrder["billing_cycle"]): string {
-  const end = new Date();
-  end.setUTCMonth(end.getUTCMonth() + (cycle === "annual" ? 12 : 1));
-  return end.toISOString();
-}
-
 async function findCorretorByEmail(email: string): Promise<CorretorRow | null> {
   const supabase = getSupabaseAdmin();
   const { data, error } = await supabase
     .from("corretores")
     .select("id,user_id")
-    .ilike("email", email)
+    .ilike("email", email.replace(/[\\%_]/g, "\\$&"))
     .limit(1)
     .maybeSingle();
 
@@ -52,7 +47,11 @@ async function inviteOrFindUser(order: CheckoutOrder): Promise<{
   invited: boolean;
 }> {
   const existing = await findCorretorByEmail(order.payer_email);
-  if (existing) return { user: null, corretor: existing, invited: false };
+  if (existing) {
+    const {data,error}=await getSupabaseAdmin().auth.admin.getUserById(existing.user_id);
+    if(error || data.user?.email?.toLowerCase() !== order.payer_email.toLowerCase()) throw new Error('ACCOUNT_EMAIL_MISMATCH');
+    return { user: null, corretor: existing, invited: false };
+  }
 
   const redirectTo = process.env.LOTTI_APP_PASSWORD_SETUP_URL;
   if (!redirectTo) throw new Error("PROVISION_REDIRECT_NOT_CONFIGURED");
@@ -71,6 +70,8 @@ async function inviteOrFindUser(order: CheckoutOrder): Promise<{
   if (error || !data.user) {
     const profileAfterConflict = await findCorretorByEmail(order.payer_email);
     if (profileAfterConflict) {
+      const verified=await supabase.auth.admin.getUserById(profileAfterConflict.user_id);
+      if(verified.error || verified.data.user?.email?.toLowerCase() !== order.payer_email.toLowerCase()) throw new Error('ACCOUNT_EMAIL_MISMATCH');
       return { user: null, corretor: profileAfterConflict, invited: false };
     }
     throw new Error("PROVISION_INVITE_FAILED");
@@ -80,50 +81,13 @@ async function inviteOrFindUser(order: CheckoutOrder): Promise<{
   return { user: data.user, corretor, invited: true };
 }
 
-async function activateSubscription(order: CheckoutOrder, corretorId: string): Promise<void> {
-  const supabase = getSupabaseAdmin();
-  const { data: plan, error: planError } = await supabase
-    .from("plans")
-    .select("id")
-    .eq("code", order.plan_code)
-    .eq("active", true)
-    .single();
-
-  if (planError || !plan) {
-    throw new Error(`PROVISION_PLAN_NOT_FOUND:${planError?.code ?? "missing"}`);
-  }
-
-  const { data: current, error: currentError } = await supabase
-    .from("subscriptions")
-    .select("id")
-    .eq("corretor_id", corretorId)
-    .in("status", ["trialing", "active", "past_due", "read_only"])
-    .limit(1)
-    .maybeSingle();
-
-  if (currentError) {
-    throw new Error(`PROVISION_SUBSCRIPTION_LOOKUP_FAILED:${currentError.code ?? "unknown"}`);
-  }
-
-  const values = {
-    plan_id: plan.id,
-    billing_cycle: order.billing_cycle,
-    status: "active",
-    trial_started_at: null,
-    trial_ends_at: null,
-    current_period_start: new Date().toISOString(),
-    current_period_end: periodEnd(order.billing_cycle),
-    cancel_at_period_end: false,
-    canceled_at: null,
-    cancel_reason: null,
-    external_subscription_id: order.asaas_subscription_id,
-  };
-
-  const mutation = current
-    ? supabase.from("subscriptions").update(values).eq("id", current.id)
-    : supabase.from("subscriptions").insert({ ...values, corretor_id: corretorId });
-  const { error } = await mutation;
-  if (error) throw new Error(`PROVISION_SUBSCRIPTION_WRITE_FAILED:${error.code ?? "unknown"}`);
+export async function applyPayment(order: CheckoutOrder, payment: AsaasPayment, userId: string): Promise<void> {
+  const { error } = await getSupabaseAdmin().rpc("apply_checkout_payment", {
+    p_order: order.id, p_payment: payment.id, p_customer: payment.customer,
+    p_subscription: payment.subscription, p_status: payment.deleted ? "DELETED" : payment.status,
+    p_due: payment.dueDate, p_amount: payment.value, p_user: userId,
+  });
+  if (error) throw new Error("PROVISION_PAYMENT_APPLY_FAILED");
 }
 
 async function sendRecoveryEmail(email: string): Promise<void> {
@@ -135,20 +99,19 @@ async function sendRecoveryEmail(email: string): Promise<void> {
   if (error) throw new Error("PROVISION_RECOVERY_EMAIL_FAILED");
 }
 
-export async function provisionPaidOrder(order: CheckoutOrder): Promise<void> {
+export async function provisionPaidOrder(order: CheckoutOrder, payment: AsaasPayment): Promise<void> {
   const claimed = await claimCheckoutOrderProvisioning(order.id);
-  if (!claimed) return;
+  if (!claimed) throw new Error("PROVISIONING_BUSY");
 
   try {
     const account = await inviteOrFindUser(order);
-    await activateSubscription(order, account.corretor.id);
+    await applyPayment(order, payment, account.corretor.user_id);
 
     if (!account.invited && !order.access_email_sent_at) {
       await sendRecoveryEmail(order.payer_email);
     }
 
     await updateCheckoutOrder(order.id, {
-      status: "active",
       provisioned_user_id: account.corretor.user_id,
       access_email_sent_at: order.access_email_sent_at ?? new Date().toISOString(),
       provisioning_started_at: null,
@@ -156,28 +119,9 @@ export async function provisionPaidOrder(order: CheckoutOrder): Promise<void> {
     });
   } catch (error) {
     await updateCheckoutOrder(order.id, {
-      status: "processing",
       provisioning_started_at: null,
       failure_code: "PROVISIONING_RETRY",
     }).catch(() => undefined);
     throw error;
   }
-}
-
-export async function updateSubscriptionLifecycle(
-  order: CheckoutOrder,
-  status: "active" | "past_due" | "canceled",
-): Promise<void> {
-  const supabase = getSupabaseAdmin();
-  const { error } = await supabase
-    .from("subscriptions")
-    .update({
-      status,
-      ...(status === "canceled"
-        ? { canceled_at: new Date().toISOString(), cancel_reason: "asaas_payment_reversed" }
-        : {}),
-    })
-    .eq("external_subscription_id", order.asaas_subscription_id);
-
-  if (error) throw new Error(`PROVISION_LIFECYCLE_UPDATE_FAILED:${error.code ?? "unknown"}`);
 }

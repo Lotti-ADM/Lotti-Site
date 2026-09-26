@@ -23,6 +23,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
   return (
     <CheckoutForm
       initialPlanCode={isPlanCode(requestedPlan) ? requestedPlan : "profissional"}
+      initialPaymentMethod={first(query.ciclo) === "annual" ? "PIX" : "CREDIT_CARD"}
     />
   );
 }

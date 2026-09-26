@@ -240,7 +240,18 @@ export async function createAsaasSubscription(input: {
 }
 
 export async function getAsaasPixQrCode(paymentId: string): Promise<PixQrCode> {
-  return asaasFetch<PixQrCode>(`/payments/${encodeURIComponent(paymentId)}/pixQrCode`);
+  // The charge may exist before Asaas finishes generating its Pix payload.
+  // Retry only this read; never create another subscription to obtain the QR.
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      return await asaasFetch<PixQrCode>(`/payments/${encodeURIComponent(paymentId)}/pixQrCode`);
+    } catch (error) {
+      if (!(error instanceof AsaasApiError)
+        || ![400, 404].includes(error.status)
+        || attempt >= 4) throw error;
+      await new Promise((resolve) => setTimeout(resolve, 1000 * (attempt + 1)));
+    }
+  }
 }
 
 export async function getAsaasPayment(id: string): Promise<AsaasPayment> {

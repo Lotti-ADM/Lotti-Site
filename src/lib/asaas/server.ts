@@ -16,6 +16,9 @@ type AsaasCustomer = {
 type AsaasSubscription = {
   id: string;
   status?: string;
+  customer?: string;
+  externalReference?: string;
+  value?: number;
 };
 
 export type AsaasPayment = {
@@ -25,6 +28,9 @@ export type AsaasPayment = {
   subscription?: string | null;
   billingType?: string | null;
   value?: number;
+  customer?: string;
+  dueDate?: string;
+  deleted?: boolean;
   creditCard?: {
     creditCardNumber?: string | null;
     creditCardBrand?: string | null;
@@ -104,7 +110,7 @@ async function asaasFetch<T>(
     const refused = response.status === 400
       && /credit|cart|refus|denied|not authorized|transa/.test(`${code} ${description}`);
 
-    throw new AsaasApiError(refused ? "CARD_REFUSED" : "INVALID_DATA", response.status);
+    throw new AsaasApiError(response.status >= 500 || response.status === 429 ? "GATEWAY_UNAVAILABLE" : refused ? "CARD_REFUSED" : "INVALID_DATA", response.status);
   }
 
   return (await response.json()) as T;
@@ -235,4 +241,12 @@ export async function createAsaasSubscription(input: {
 
 export async function getAsaasPixQrCode(paymentId: string): Promise<PixQrCode> {
   return asaasFetch<PixQrCode>(`/payments/${encodeURIComponent(paymentId)}/pixQrCode`);
+}
+
+export async function getAsaasPayment(id: string): Promise<AsaasPayment> {
+  return asaasFetch<AsaasPayment>(`/payments/${encodeURIComponent(id)}`);
+}
+
+export async function getAsaasSubscription(id: string): Promise<AsaasSubscription> {
+  return asaasFetch<AsaasSubscription>(`/subscriptions/${encodeURIComponent(id)}`);
 }

@@ -82,7 +82,7 @@ PAYMENT_DELETED
 ```
 
 O endpoint retorna `200` para duplicatas e eventos que não pertencem ao checkout.
-Falhas internas retornam `500`, mantendo o evento elegível para nova tentativa.
+Falhas internas retornam `503`, mantendo o evento elegível para nova tentativa.
 
 ## 4. Configurar o e-mail de acesso no Supabase
 
@@ -103,10 +103,28 @@ Antes de trocar para produção, validar no Sandbox:
 - cartão aprovado, recusado e com timeout inconclusivo;
 - reenvio do mesmo evento sem duplicar convite ou assinatura;
 - e-mail novo recebendo convite e conta existente recebendo recuperação;
-- cartão mensal com os três valores do catálogo (R$ 99, R$ 149 e R$ 299);
-- PIX anual com os totais de R$ 1.188, R$ 1.788 e R$ 3.588;
+- cartão mensal com os três valores do catálogo (R$ 279, R$ 399 e R$ 799);
+- PIX anual com os totais de R$ 2.790, R$ 3.990 e R$ 7.990;
 - pagamento atrasado, estorno e chargeback alterando o acesso;
 - layout em HTTPS, desktop e celular.
 
 Uma resposta de criação do Asaas ou uma página de sucesso nunca deve liberar
 acesso sozinha. A fonte de verdade é o webhook autenticado e idempotente.
+
+## Endurecimento de 25/09/2026
+
+Aplicar também `20260925120200_checkout_payment_ledger.sql` (a plataforma mantém
+as migrations de limites e reservas de IA). O webhook consulta o estado atual da
+cobrança e confere cliente, assinatura, referência, valor e vencimento antes de
+aplicar o recebimento. A tabela `checkout_payments` evita contar CONFIRMED e
+RECEIVED como duas mensalidades. Renovações atualizam o período; eventos de uma
+cobrança antiga não suspendem uma cobrança posterior paga.
+
+`CHECKOUT_ENABLED=false` é o padrão seguro. Configurar SMTP, redirects, chave
+Asaas, token/webhook e homologar antes de mudar para `true`. Nunca repetir
+automaticamente um POST de criação cujo resultado foi inconclusivo.
+
+No repositório da plataforma, `docs/ASAAS_PLANOS_ATIVACAO.md` descreve os limites,
+o procedimento de ativação e as pendências de cancelamento/troca de plano.
+
+Aplicar tambem a migration 20260925120300 depois das migrations de limites da plataforma (20260925120000/120100). Ela limita tentativas por IP com chave HMAC, sem guardar o IP bruto. As cinco migrations desta entrega ja foram aplicadas e registradas no projeto Supabase vinculado em 25/09/2026.

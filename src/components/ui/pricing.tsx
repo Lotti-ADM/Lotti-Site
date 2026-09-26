@@ -31,8 +31,6 @@ interface PricingProps {
 
 export function Pricing({
   plans,
-  title = "Preços simples e transparentes",
-  description = "Escolha o plano certo para sua operação.\nTodos incluem plataforma completa, agente de IA e suporte dedicado.",
 }: PricingProps) {
   const [isMonthly, setIsMonthly] = useState(true);
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -174,7 +172,7 @@ export function Pricing({
               </ul>
 
               <Link
-                href={plan.href}
+                href={`${plan.href}${plan.href.includes("?") ? "&" : "?"}ciclo=${isMonthly ? "monthly" : "annual"}`}
                 className={cn(
                   "group relative w-full gap-2 overflow-hidden text-sm font-semibold tracking-tight cursor-pointer",
                   "inline-flex items-center justify-center rounded-full px-6 py-3",

@@ -55,6 +55,7 @@ type CheckoutResponse = {
 
 type CheckoutFormProps = {
   initialPlanCode: PlanCode;
+  initialPaymentMethod: PaymentMethod;
 };
 
 const emptyCard: CreditCardData = {
@@ -92,9 +93,9 @@ function formatPostalCode(value: string): string {
   return digitsOnly(value).slice(0, 8).replace(/(\d{5})(\d)/, "$1-$2");
 }
 
-export function CheckoutForm({ initialPlanCode }: CheckoutFormProps) {
+export function CheckoutForm({ initialPlanCode, initialPaymentMethod }: CheckoutFormProps) {
   const [planCode, setPlanCode] = useState(initialPlanCode);
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("PIX");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(initialPaymentMethod);
   const billingCycle: BillingCycle = billingCycleForPayment(paymentMethod);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --import tsx --test tests/checkout-validation.test.ts",
+    "test": "node --import tsx --test tests/checkout-validation.test.ts tests/payment-validation.test.ts",
     "test:visual": "node --test tests/visual-brand.test.mjs"
   },
   "dependencies": {

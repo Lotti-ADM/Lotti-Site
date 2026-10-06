@@ -4,11 +4,12 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+import { Reveal } from "@/components/ui/Reveal";
 import { Check, Star } from "lucide-react";
 import Link from "next/link";
 import { useState, useRef } from "react";
-import confetti from "canvas-confetti";
+// Dynamic import — loads ~8KB only when user toggles annual pricing
+const loadConfetti = () => import("canvas-confetti").then((m) => m.default);
 import NumberFlow from "@number-flow/react";
 
 export interface PricingPlan {
@@ -33,7 +34,6 @@ export function Pricing({
   plans,
 }: PricingProps) {
   const [isMonthly, setIsMonthly] = useState(true);
-  const isDesktop = useMediaQuery("(min-width: 768px)");
   const switchRef = useRef<HTMLButtonElement>(null);
 
   const handleToggle = (checked: boolean) => {
@@ -43,19 +43,21 @@ export function Pricing({
       const x = rect.left + rect.width / 2;
       const y = rect.top + rect.height / 2;
 
-      confetti({
-        particleCount: 50,
-        spread: 60,
-        origin: {
-          x: x / window.innerWidth,
-          y: y / window.innerHeight,
-        },
-        colors: ["#093323", "#5e687a", "#d9deea", "#eef1f6"],
-        ticks: 200,
-        gravity: 1.2,
-        decay: 0.94,
-        startVelocity: 30,
-        shapes: ["circle"],
+      void loadConfetti().then((confetti) => {
+        confetti({
+          particleCount: 50,
+          spread: 60,
+          origin: {
+            x: x / window.innerWidth,
+            y: y / window.innerHeight,
+          },
+          colors: ["#093323", "#5e687a", "#d9deea", "#eef1f6"],
+          ticks: 200,
+          gravity: 1.2,
+          decay: 0.94,
+          startVelocity: 30,
+          shapes: ["circle"],
+        });
       });
     }
   };
@@ -81,45 +83,23 @@ export function Pricing({
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {plans.map((plan, index) => (
-          <motion.div
+          <Reveal
             key={index}
-            initial={{ y: 50, opacity: 1 }}
-            whileInView={
-              isDesktop
-                ? {
-                    y: plan.isPopular ? -20 : 0,
-                    opacity: 1,
-                    x: index === 2 ? -30 : index === 0 ? 30 : 0,
-                    scale: index === 0 || index === 2 ? 0.94 : 1.0,
-                  }
-                : {}
-            }
-            viewport={{ once: true }}
-            transition={{
-              duration: 1.6,
-              type: "spring",
-              stiffness: 100,
-              damping: 30,
-              delay: 0.4,
-              opacity: { duration: 0.5 },
-            }}
+            delay={index * 150}
             className={cn(
-              "rounded-2xl border p-6 bg-paper text-center lg:flex lg:flex-col lg:justify-center relative",
+              "rounded-2xl border p-6 bg-paper text-center lg:flex lg:flex-col lg:justify-center relative transition-transform duration-500",
               plan.isPopular
-                ? "border-forest border-2 shadow-xl"
-                : "border-line",
+                ? "border-forest border-2 shadow-xl md:-translate-y-5 md:z-20"
+                : "border-line md:z-10",
               "flex flex-col",
               !plan.isPopular && "mt-5",
-              index === 0 || index === 2
-                ? "z-0 transform translate-x-0 translate-y-0 -translate-z-[50px] rotate-y-[10deg]"
-                : "z-10",
-              index === 0 && "origin-right",
-              index === 2 && "origin-left"
+              index === 0 && "md:translate-x-8 md:scale-[0.96] md:origin-right",
+              index === 2 && "md:-translate-x-8 md:scale-[0.96] md:origin-left"
             )}
           >
             {plan.isPopular && (
               <div className="absolute top-0 right-0 bg-forest py-0.5 px-2 rounded-bl-xl rounded-tr-xl flex items-center">
-                <Star className="text-white h-4 w-4 fill-current" />
+                <Star className="text-white h-4 w-4 fill-current" aria-hidden="true" />
                 <span className="text-white ml-1 font-sans font-semibold text-sm">
                   Mais escolhido
                 </span>
@@ -160,11 +140,11 @@ export function Pricing({
                   : "Cobrança anual (valor equivalente por mês)"}
               </p>
 
-              <ul className="mt-7 mb-7 gap-3 flex flex-col flex-1">
+              <ul className="mt-7 mb-7 gap-3 flex flex-col flex-1 text-left">
                 {plan.features.map((feature, idx) => (
                   <li key={idx} className="flex items-start gap-2">
-                    <Check className="h-4 w-4 text-forest mt-1 flex-shrink-0" />
-                    <span className="text-left text-sm text-muted">
+                    <Check className="h-4 w-4 text-forest mt-1 flex-shrink-0" aria-hidden="true" />
+                    <span className="text-sm text-muted">
                       {feature}
                     </span>
                   </li>
@@ -189,7 +169,7 @@ export function Pricing({
                 {plan.description}
               </p>
             </div>
-          </motion.div>
+          </Reveal>
         ))}
       </div>
     </div>

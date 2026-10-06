@@ -1,9 +1,7 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { BeamsBackground } from "@/components/ui/beams-background";
 import { hero } from "@/content/landing";
+import { HeroVideo } from "@/components/ui/HeroVideo";
 
 /**
  * O hero é o LCP da página.
@@ -11,6 +9,10 @@ import { hero } from "@/content/landing";
  * com feixes de luz esmeralda que sobem suavemente.  O conteúdo usa as
  * variantes de botão "inverted" e texto branco para manter legibilidade
  * sobre a superfície escura — igual ao header pill.
+ *
+ * Performance: uses CSS animations instead of framer-motion to avoid
+ * shipping ~40KB of JS for a simple fade-in. The hero-entrance animation
+ * is defined in globals.css.
  */
 export function Hero() {
   return (
@@ -18,11 +20,8 @@ export function Hero() {
       className="pt-[calc(var(--header-h)+clamp(2rem,4vw,3rem))] pb-[clamp(4rem,8vw,7rem)]"
       intensity="medium"
     >
-      <motion.div
-        initial={{ opacity: 0, y: 32 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.15, duration: 0.7, ease: "easeOut" }}
-        className="on-ink shell flex flex-col items-center text-center"
+      <div
+        className="on-ink shell flex flex-col items-center text-center hero-entrance"
       >
         <div className="flex w-full flex-col items-center">
           <h1 className="max-w-[22ch] text-display text-balance text-gradient lg:max-w-none">
@@ -49,24 +48,12 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Video do produto */}
+        {/* Video do produto — lazy loaded, poster shown immediately */}
         <div className="relative mt-8 w-[min(94vw,1280px)] max-w-none pt-4 sm:mt-10 sm:pt-6">
           <div className="hero-product-glow" aria-hidden="true" />
-          <video
-            data-hero-video=""
-            className="relative z-10 w-full rounded-xl border border-white/10 bg-paper object-cover shadow-[0_28px_80px_rgba(0,0,0,0.4)]"
-            src="/product/hero-demo.mp4"
-            poster="/product/hero-demo-poster.jpg"
-            style={{ aspectRatio: "1400 / 1034" }}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            aria-label="Demonstracao da plataforma Lotti"
-          />
+          <HeroVideo />
         </div>
-      </motion.div>
+      </div>
     </BeamsBackground>
   );
 }

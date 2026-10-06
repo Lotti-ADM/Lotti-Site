@@ -1044,6 +1044,30 @@
     }
   }
 
+  /* ---- Hero Entrance Animation (Replaces framer-motion) ----------------- */
+  @keyframes hero-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(32px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero-entrance {
+    animation: hero-fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.15s backwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-entrance {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
   /* ============================================================
      UX/UI OVERHAUL: Advanced Aesthetics & Animations
      ============================================================ */
@@ -1237,8 +1261,16 @@
       0 8px 32px rgba(0, 0, 0, 0.35),
       0 2px 8px rgba(0, 0, 0, 0.2),
       inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(24px) saturate(1.2);
-    -webkit-backdrop-filter: blur(24px) saturate(1.2);
+    /* Lighter blur on mobile to save GPU, full blur on desktop */
+    backdrop-filter: blur(12px) saturate(1.1);
+    -webkit-backdrop-filter: blur(12px) saturate(1.1);
+  }
+
+  @media (min-width: 768px) {
+    .header-pill--scrolled {
+      backdrop-filter: blur(24px) saturate(1.2);
+      -webkit-backdrop-filter: blur(24px) saturate(1.2);
+    }
   }
 
   /* Nav link hover underline on dark bg */

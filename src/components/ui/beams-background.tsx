@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface BeamsBackgroundProps {
@@ -30,6 +29,10 @@ interface Beam {
  * Green-hue beams (hue 130-170) over a dark forest-green surface (#03130d),
  * matching the header pill and Lotti brand identity.  The component accepts
  * children so it can wrap arbitrary hero content.
+ *
+ * Performance: on mobile, a static CSS gradient replaces the canvas animation
+ * to avoid GPU strain from blur filters. Desktop uses a single canvas blur
+ * instead of the previous triple-blur stack.
  */
 
 function createBeam(width: number, height: number): Beam {
@@ -49,7 +52,8 @@ function createBeam(width: number, height: number): Beam {
   };
 }
 
-const MINIMUM_BEAMS = 20;
+/** Fewer beams = less GPU work. 12 is visually close to 30 at blur levels. */
+const BEAM_COUNT = 12;
 
 const opacityMap = {
   subtle: 0.7,
@@ -67,6 +71,14 @@ export function BeamsBackground({
   const animationFrameRef = useRef<number>(0);
 
   useEffect(() => {
+    // Skip canvas animation on mobile and when reduced motion is preferred
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const isMobile = window.innerWidth < 768;
+
+    if (prefersReducedMotion || isMobile) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -74,7 +86,7 @@ export function BeamsBackground({
     if (!ctx) return;
 
     const updateCanvasSize = () => {
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap DPR at 2
       const rect = canvas.parentElement?.getBoundingClientRect();
       const w = rect?.width ?? window.innerWidth;
       const h = rect?.height ?? window.innerHeight;
@@ -84,8 +96,7 @@ export function BeamsBackground({
       canvas.style.height = `${h}px`;
       ctx.scale(dpr, dpr);
 
-      const totalBeams = MINIMUM_BEAMS * 1.5;
-      beamsRef.current = Array.from({ length: totalBeams }, () =>
+      beamsRef.current = Array.from({ length: BEAM_COUNT }, () =>
         createBeam(canvas.width, canvas.height),
       );
     };
@@ -150,7 +161,6 @@ export function BeamsBackground({
       if (!canvas || !ctx) return;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.filter = "blur(35px)";
 
       beamsRef.current.forEach((beam, index) => {
         beam.y -= beam.speed;
@@ -185,23 +195,21 @@ export function BeamsBackground({
         className,
       )}
     >
-      {/* Beam canvas */}
+      {/* Beam canvas — hidden on mobile via CSS, JS also skips animation */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0"
-        style={{ filter: "blur(15px)" }}
+        className="absolute inset-0 hidden md:block"
+        style={{ filter: "blur(20px)" }}
       />
 
-      {/* Subtle pulsing overlay for depth */}
-      <motion.div
-        className="absolute inset-0 bg-[#03130d]/5"
-        animate={{ opacity: [0.05, 0.15, 0.05] }}
-        transition={{
-          duration: 10,
-          ease: "easeInOut",
-          repeat: Number.POSITIVE_INFINITY,
+      {/* Static gradient fallback for mobile & reduced-motion — visually similar,
+          zero GPU cost. Also visible on desktop as a subtle base layer. */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% 40%, hsla(150, 70%, 20%, 0.15), transparent 70%)",
         }}
-        style={{ backdropFilter: "blur(50px)" }}
       />
 
       {/* Content layer */}

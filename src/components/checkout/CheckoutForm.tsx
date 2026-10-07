@@ -11,7 +11,6 @@ import {
   CreditCard,
   LoaderCircle,
   LockKeyhole,
-  Mail,
   QrCode,
   ShieldCheck,
   UserRound,
@@ -51,6 +50,21 @@ type CheckoutResponse = {
     payload: string;
     expirationDate: string;
   };
+};
+
+/** Acesso da conta paga: link de criar senha (uso único) ou, se já houver senha, o de entrar. */
+type AccountAccess = {
+  passwordSetupUrl: string | null;
+  passwordAlreadySet: boolean;
+  loginUrl: string | null;
+};
+
+type CheckoutStatusResponse = {
+  status?: CheckoutStatus;
+  pix?: CheckoutResponse["pix"];
+  passwordSetupUrl?: string | null;
+  passwordAlreadySet?: boolean;
+  loginUrl?: string | null;
 };
 
 type CheckoutFormProps = {
@@ -110,8 +124,10 @@ export function CheckoutForm({ initialPlanCode, initialPaymentMethod }: Checkout
   const [errorMessage, setErrorMessage] = useState("");
   const [order, setOrder] = useState<{ id: string; token: string } | null>(null);
   const [pix, setPix] = useState<CheckoutResponse["pix"]>();
+  const [access, setAccess] = useState<AccountAccess | null>(null);
   const [copied, setCopied] = useState(false);
   const checkoutAttempt = useRef<{ id: string; token: string } | null>(null);
+  const accessReady = Boolean(access?.passwordSetupUrl || access?.passwordAlreadySet);
 
   const plan = checkoutPlans[planCode];
   const monthlyAmount = planPrice(plan, "monthly");
@@ -162,19 +178,24 @@ export function CheckoutForm({ initialPlanCode, initialPaymentMethod }: Checkout
   };
 
   useEffect(() => {
-    if (!order || status === "active" || status === "failed" || status === "refunded") return;
+    // Ativo continua consultando até o acesso (link de senha ou de entrar) chegar.
+    if (!order || (status === "active" && accessReady) || status === "failed" || status === "refunded") return;
 
     let cancelled = false;
     const checkStatus = async () => {
       const query = new URLSearchParams({ pedido: order.id, token: order.token });
       const response = await fetch(`/api/checkout/status?${query}`, { cache: "no-store" }).catch(() => null);
       if (!response?.ok || cancelled) return;
-      const data = await response.json() as {
-        status?: CheckoutStatus;
-        pix?: CheckoutResponse["pix"];
-      };
+      const data = await response.json() as CheckoutStatusResponse;
       if (data.status) setStatus(data.status);
       if (data.pix) setPix(data.pix);
+      if (data.passwordSetupUrl || data.passwordAlreadySet) {
+        setAccess({
+          passwordSetupUrl: data.passwordSetupUrl ?? null,
+          passwordAlreadySet: data.passwordAlreadySet === true,
+          loginUrl: data.loginUrl ?? null,
+        });
+      }
     };
 
     void checkStatus();
@@ -183,7 +204,7 @@ export function CheckoutForm({ initialPlanCode, initialPaymentMethod }: Checkout
       cancelled = true;
       window.clearInterval(timer);
     };
-  }, [order, status]);
+  }, [order, status, accessReady]);
 
   const submit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -286,15 +307,54 @@ export function CheckoutForm({ initialPlanCode, initialPaymentMethod }: Checkout
                       <Check size={30} aria-hidden="true" />
                     </span>
                     <p className="mt-7 text-xs font-bold uppercase tracking-[0.18em] text-forest">Pagamento confirmado</p>
-                    <h1 className="mt-3 text-[clamp(2rem,5vw,3.25rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-ink">
-                      Seu acesso está a caminho.
-                    </h1>
-                    <p className="mx-auto mt-5 max-w-[48ch] text-muted">
-                      Enviamos para <strong className="font-semibold text-ink">{email}</strong> o link exclusivo para criar sua senha e iniciar o onboarding da Lotti.
-                    </p>
-                    <div className="mt-8 rounded-xl border border-line bg-surface p-5 text-left text-sm text-muted">
-                      <p className="flex gap-3"><Mail size={18} className="mt-0.5 shrink-0 text-forest" aria-hidden="true" /> Confira também as abas Promoções e Spam. O link é pessoal e não deve ser compartilhado.</p>
-                    </div>
+                    {access?.passwordSetupUrl ? (
+                      <>
+                        <h1 className="mt-3 text-[clamp(2rem,5vw,3.25rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-ink">
+                          Sua conta Lotti está pronta.
+                        </h1>
+                        <p className="mx-auto mt-5 max-w-[48ch] text-muted">
+                          Crie agora a senha de acesso para <strong className="font-semibold text-ink">{email}</strong> e comece o onboarding da Lotti.
+                        </p>
+                        <a
+                          href={access.passwordSetupUrl}
+                          className="mt-8 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-forest px-7 text-sm font-semibold text-white transition-colors hover:bg-black"
+                        >
+                          <LockKeyhole size={17} aria-hidden="true" />
+                          Criar minha senha
+                        </a>
+                        <div className="mt-8 rounded-xl border border-line bg-surface p-5 text-left text-sm text-muted">
+                          <p className="flex gap-3"><ShieldCheck size={18} className="mt-0.5 shrink-0 text-forest" aria-hidden="true" /> O link é pessoal, vale por 24 horas e só pode ser usado uma vez. Não compartilhe esta página.</p>
+                        </div>
+                      </>
+                    ) : access?.passwordAlreadySet ? (
+                      <>
+                        <h1 className="mt-3 text-[clamp(2rem,5vw,3.25rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-ink">
+                          Seu plano já está ativo.
+                        </h1>
+                        <p className="mx-auto mt-5 max-w-[48ch] text-muted">
+                          A conta de <strong className="font-semibold text-ink">{email}</strong> já tem senha. Entre na Lotti com a senha de sempre.
+                        </p>
+                        {access.loginUrl ? (
+                          <a
+                            href={access.loginUrl}
+                            className="mt-8 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-forest px-7 text-sm font-semibold text-white transition-colors hover:bg-black"
+                          >
+                            <UserRound size={17} aria-hidden="true" />
+                            Entrar na Lotti
+                          </a>
+                        ) : null}
+                      </>
+                    ) : (
+                      <>
+                        <h1 className="mt-3 text-[clamp(2rem,5vw,3.25rem)] font-semibold leading-[1.08] tracking-[-0.035em] text-ink">
+                          Preparando seu acesso.
+                        </h1>
+                        <p className="mx-auto mt-5 flex max-w-[48ch] items-start justify-center gap-3 text-muted">
+                          <LoaderCircle size={18} className="mt-1 shrink-0 animate-spin text-forest" aria-hidden="true" />
+                          <span>Estamos criando a conta de <strong className="font-semibold text-ink">{email}</strong>. Em instantes o botão para criar sua senha aparece aqui. Não feche esta página.</span>
+                        </p>
+                      </>
+                    )}
                   </div>
                 ) : status === "failed" || status === "refunded" ? (
                   <div className="mx-auto max-w-xl py-10 text-center" role="alert">
@@ -532,7 +592,7 @@ export function CheckoutForm({ initialPlanCode, initialPaymentMethod }: Checkout
 
               <div className="mt-6 grid gap-3 border-t border-line pt-6 text-xs text-muted">
                 <p className="flex items-center gap-2"><ShieldCheck size={16} className="text-forest" aria-hidden="true" /> Processado com segurança pelo Asaas</p>
-                <p className="flex items-center gap-2"><Mail size={16} className="text-forest" aria-hidden="true" /> Acesso enviado ao e-mail do pagamento</p>
+                <p className="flex items-center gap-2"><LockKeyhole size={16} className="text-forest" aria-hidden="true" /> Senha criada nesta página após a confirmação</p>
               </div>
 
               <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-line pt-5 text-[0.68rem] font-bold tracking-[0.08em] text-muted/80" aria-label="Meios de pagamento aceitos">

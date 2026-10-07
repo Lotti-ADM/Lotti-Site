@@ -36,10 +36,10 @@ export async function POST(request: NextRequest) {
     if (!paymentMatchesOrder(order, payment)) throw new Error('PAYMENT_MISMATCH');
     if (settledStatuses.has(payment.status) && !payment.deleted) {
       if (!order.access_email_sent_at) await provisionPaidOrder(order, payment);
-      else if (order.provisioned_user_id) await applyPayment(order, payment, order.provisioned_user_id);
+      else if (order.provisioned_user_id) await applyPayment(order, payment);
       else throw new Error('PROVISIONED_USER_MISSING');
     } else if ((lifecycleStatuses.has(payment.status) || payment.deleted) && order.provisioned_user_id) {
-      await applyPayment(order, payment, order.provisioned_user_id);
+      await applyPayment(order, payment);
     } else {
       await finishWebhookEvent(body.id, 'ignored');
       return NextResponse.json({ received: true });

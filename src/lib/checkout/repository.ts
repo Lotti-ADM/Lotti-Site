@@ -2,37 +2,21 @@ import "server-only";
 
 import { createHash, timingSafeEqual } from "node:crypto";
 import type { BillingCycle, PaymentMethod, PlanCode } from "./catalog";
-import { getSupabaseAdmin } from "@/lib/supabase/admin";
+import { getLottiApi } from "@/lib/lotti-api/server";
+import {
+  checkoutApi,
+  type CheckoutOrder,
+  type CheckoutOrderUpdate,
+  type PasswordAccess,
+  type RateLimitOutcome,
+} from "@/lib/lotti-api/checkout";
 
-export type CheckoutOrderStatus =
-  | "creating"
-  | "awaiting_payment"
-  | "processing"
-  | "active"
-  | "failed"
-  | "overdue"
-  | "refunded";
+// Pedidos e eventos do checkout ficam no banco da plataforma, pela API da Lotti
+// (rotas /api/checkout/*, servidor a servidor). O site não fala com o banco.
 
-export type CheckoutOrder = {
-  id: string;
-  payer_name: string;
-  payer_email: string;
-  payer_document: string;
-  payer_phone: string;
-  plan_code: PlanCode;
-  billing_cycle: BillingCycle;
-  payment_method: PaymentMethod;
-  amount: number;
-  status: CheckoutOrderStatus;
-  access_token_hash: string;
-  asaas_customer_id: string | null;
-  asaas_subscription_id: string | null;
-  asaas_payment_id: string | null;
-  provisioned_user_id: string | null;
-  access_email_sent_at: string | null;
-  provisioning_started_at: string | null;
-  failure_code: string | null;
-};
+export type { CheckoutOrder, CheckoutOrderStatus, CheckoutOrderUpdate, PasswordAccess } from "@/lib/lotti-api/checkout";
+
+const api = () => checkoutApi(getLottiApi());
 
 export function sha256(value: string): string {
   return createHash("sha256").update(value, "utf8").digest("hex");
@@ -42,6 +26,11 @@ export function tokensMatch(token: string, expectedHash: string): boolean {
   const actual = Buffer.from(sha256(token), "hex");
   const expected = Buffer.from(expectedHash, "hex");
   return actual.length === expected.length && timingSafeEqual(actual, expected);
+}
+
+/** Limite de tentativas por IP (a chave já chega como HMAC; a API nunca vê o IP). */
+export function consumeCheckoutRateLimit(key: string): Promise<RateLimitOutcome> {
+  return api().consumeRateLimit(key);
 }
 
 export async function createCheckoutOrder(input: {
@@ -56,69 +45,34 @@ export async function createCheckoutOrder(input: {
   paymentMethod: PaymentMethod;
   amount: number;
 }): Promise<void> {
-  const supabase = getSupabaseAdmin();
-  const { error } = await supabase.from("checkout_orders").insert({
+  await api().createOrder({
     id: input.id,
-    access_token_hash: sha256(input.statusToken),
-    payer_name: input.payerName,
-    payer_email: input.payerEmail,
-    payer_document: input.payerDocument,
-    payer_phone: input.payerPhone,
-    plan_code: input.planCode,
-    billing_cycle: input.billingCycle,
-    payment_method: input.paymentMethod,
+    accessTokenHash: sha256(input.statusToken),
+    payerName: input.payerName,
+    payerEmail: input.payerEmail,
+    payerDocument: input.payerDocument,
+    payerPhone: input.payerPhone,
+    planCode: input.planCode,
+    billingCycle: input.billingCycle,
+    paymentMethod: input.paymentMethod,
     amount: input.amount,
-    status: "creating",
   });
-
-  if (error) throw new Error(`CHECKOUT_ORDER_CREATE_FAILED:${error.code ?? "unknown"}`);
 }
 
-export async function updateCheckoutOrder(
-  id: string,
-  values: Partial<CheckoutOrder> & { failure_code?: string | null },
-): Promise<void> {
-  const supabase = getSupabaseAdmin();
-  let mutation = supabase.from("checkout_orders").update(values).eq("id", id);
-  if (values.status && ["creating", "awaiting_payment", "processing", "failed"].includes(values.status)) {
-    mutation = mutation.not("status", "in", "(active,overdue,refunded)");
-  }
-  const { error } = await mutation;
-  if (error) throw new Error(`CHECKOUT_ORDER_UPDATE_FAILED:${error.code ?? "unknown"}`);
+/** Mudar o status para creating/awaiting_payment/processing/failed nunca desfaz active/overdue/refunded. */
+export async function updateCheckoutOrder(id: string, values: CheckoutOrderUpdate): Promise<void> {
+  await api().updateOrder(id, values);
 }
 
 export async function getCheckoutOrder(id: string): Promise<CheckoutOrder | null> {
-  const supabase = getSupabaseAdmin();
-  const { data, error } = await supabase
-    .from("checkout_orders")
-    .select("*")
-    .eq("id", id)
-    .maybeSingle();
-
-  if (error) throw new Error(`CHECKOUT_ORDER_READ_FAILED:${error.code ?? "unknown"}`);
-  return data as CheckoutOrder | null;
+  return api().getOrder(id);
 }
 
 export async function findCheckoutOrderForPayment(input: {
   externalReference?: string | null;
   subscriptionId?: string | null;
 }): Promise<CheckoutOrder | null> {
-  const supabase = getSupabaseAdmin();
-
-  if (input.externalReference && /^[0-9a-f-]{36}$/i.test(input.externalReference)) {
-    const byId = await getCheckoutOrder(input.externalReference);
-    if (byId) return byId;
-  }
-
-  if (!input.subscriptionId) return null;
-  const { data, error } = await supabase
-    .from("checkout_orders")
-    .select("*")
-    .eq("asaas_subscription_id", input.subscriptionId)
-    .maybeSingle();
-
-  if (error) throw new Error(`CHECKOUT_ORDER_LOOKUP_FAILED:${error.code ?? "unknown"}`);
-  return data as CheckoutOrder | null;
+  return api().findOrderForPayment(input);
 }
 
 export async function claimWebhookEvent(input: {
@@ -126,15 +80,7 @@ export async function claimWebhookEvent(input: {
   eventType: string;
   paymentId?: string | null;
 }): Promise<boolean> {
-  const supabase = getSupabaseAdmin();
-  const { data, error } = await supabase.rpc("claim_asaas_checkout_event", {
-    p_event_id: input.id,
-    p_event_type: input.eventType,
-    p_payment_id: input.paymentId ?? null,
-  });
-
-  if (error) throw new Error(`CHECKOUT_EVENT_CLAIM_FAILED:${error.code ?? "unknown"}`);
-  return data === true;
+  return api().claimWebhookEvent(input);
 }
 
 export async function finishWebhookEvent(
@@ -142,21 +88,10 @@ export async function finishWebhookEvent(
   status: "processed" | "ignored" | "failed",
   errorCode?: string,
 ): Promise<void> {
-  const supabase = getSupabaseAdmin();
-  const { error } = await supabase.rpc("finish_asaas_checkout_event", {
-    p_event_id: id,
-    p_status: status,
-    p_error_code: errorCode ?? null,
-  });
-  if (error) throw new Error(`CHECKOUT_EVENT_FINISH_FAILED:${error.code ?? "unknown"}`);
+  await api().finishWebhookEvent(id, status, errorCode);
 }
 
-export async function claimCheckoutOrderProvisioning(id: string): Promise<boolean> {
-  const supabase = getSupabaseAdmin();
-  const { data, error } = await supabase.rpc("claim_checkout_order_provisioning", {
-    p_order_id: id,
-  });
-
-  if (error) throw new Error(`CHECKOUT_PROVISION_CLAIM_FAILED:${error.code ?? "unknown"}`);
-  return data === true;
+/** Link de criar senha (ou de entrar) para a tela de sucesso. Null enquanto não houver acesso. */
+export async function getPasswordAccess(orderId: string, statusToken: string): Promise<PasswordAccess | null> {
+  return api().passwordAccess(orderId, statusToken);
 }

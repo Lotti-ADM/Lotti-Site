@@ -1,13 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { getCheckoutOrder, tokensMatch, updateCheckoutOrder } from "@/lib/checkout/repository";
-import { isSupabaseConfigured } from "@/lib/supabase/admin";
+import { getCheckoutOrder, getPasswordAccess, tokensMatch, updateCheckoutOrder } from "@/lib/checkout/repository";
+import { isLottiApiConfigured } from "@/lib/lotti-api/server";
 import { getAsaasPixQrCode, getFirstAsaasSubscriptionPayment } from "@/lib/asaas/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
-  if (!isSupabaseConfigured()) {
+  if (!isLottiApiConfigured()) {
     return NextResponse.json({ ok: false }, { status: 503 });
   }
 
@@ -39,11 +39,21 @@ export async function GET(request: NextRequest) {
     ? await getAsaasPixQrCode(paymentId).catch(() => undefined)
     : undefined;
 
+  // Conta pronta: no lugar do convite por e-mail, a tela recebe o link de criar a senha
+  // (de uso único, emitido pela API para este navegador) ou, se a conta já tem senha, o de entrar.
+  const accountReady = order.status === "active" && Boolean(order.provisioned_user_id && order.access_email_sent_at);
+  const access = accountReady ? await getPasswordAccess(order.id, token) : null;
+
   return NextResponse.json({
     ok: true,
     status: paymentId && order.status === "processing" ? "awaiting_payment" : order.status,
     accessEmailSent: Boolean(order.access_email_sent_at),
+    accountReady,
+    passwordSetupUrl: access?.passwordSetupUrl ?? null,
+    passwordSetupExpiresAt: access?.passwordSetupExpiresAt ?? null,
+    passwordAlreadySet: access?.passwordAlreadySet ?? false,
+    loginUrl: access?.loginUrl ?? null,
     failureCode: order.failure_code ?? null,
     pix,
-  });
+  }, { headers: { "cache-control": "no-store" } });
 }

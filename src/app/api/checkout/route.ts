@@ -2,9 +2,9 @@ import { createHmac } from "node:crypto";
 import { NextResponse, type NextRequest } from "next/server";
 import { isAsaasConfigured, AsaasApiError, createAsaasSubscription, findOrCreateAsaasCustomer, getAsaasPixQrCode } from "@/lib/asaas/server";
 import { checkoutPlans, planPrice } from "@/lib/checkout/catalog";
-import { createCheckoutOrder, getCheckoutOrder, tokensMatch, updateCheckoutOrder } from "@/lib/checkout/repository";
+import { consumeCheckoutRateLimit, createCheckoutOrder, getCheckoutOrder, tokensMatch, updateCheckoutOrder } from "@/lib/checkout/repository";
 import { checkoutRequestSchema } from "@/lib/checkout/validation";
-import { getSupabaseAdmin, isSupabaseConfigured } from "@/lib/supabase/admin";
+import { isLottiApiConfigured } from "@/lib/lotti-api/server";
 
 export const runtime = "nodejs";
 
@@ -39,18 +39,22 @@ export async function POST(request: NextRequest) {
     return errorResponse("PAYLOAD_TOO_LARGE", "Os dados enviados excedem o limite permitido.", 413);
   }
 
-  if (process.env.CHECKOUT_ENABLED !== "true" || !isAsaasConfigured() || !isSupabaseConfigured() || !process.env.ASAAS_WEBHOOK_TOKEN || !process.env.LOTTI_APP_PASSWORD_SETUP_URL) {
-    return errorResponse(
-      "CHECKOUT_NOT_CONFIGURED",
-      "O pagamento online está em configuração. Tente novamente em instantes.",
-      503,
-    );
+  const notConfigured = () => errorResponse(
+    "CHECKOUT_NOT_CONFIGURED",
+    "O pagamento online está em configuração. Tente novamente em instantes.",
+    503,
+  );
+  // A página de criar senha (LOTTI_APP_PASSWORD_SETUP_URL) agora é configuração da API:
+  // sem ela a API responde "não configurado" no limite abaixo, antes de qualquer cobrança.
+  if (process.env.CHECKOUT_ENABLED !== "true" || !isAsaasConfigured() || !isLottiApiConfigured() || !process.env.ASAAS_WEBHOOK_TOKEN) {
+    return notConfigured();
   }
 
   const rateKey = createHmac('sha256', process.env.ASAAS_WEBHOOK_TOKEN!).update(requestIp(request)).digest('hex');
-  const rate = await getSupabaseAdmin().rpc('consume_checkout_rate_limit', { p_key: rateKey });
-  if (rate.error) return errorResponse('CHECKOUT_UNAVAILABLE','Não foi possível iniciar o pagamento agora.',503);
-  if (rate.data !== true) return errorResponse('TOO_MANY_ATTEMPTS','Aguarde um minuto antes de tentar novamente.',429);
+  const rate = await consumeCheckoutRateLimit(rateKey);
+  if (rate === 'not_configured') return notConfigured();
+  if (rate === 'unavailable') return errorResponse('CHECKOUT_UNAVAILABLE','Não foi possível iniciar o pagamento agora.',503);
+  if (rate !== 'allowed') return errorResponse('TOO_MANY_ATTEMPTS','Aguarde um minuto antes de tentar novamente.',429);
 
   const rawBody = await request.json().catch(() => null);
   const parsed = checkoutRequestSchema.safeParse(rawBody);

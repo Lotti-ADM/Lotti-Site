@@ -395,7 +395,22 @@ test("mantém segredos e cartão fora do cliente e da persistência", async () =
     "utf8",
   );
 
-  assert.doesNotMatch(checkoutRoute, /NEXT_PUBLIC_(ASAAS|SUPABASE_SECRET|SUPABASE_SERVICE)/);
+  const lottiApi = await readFile(
+    new URL("../src/lib/lotti-api/core.ts", import.meta.url),
+    "utf8",
+  );
+  const lottiApiServer = await readFile(
+    new URL("../src/lib/lotti-api/server.ts", import.meta.url),
+    "utf8",
+  );
+
+  assert.doesNotMatch(checkoutRoute, /NEXT_PUBLIC_(ASAAS|SUPABASE_SECRET|SUPABASE_SERVICE|LOTTI_API|CHECKOUT_API)/);
+  assert.doesNotMatch(lottiApi, /NEXT_PUBLIC_/);
+  assert.match(lottiApiServer, /^import "server-only";/);
+  // O checkout não fala mais com o Supabase: tudo passa pela API da Lotti.
+  for (const source of [checkoutRoute, repository, provisioning, lottiApi, lottiApiServer]) {
+    assert.doesNotMatch(source, /@supabase|getSupabaseAdmin|SUPABASE_/);
+  }
   const sensitiveColumn = /^\s*(card_number|credit_card_number|cvv|ccv)\s+/im;
   assert.doesNotMatch(repository, sensitiveColumn);
   assert.doesNotMatch(migration, sensitiveColumn);
@@ -404,5 +419,6 @@ test("mantém segredos e cartão fora do cliente e da persistência", async () =
   assert.match(migration, /claim_checkout_order_provisioning/);
   assert.match(migration, /REVOKE ALL ON TABLE public\.checkout_orders FROM PUBLIC, anon, authenticated/);
   assert.match(asaasServer, /input\.billingCycle === "annual" \? "YEARLY" : "MONTHLY"/);
-  assert.match(provisioning, /cycle === "annual" \? 12 : 1/);
+  // O período (1 mês no cartão, 1 ano no Pix) é calculado por apply_checkout_payment na API.
+  assert.match(provisioning, /checkoutApi\(getLottiApi\(\)\)\.provisionOrder/);
 });

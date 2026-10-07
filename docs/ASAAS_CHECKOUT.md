@@ -20,16 +20,25 @@ Fluxo de ativação:
    Code quando a cobrança PIX demora a ficar disponível.
 7. O webhook valida `asaas-access-token` e registra o `event.id` antes de agir.
 8. Apenas `PAYMENT_CONFIRMED` ou `PAYMENT_RECEIVED` ativa a assinatura da Lotti.
-9. O Supabase envia ao e-mail do pagamento o convite para criar a senha. Se a
-   conta já existir, envia recuperação de senha para o mesmo endereço.
+9. A API da Lotti (Railway) cria a conta no login da plataforma, sem senha, com o
+   e-mail do pagamento (ou reaproveita a conta que já tem esse e-mail de login),
+   aplica a assinatura e marca o pedido, numa transação só. Ainda não há envio de
+   e-mail: a tela de sucesso mostra o botão **Criar minha senha** com um link de uso
+   único (24 h) emitido pela API para o navegador que pagou. Conta que já tem senha
+   recebe o botão **Entrar na Lotti**.
+
+O site não acessa banco nenhum: pedidos, eventos do webhook, limite por IP e
+provisionamento passam pelas rotas `/api/checkout/*` da API, servidor a servidor,
+com o segredo `CHECKOUT_API_TOKEN` no cabeçalho `x-lotti-checkout`.
 
 O número completo do cartão e o CVV não são gravados no banco, nos eventos ou em
 logs da aplicação.
 
-## 1. Aplicar a migration
+## 1. Banco (histórico)
 
-Aplique no mesmo projeto Supabase utilizado pela plataforma, depois das migrations
-de `corretores`, `plans`, `subscriptions` e onboarding:
+As tabelas e funções do checkout já estão na baseline do banco da plataforma no
+Railway (`api/prisma/migrations/0_init`). As migrations abaixo ficam aqui só como
+registro de como nasceram no Supabase:
 
 ```text
 supabase/migrations/20260826090000_asaas_saas_checkout.sql
@@ -50,9 +59,12 @@ Use `.env.example` como referência. Em produção:
 - `ASAAS_API_KEY` deve pertencer à conta exclusiva de cobrança do SaaS;
 - `ASAAS_WEBHOOK_TOKEN` precisa ter entre 32 e 255 caracteres e não pode ser a
   API Key;
-- `SUPABASE_SECRET_KEY` deve permanecer exclusivamente no backend;
-- `LOTTI_APP_PASSWORD_SETUP_URL` deve apontar para a página real de criação de
-  senha da plataforma;
+- `LOTTI_API_URL` aponta para a API da Lotti (sem `/api` no final);
+- `CHECKOUT_API_TOKEN` é o mesmo valor configurado na API (32+ caracteres) e
+  permanece exclusivamente no backend;
+- na **API** (Railway), `CHECKOUT_API_TOKEN` e `LOTTI_APP_PASSWORD_SETUP_URL`
+  (página de criação de senha da plataforma, ex.: `https://app.plataformalotti.com.br/nova-senha`);
+  sem a página de senha a API recusa o checkout antes de qualquer cobrança;
 - `CHECKOUT_ALLOWED_ORIGINS` deve conter somente os domínios oficiais do site.
 
 Sem essas variáveis, a interface abre normalmente, mas a API responde com modo
@@ -84,16 +96,15 @@ PAYMENT_DELETED
 O endpoint retorna `200` para duplicatas e eventos que não pertencem ao checkout.
 Falhas internas retornam `503`, mantendo o evento elegível para nova tentativa.
 
-## 4. Configurar o e-mail de acesso no Supabase
+## 4. Acesso da conta
 
-No painel do Supabase:
-
-1. Cadastre `LOTTI_APP_PASSWORD_SETUP_URL` na lista de Redirect URLs.
-2. Personalize os templates **Invite user** e **Reset password** com a marca Lotti.
-3. Configure SMTP próprio. O SMTP de demonstração do Supabase não entrega para
-   clientes externos em produção.
-4. Confirme que o trigger `handle_new_user` e o bootstrap do onboarding estão
-   aplicados no banco de destino.
+A conta nasce no login próprio da plataforma (`auth.users` + `usuarios`, sem
+senha); o gatilho `handle_new_user` cria o corretor. A página
+`LOTTI_APP_PASSWORD_SETUP_URL?token=...` da plataforma chama
+`POST /api/auth/definir-senha`, que grava a senha e já entra na conta. Enquanto
+não houver provedor de e-mail, quem fechar a tela de sucesso antes de criar a
+senha precisa de atendimento (a recuperação de senha por e-mail ainda está
+desligada).
 
 ## 5. Homologação obrigatória
 
@@ -102,7 +113,7 @@ Antes de trocar para produção, validar no Sandbox:
 - PIX criado, pago manualmente no painel e confirmado pelo webhook;
 - cartão aprovado, recusado e com timeout inconclusivo;
 - reenvio do mesmo evento sem duplicar convite ou assinatura;
-- e-mail novo recebendo convite e conta existente recebendo recuperação;
+- conta nova recebendo o botão de criar senha e conta existente o de entrar;
 - cartão mensal com os três valores do catálogo (R$ 279, R$ 399 e R$ 799);
 - PIX anual com os totais de R$ 2.790, R$ 3.990 e R$ 7.990;
 - pagamento atrasado, estorno e chargeback alterando o acesso;
@@ -120,7 +131,7 @@ aplicar o recebimento. A tabela `checkout_payments` evita contar CONFIRMED e
 RECEIVED como duas mensalidades. Renovações atualizam o período; eventos de uma
 cobrança antiga não suspendem uma cobrança posterior paga.
 
-`CHECKOUT_ENABLED=false` é o padrão seguro. Configurar SMTP, redirects, chave
+`CHECKOUT_ENABLED=false` é o padrão seguro. Configurar a API, chave
 Asaas, token/webhook e homologar antes de mudar para `true`. Nunca repetir
 automaticamente um POST de criação cujo resultado foi inconclusivo.
 

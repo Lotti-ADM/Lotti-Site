@@ -2,7 +2,7 @@
 
 Landing page e checkout público da Lotti (Next.js 16, App Router, Tailwind v4).
 O conteúdo institucional é estático; a rota `/checkout` usa APIs server-side
-para criar a assinatura no Asaas e provisionar o acesso pelo Supabase.
+para criar a assinatura no Asaas e provisionar o acesso pela API da Lotti (Railway).
 
 O aplicativo (CRM) vive em **outro repositório e outro projeto da Vercel**, em
 `app.plataformalotti.com.br`. Todo botão de "Entrar" / "Acessar plataforma"
@@ -17,14 +17,14 @@ npm run lint          # eslint
 npm run test:visual   # testes de marca/layout — exigem servidor no ar
 ```
 
-Não existe `npm test` neste repositório.
+`npm test` roda os testes de validação do checkout e do cliente da API da Lotti (sem rede).
 
 `test:visual` faz requisições HTTP contra um servidor já rodando. Ele usa
 `http://localhost:3000` por padrão; aponte para outro endereço com
 `TEST_BASE_URL`:
 
 O checkout de planos está disponível em `/checkout`. A integração segura com
-Asaas, Supabase e o e-mail de criação de senha está documentada em
+Asaas, a API da Lotti e o link de criação de senha está documentada em
 [`docs/ASAAS_CHECKOUT.md`](docs/ASAAS_CHECKOUT.md).
 
 ```bash

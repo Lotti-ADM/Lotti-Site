@@ -112,6 +112,32 @@ Nunca gere telas fictícias nem invente números de dashboard: quando não houve
 print, `ProductShot` desenha a moldura de sistema do manual, que mostra
 estrutura de interface sem dado inventado.
 
+## Blog (`/blog`)
+
+Posts em MDX dentro do repositório, gerados estaticamente no build. Não há CMS
+nem banco.
+
+| Arquivo | Papel |
+| --- | --- |
+| `src/content/blog/categories.ts` | Os 7 silos. O id é a URL (`/blog/{silo}`) e define a chamada para o produto no fim do post. |
+| `src/content/blog/authors.ts` | Quem assina. Hoje só "Equipe Lotti"; autor pessoa só com nome, função e bio reais. |
+| `src/content/blog/posts/{slug}.mdx` | O post. Começa com `export const meta = { ... }`. |
+| `src/content/blog/posts/index.ts` | Registro: todo post novo precisa de uma linha aqui. |
+| `src/lib/blog.ts` | Schema zod do `meta`, sumário, tempo de leitura e relacionados. |
+
+Para publicar: copie `modelo-de-post.mdx`, troque o `meta`, registre o arquivo
+em `posts/index.ts`, rode `npm run build` e confira em `npm run dev`. Um `meta`
+inválido (silo inexistente, descrição fora de 70–160 caracteres, data fora de
+`AAAA-MM-DD`) derruba o build com o motivo.
+
+- `draft: true` aparece só no `next dev`; o build de produção ignora o post.
+- Todo número, lei ou pesquisa citado no texto vai em `sources`, com o link.
+- `featured: true` coloca o post em "Mais lidas" (curadoria manual).
+- Capa opcional em `public/blog/`; sem capa, o card usa o padrão de lâminas da marca.
+- Enquanto não houver post publicado, `/blog` e os silos saem com `noindex` e
+  fora do sitemap. O link "Blog" ainda não está no menu: acrescente em
+  `nav` (`src/content/landing.ts`) quando o primeiro post for ao ar.
+
 ## Domínios
 
 | Domínio | Projeto |

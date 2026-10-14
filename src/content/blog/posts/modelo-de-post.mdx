@@ -1,0 +1,56 @@
+export const meta = {
+  title: "Modelo de post: como escrever para o blog da Lotti",
+  description:
+    "Rascunho interno que mostra a estrutura de um post do blog da Lotti: resumo, sumário, seções, chamada para o produto, perguntas frequentes e fontes.",
+  category: "gestao-imobiliaria",
+  author: "equipe-lotti",
+  publishedAt: "2026-10-17",
+  keyTakeaways: [
+    "Este arquivo é um rascunho (draft: true) e nunca vai para o build de produção.",
+    "Cada post pertence a um único silo, que define a URL e a chamada para o produto.",
+    "Todo número, lei ou pesquisa citado no texto precisa aparecer em Fontes.",
+  ],
+  faq: [
+    {
+      q: "Onde ficam as imagens do post?",
+      a: "Em public/blog/. Informe src, alt, width e height no campo cover do meta.",
+    },
+    {
+      q: "Como um post entra em Mais lidas?",
+      a: "Com featured: true no meta. A seleção é manual, porque o site não tem banco de dados.",
+    },
+  ],
+  sources: [
+    {
+      label: "Google Search Central — Como criar conteúdo útil e confiável",
+      url: "https://developers.google.com/search/docs/fundamentals/creating-helpful-content",
+    },
+  ],
+  draft: true,
+};
+
+Abra o post respondendo à pergunta do título em até três frases. Quem chegou pela busca decide aqui se continua lendo.
+
+## Escreva para o corretor, não para o comprador
+
+O leitor do blog é quem usa a Lotti: corretor autônomo e imobiliária pequena. Pautas de comprador ou inquilino atraem um público que não contrata um CRM.
+
+### Uma pergunta por seção
+
+Cada título de seção (`##`) vira um item do sumário. Prefira títulos que sejam a pergunta que o leitor faria.
+
+## Mostre o processo antes do produto
+
+Explique como fazer o trabalho com qualquer ferramenta. A chamada para a Lotti entra sozinha no fim do post, de acordo com o silo.
+
+| Bloco | De onde vem |
+| --- | --- |
+| Em resumo | `keyTakeaways` |
+| Sumário | títulos `##` e `###` do texto |
+| Chamada para o produto | silo do post |
+| Perguntas frequentes | `faq` |
+| Fontes | `sources` |
+
+## Cite a fonte de todo dado
+
+Número de mercado, artigo de lei e resultado de pesquisa entram em `sources`, com o link de onde saíram. Sem fonte, a frase sai do texto.

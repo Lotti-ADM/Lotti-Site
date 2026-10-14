@@ -9,11 +9,11 @@ Para: Codex. Origem: sessão Claude Code de 2026-10-17.
 | Pasta | `C:\Saas Oliver negócios Inteligentes\Lotti-Site\.worktrees\blog` |
 | Repositório | `Lotti-Site` (worktree do repo principal em `C:\Saas Oliver negócios Inteligentes\Lotti-Site`) |
 | Branch | `feat/blog`, criada a partir de `origin/main` (8eeadf1) |
-| Estado | **Nada commitado, nada enviado ao GitHub, nada publicado.** Build, lint e testes passando. |
+| Estado verificado em 2026-10-14 | Branch `feat/blog` commitada em `9ff6e3f` e enviada ao GitHub. PR #5 aberto para revisão; `main` remota ainda estava em `8eeadf1` na última conferência. |
 
-**Bloqueio para o n8n:** o fluxo roda fora desta máquina e só enxerga o
-que está no GitHub. Antes de montar o fluxo, a branch `feat/blog` precisa
-ser commitada, revisada e mesclada (ou no mínimo enviada ao GitHub).
+**Dependência para o primeiro post:** o fluxo roda fora desta máquina e lê a
+`main` do GitHub. O PR #5 precisa ser revisado e mesclado antes do teste real
+de geração do primeiro post.
 
 Arquivos do blog:
 
@@ -122,3 +122,20 @@ Pendências:
 Acesso confirmado em 2026-10-17 pelo conector n8n do claude.ai: 22
 workflows, todos inativos. Nenhum de blog ou notícias. O servidor
 `n8n-mcp` local não estava conectando (ECONNREFUSED).
+
+## 7. Codex — estado verificado em 2026-10-14
+
+- `feat/blog` contém o silo `mercado-imobiliario`, com descrição e CTA. Commit
+  `9ff6e3f` enviado ao GitHub; PR: https://github.com/Lotti-ADM/Lotti-Site/pull/5.
+- Verificações antes do commit: `npm run build` passou, `npm test` passou (8/8),
+  `npm run lint` terminou sem erros e com um aviso preexistente em
+  `src/components/ui/pricing.tsx`; `git diff --check` passou.
+- O site `plataformalotti.com.br` respondeu com `Server: Vercel`. Não foi
+  confirmado se o merge na `main` dispara publicação automática.
+- Workflow n8n `lZXWIUIJ49VJqd59` salvo e **inativo** em
+  https://carteiraemdia.app.n8n.cloud/workflow/lZXWIUIJ49VJqd59. Usa RSS da
+  Agência Brasil como fonte primária e Newsdata como apoio. Abre PR em vez de
+  escrever na `main` e envia e-mail em caso de sucesso ou falha.
+- Pendências para teste manual: mesclar PR #5; cadastrar credenciais GitHub e
+  Newsdata no n8n; associá-las aos nós; executar o fluxo e revisar o PR de
+  notícia. O workflow deve continuar inativo até teste e autorização do Gabriel.

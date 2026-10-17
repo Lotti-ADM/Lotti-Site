@@ -1,8 +1,13 @@
 import type { NextConfig } from "next";
+import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
   // O selo de dev flutua sobre o canto da página e atrapalha a revisão visual.
   devIndicators: false,
+
+  // Os posts do blog são .mdx importados por src/lib/blog.ts — não viram rota
+  // sozinhos, porque não ficam dentro de src/app.
+  pageExtensions: ["ts", "tsx", "mdx"],
 
   images: {
     // As capturas do produto tem 1919px de largura. Sem esse teto o next/image
@@ -17,4 +22,13 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Plugins por nome (string): o Turbopack não aceita funções na config do MDX.
+// rehype-slug dá id aos títulos — é dele que o sumário do post depende.
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: ["remark-gfm"],
+    rehypePlugins: ["rehype-slug"],
+  },
+});
+
+export default withMDX(nextConfig);

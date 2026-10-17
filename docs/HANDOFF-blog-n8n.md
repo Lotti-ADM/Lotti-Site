@@ -79,10 +79,11 @@ Vêm do `AGENTS.md` da operação e valem para conteúdo automático:
 - **Credenciais** (GitHub, LLM) ficam nas credenciais do n8n, nunca no
   workflow nem no repositório.
 
-## 4. Lacuna de taxonomia: não existe silo para notícia
+## 4. Lacuna de taxonomia resolvida: silo de notícia
 
-Os 6 silos atuais (`categories.ts`) são de prática profissional. Notícia
-diária de mercado não se encaixa. Opções:
+Os 6 silos originais (`categories.ts`) são de prática profissional. A notícia
+diária de mercado ganhou o 7º silo `mercado-imobiliario` no PR #5. Opções
+consideradas na decisão:
 
 - **Recomendada:** acrescentar um 7º silo, por exemplo
   `{ id: "mercado-imobiliario", label: "Mercado Imobiliário", ... }`, com CTA
@@ -103,11 +104,10 @@ Schedule Trigger  09:00 America/Sao_Paulo, todo dia
   → Error handler
 ```
 
-Decisões do Gabriel (2026-10-17):
+Decisões originais do Gabriel (2026-10-17; fonte atualizada na seção 8):
 
-- Fonte de notícia: API da newsdata.io. A chave vai numa credencial do n8n,
-  nunca no workflow nem no repositório. Confirmar parâmetros (idioma, país,
-  categoria, busca) na documentação da API antes de usar.
+- Fonte de notícia: API da newsdata.io. A chave ficaria numa credencial do n8n;
+  a escolha posterior foi fazer a consulta pela API da Lotti (seção 8).
 - Aviso: e-mail para uselottiapp@gmail.com, com o link do PR.
 - Publicação: via Pull Request aprovado pelo Gabriel.
 
@@ -119,9 +119,9 @@ Pendências:
 
 ## 6. O que já existe no n8n
 
-Acesso confirmado em 2026-10-17 pelo conector n8n do claude.ai: 22
-workflows, todos inativos. Nenhum de blog ou notícias. O servidor
-`n8n-mcp` local não estava conectando (ECONNREFUSED).
+O workflow de blog `lZXWIUIJ49VJqd59` existe e está inativo. Seu estado
+atual foi conferido pelo conector n8n do Codex em 2026-10-17 e está descrito
+na seção 8.
 
 ## 7. Codex — estado verificado em 2026-10-14
 
@@ -139,3 +139,32 @@ workflows, todos inativos. Nenhum de blog ou notícias. O servidor
 - Pendências para teste manual: mesclar PR #5; cadastrar credenciais GitHub e
   Newsdata no n8n; associá-las aos nós; executar o fluxo e revisar o PR de
   notícia. O workflow deve continuar inativo até teste e autorização do Gabriel.
+
+## 8. Codex — estado verificado em 2026-10-17
+
+- `feat/blog` já estava commitada e enviada ao GitHub no início desta etapa,
+  sem alterações locais. O PR #5 continua aberto e mesclável. O silo
+  `mercado-imobiliario` já existe; `npm run build` passou nesta etapa e gerou
+  `/blog` e `/blog/mercado-imobiliario`.
+- Gabriel escolheu a API do PR #56 como responsável por consultar as fontes.
+  O workflow `lZXWIUIJ49VJqd59` foi atualizado para fazer `POST` na rota
+  `/api/internal/blog/research`; os nós de RSS e Newsdata diretos foram
+  removidos. O workflow continua **inativo**, com agendamento diário às 9h e
+  timezone `America/Sao_Paulo`. A seleção aceita somente notícia do dia com
+  fonte HTTPS e conteúdo suficiente; ausência de pauta segue para o aviso.
+- Os nós HTTP e de seleção passaram na validação de configuração do n8n.
+  Simulação local da seleção retornou `ok` para candidato válido e `no_news`
+  para lista vazia. Não houve execução manual integrada, PR de notícia nem
+  envio de e-mail nesta etapa.
+- Pendências para teste real: integrar os PRs #5 (site) e #56 (API), configurar
+  `BLOG_RESEARCH_SECRET` e `NEWSDATA_API_KEY` no serviço API do Railway,
+  associar uma credencial HTTP de autenticação ao nó do n8n e configurar a
+  credencial GitHub do workflow. As credenciais Gmail e Gemini já estão
+  associadas aos respectivos nós. A chave Newsdata fica na API, conforme a
+  escolha atual de Gabriel; não no workflow.
+- O domínio `plataformalotti.com.br` pertence ao projeto `lotti-site` da
+  Vercel. O projeto está ligado ao repositório GitHub (ID 1325664626), com
+  `main` como branch de produção; há deploy de produção registrado para um
+  commit da `main`. Isso indica deploy pelo Git, mas o resultado do merge do
+  PR #5 ainda precisa ser confirmado no endereço público. `/blog` retornou
+  404 antes do merge. Não ativar o workflow antes do teste real e da aprovação.

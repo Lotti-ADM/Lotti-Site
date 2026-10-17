@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/brand/Logo";
+import { PixPaymentTimer } from "@/components/checkout/PixPaymentTimer";
 import { CreditCardForm, type CreditCardData } from "@/components/ui/CreditCardForm";
 import {
   billingCycleForPayment,
@@ -324,7 +325,8 @@ export function CheckoutForm({ initialPlanCode, initialPaymentMethod }: Checkout
                     <p className="mx-auto mt-4 max-w-[48ch] text-muted">Evite pagar um QR Code vencido. A página continuará verificando uma eventual confirmação do Asaas.</p>
                   </div>
                 ) : paymentMethod === "PIX" && pix ? (
-                  <div className="mx-auto max-w-2xl" aria-live="polite">
+                  <div className="mx-auto max-w-2xl">
+                    <PixPaymentTimer key={order?.id} />
                     <div className="text-center">
                       <p className="text-xs font-bold uppercase tracking-[0.18em] text-forest">Pix gerado</p>
                       <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-ink sm:text-4xl">Escaneie para concluir</h1>
@@ -349,9 +351,9 @@ export function CheckoutForm({ initialPlanCode, initialPaymentMethod }: Checkout
                           {copied ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
                           {copied ? "Código copiado" : "Copiar código Pix"}
                         </button>
-                        <p className="mt-4 flex items-center gap-2 text-xs text-muted">
+                        <p className="mt-4 flex items-center gap-2 text-xs text-muted" role="status">
                           <LoaderCircle size={14} className="animate-spin text-forest" aria-hidden="true" />
-                          Aguardando confirmação do Asaas
+                          Aguardando pagamento
                         </p>
                       </div>
                     </div>
@@ -474,7 +476,7 @@ export function CheckoutForm({ initialPlanCode, initialPaymentMethod }: Checkout
 
                   <button type="submit" disabled={isBusy} className="mt-6 flex min-h-14 w-full items-center justify-center gap-2 rounded-full bg-forest px-6 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(9,51,35,0.22)] transition-colors hover:bg-black disabled:cursor-not-allowed disabled:opacity-60">
                     {isBusy ? <LoaderCircle size={18} className="animate-spin" aria-hidden="true" /> : paymentMethod === "PIX" ? <QrCode size={18} aria-hidden="true" /> : <LockKeyhole size={18} aria-hidden="true" />}
-                    {isBusy ? "Conectando ao Asaas..." : paymentMethod === "PIX" ? `Gerar Pix de ${formatCurrency(amount)}` : `Pagar ${formatCurrency(amount)} com cartão`}
+                    {isBusy ? "Carregando pagamento…" : paymentMethod === "PIX" ? `Gerar Pix de ${formatCurrency(amount)}` : `Pagar ${formatCurrency(amount)} com cartão`}
                   </button>
                   <p className="mt-4 text-center text-xs leading-relaxed text-muted">A Lotti não armazena o número completo do cartão nem o código de segurança.</p>
                 </div>

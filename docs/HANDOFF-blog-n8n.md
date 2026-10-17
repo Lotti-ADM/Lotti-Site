@@ -164,7 +164,8 @@ na seção 8.
   escolha atual de Gabriel; não no workflow.
 - O domínio `plataformalotti.com.br` pertence ao projeto `lotti-site` da
   Vercel. O projeto está ligado ao repositório GitHub (ID 1325664626), com
-  `main` como branch de produção; há deploy de produção registrado para um
-  commit da `main`. Isso indica deploy pelo Git, mas o resultado do merge do
-  PR #5 ainda precisa ser confirmado no endereço público. `/blog` retornou
-  404 antes do merge. Não ativar o workflow antes do teste real e da aprovação.
+  `main` como branch de produção e `createDeployments: enabled`; há deploy de
+  produção registrado para um commit da `main`. O merge do PR #5 deve acionar
+  um novo deploy automático, sujeito ao build; conferir o resultado no domínio
+  após o merge. `/blog` retornou 404 antes do merge. Não ativar o workflow
+  antes do teste real e da aprovação.

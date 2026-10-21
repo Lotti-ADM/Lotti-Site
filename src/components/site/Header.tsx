@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { ArrowRight, Menu, X } from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
 import { nav } from "@/content/landing";
@@ -51,13 +52,13 @@ export function Header() {
           ].join(" ")}
         >
           {/* Logo */}
-          <a
-            href="#topo"
-            aria-label="Lotti - início da página"
+          <Link
+            href="/"
+            aria-label="Lotti - página inicial"
             className="-m-1 rounded-md p-1 shrink-0"
           >
             <Logo size={22} tone="paper" />
-          </a>
+          </Link>
 
           {/* Desktop nav links */}
           <nav aria-label="Seções do site" className="hidden items-center gap-8 lg:flex">

@@ -1318,3 +1318,131 @@
 
 /* O quiz usa uma superfície clara dentro da seção escura. */
 .on-ink .demo-quiz :focus-visible { outline: 2px solid #093323; outline-offset: 4px; }
+
+/* ---- Blog: corpo do artigo ----------------------------------------------
+   O markdown dos posts chega como HTML puro (h2, p, ul, table...). A
+   tipografia mora aqui, em um seletor só, em vez de espalhada em
+   mdx-components.tsx. Medida de leitura: ~68 caracteres por linha. */
+@layer components {
+  .post-body {
+    max-width: 42rem;
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    color: var(--color-ink);
+  }
+
+  .post-body > * + * {
+    margin-top: 1.25em;
+  }
+
+  .post-body h2 {
+    margin-top: 2.4em;
+    font-size: clamp(1.5rem, 2.6vw, 1.875rem);
+    line-height: 1.2;
+    letter-spacing: -0.022em;
+    font-weight: 600;
+  }
+
+  .post-body h3 {
+    margin-top: 1.9em;
+    font-size: 1.25rem;
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+    font-weight: 600;
+  }
+
+  .post-body h2 + *,
+  .post-body h3 + * {
+    margin-top: 0.75em;
+  }
+
+  .post-body a {
+    color: var(--color-forest);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--color-forest) 35%, transparent);
+    text-underline-offset: 0.2em;
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  .post-body a:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .post-body strong {
+    font-weight: 600;
+  }
+
+  .post-body ul,
+  .post-body ol {
+    padding-left: 1.25em;
+  }
+
+  .post-body ul {
+    list-style: disc;
+  }
+
+  .post-body ol {
+    list-style: decimal;
+  }
+
+  .post-body li + li {
+    margin-top: 0.5em;
+  }
+
+  .post-body li::marker {
+    color: var(--color-forest);
+  }
+
+  .post-body blockquote {
+    border-left: 2px solid var(--color-forest);
+    padding-left: 1.25em;
+    color: var(--color-muted);
+  }
+
+  .post-body code {
+    border-radius: 0.3em;
+    background: var(--color-surface);
+    padding: 0.1em 0.35em;
+    font-size: 0.9em;
+  }
+
+  .post-body img {
+    border-radius: var(--radius-card);
+  }
+
+  .post-body hr {
+    border: 0;
+    border-top: 1px solid var(--color-line);
+    margin-block: 2.5em;
+  }
+
+  /* Tabela larga rola dentro da caixa — a página nunca rola na horizontal. */
+  .post-table {
+    overflow-x: auto;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+  }
+
+  .post-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-small);
+    line-height: 1.5;
+  }
+
+  .post-table th,
+  .post-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .post-table th {
+    background: var(--color-surface);
+    font-weight: 600;
+  }
+
+  .post-table tr + tr td {
+    border-top: 1px solid var(--color-line);
+  }
+}

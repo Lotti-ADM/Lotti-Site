@@ -302,8 +302,8 @@ export const footer = {
     {
       title: "Produto",
       links: [
-        { label: "Recursos", href: "#recursos" },
-        { label: "Como funciona", href: "#como-funciona" },
+        { label: "Recursos", href: "/#recursos" },
+        { label: "Como funciona", href: "/#como-funciona" },
         { label: "Diferenciais", href: "/#diferenciais" },
         { label: "Planos", href: "/#planos" },
         { label: "Comparar planos", href: "/planos" },

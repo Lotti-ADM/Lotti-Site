@@ -20,6 +20,26 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/opengraph-image": ["./assets/Sora-Regular.woff", "./assets/Sora-Bold.woff"],
   },
+
+  poweredByHeader: false,
+
+  // Cabeçalhos de segurança das páginas. A CSP fica só nas diretivas que não
+  // mexem em script/estilo: o Next injeta scripts inline na hidratação, e o
+  // nonce obrigaria toda página a ser dinâmica (perde o cache estático).
+  // As rotas /api ficam de fora — o webhook do Asaas mora lá e não se mexe.
+  async headers() {
+    return [
+      {
+        source: "/:path((?!api/).*)",
+        headers: [
+          { key: "Content-Security-Policy", value: "frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+        ],
+      },
+    ];
+  },
 };
 
 // Plugins por nome (string): o Turbopack não aceita funções na config do MDX.

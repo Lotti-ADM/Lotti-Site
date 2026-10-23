@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "node --import tsx --test tests/checkout-validation.test.ts tests/payment-validation.test.ts",
-    "test:visual": "node --test tests/visual-brand.test.mjs"
+    "test:visual": "node --test tests/visual-brand.test.mjs",
+    "test:headers": "node --test tests/security-headers.test.mjs"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",

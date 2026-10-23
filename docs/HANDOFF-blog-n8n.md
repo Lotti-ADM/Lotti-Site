@@ -169,3 +169,29 @@ na seção 8.
   um novo deploy automático, sujeito ao build; conferir o resultado no domínio
   após o merge. `/blog` retornou 404 antes do merge. Não ativar o workflow
   antes do teste real e da aprovação.
+
+## 9. Codex — estado verificado em 2026-10-23
+
+- O PR #5 foi mesclado na `main` como `3b59ead`. Em checkout limpo desse
+  commit, `npm ci`, `npm test` (8/8) e `npm run build` passaram; o build gerou
+  `/blog` e `/blog/mercado-imobiliario`.
+- A produção do site é o serviço `Lotti-Site` no Railway, conectado ao
+  repositório `Lotti-ADM/Lotti-Site`, branch `main`. Foi feito deploy do commit
+  `3b59ead` em 2026-10-23 e ele ficou `SUCCESS`; no domínio interno do Railway,
+  `/`, `/blog`, `/blog/mercado-imobiliario`, `/sitemap.xml` e `/robots.txt`
+  responderam 200. O blog fica `noindex` enquanto não houver post publicado,
+  e o sitemap só adiciona rotas do blog após existir artigo publicado.
+- O domínio público ainda não foi migrado: `plataformalotti.com.br` e `www`
+  continuavam no IP da Vercel. O Railway exige os CNAMEs e TXT de verificação
+  exibidos no painel/CLI do Railway antes de o certificado e as rotas públicas
+  responderem por ele. Não alterar registros de e-mail.
+- O workflow `lZXWIUIJ49VJqd59` está **ativo**, com horário
+  `America/Sao_Paulo` e agenda diária às 9h. Credenciais ficam somente no n8n.
+  A seleção aceita uma matéria relevante de hoje ou ontem, pois o plano gratuito
+  da Newsdata pode atrasar a fonte. Mantém fonte HTTPS, checagem de assunto já
+  publicado, geração de MDX, branch e PR; nunca grava direto na `main`.
+- Execução manual 1289 confirmou a seleção de notícia válida. A execução 1290
+  identificou que o Gemini encerrou o JSON antes de terminar o texto; não abriu
+  PR e enviou o aviso de falha. A próxima correção deve ampliar a saída do nó
+  Gemini e repetir o teste manual, confirmando o PR e o e-mail antes de confiar
+  na rota diária.

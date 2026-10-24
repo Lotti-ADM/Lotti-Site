@@ -1,5 +1,4 @@
-// Rotas de checkout da API da Lotti, com os mesmos erros que o site lançava quando falava
-// direto com o Supabase. Sem "server-only" para os testes; a aplicação usa estas funções
+// Rotas de checkout da API da Lotti (Railway), com os códigos de erro que o site já tratava. Sem "server-only" para os testes; a aplicação usa estas funções
 // apenas por src/lib/checkout/repository.ts e provisioning.ts (ambos server-only).
 import { LottiApiError, type LottiApiClient } from "./core";
 

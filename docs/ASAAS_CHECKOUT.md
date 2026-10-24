@@ -41,7 +41,7 @@ Railway (`api/prisma/migrations/0_init`). As migrations abaixo ficam aqui só co
 registro de como nasceram no Supabase:
 
 ```text
-supabase/migrations/20260826090000_asaas_saas_checkout.sql
+docs/historico/supabase-migrations/20260826090000_asaas_saas_checkout.sql
 ```
 
 A migration cria:

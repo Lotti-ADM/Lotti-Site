@@ -4,7 +4,7 @@ Landing page e checkout público da Lotti (Next.js 16, App Router, Tailwind v4).
 O conteúdo institucional é estático; a rota `/checkout` usa APIs server-side
 para criar a assinatura no Asaas e provisionar o acesso pela API da Lotti (Railway).
 
-O aplicativo (CRM) vive em **outro repositório e outro projeto da Vercel**, em
+O aplicativo (CRM) vive em **outro repositório e outro serviço do Railway**, em
 `app.plataformalotti.com.br`. Todo botão de "Entrar" / "Acessar plataforma"
 aponta para lá — nunca para uma rota interna deste site.
 
@@ -34,9 +34,12 @@ TEST_BASE_URL=http://localhost:3100 npm run test:visual
 
 ## Variáveis de ambiente
 
-Configure na Vercel (Project → Settings → Environment Variables). **Nenhum
+Configure no Railway (projeto Lotti-Site → serviço Lotti-Site → Variables). **Nenhum
 valor fica no repositório.** Variável nova só passa a valer em um deployment
-novo — depois de criar, refaça o deploy.
+novo — o Railway refaz o deploy ao salvar as variáveis.
+
+Além das abaixo, o checkout usa as variáveis listadas em `.env.example` (Asaas, `LOTTI_API_URL`,
+`CHECKOUT_API_TOKEN`, `CHECKOUT_ALLOWED_ORIGINS`, `CHECKOUT_ENABLED`).
 
 | Nome | Obrigatória | Ambiente | Para que serve |
 | --- | --- | --- | --- |
@@ -47,14 +50,10 @@ novo — depois de criar, refaça o deploy.
 
 Lida em [`src/app/actions/schedule-demo.ts`](src/app/actions/schedule-demo.ts).
 Ausente, a server action registra o lead em `console.error` (recuperável pelos
-runtime logs da Vercel, dentro da retenção do plano) e devolve erro ao
+logs do serviço no Railway) e devolve erro ao
 visitante. Ela **não** finge sucesso — mas o lead não chega ao destino.
 
-Para provisionar pelo Marketplace, que já cria a variável:
-
-```bash
-npx vercel integration add resend/resend-email
-```
+Crie a chave no painel do Resend (API Keys) e cole em `RESEND_API_KEY` no Railway.
 
 ### `RESEND_FROM`
 

@@ -22,8 +22,7 @@ export const siteConfig = {
 
   /**
    * Domínio de produção — usado em canonical, sitemap e Open Graph.
-   * Provisório: aponta para o domínio da Vercel enquanto o definitivo não
-   * é conectado. Não use lotti.com.br — pertence a outro negócio.
+   * Não use lotti.com.br — pertence a outro negócio.
    */
   domain: "plataformalotti.com.br",
   url: "https://plataformalotti.com.br",

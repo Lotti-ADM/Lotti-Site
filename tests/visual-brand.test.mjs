@@ -383,7 +383,7 @@ test("mantém segredos e cartão fora do cliente e da persistência", async () =
     "utf8",
   );
   const migration = await readFile(
-    new URL("../supabase/migrations/20260826090000_asaas_saas_checkout.sql", import.meta.url),
+    new URL("../docs/historico/supabase-migrations/20260826090000_asaas_saas_checkout.sql", import.meta.url),
     "utf8",
   );
   const asaasServer = await readFile(

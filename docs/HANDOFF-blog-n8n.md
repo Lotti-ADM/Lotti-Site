@@ -169,3 +169,9 @@ na seção 8.
   um novo deploy automático, sujeito ao build; conferir o resultado no domínio
   após o merge. `/blog` retornou 404 antes do merge. Não ativar o workflow
   antes do teste real e da aprovação.
+
+## Atualização 24/10/2026
+
+O domínio `plataformalotti.com.br` saiu da Vercel: o DNS (Hostinger) aponta raiz e `www` para o
+serviço `Lotti-Site` do Railway, que implanta a `main` a cada push. Trechos acima que citam a Vercel
+são histórico. O checkout não usa mais o Supabase (rotas `/api/checkout/*` da API da Lotti).

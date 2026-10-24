@@ -16,9 +16,9 @@ export type DemoFormState = {
 };
 
 /**
- * Throttle best-effort por IP. Em serverless a memória é por instância, então
- * isso segura repetição acidental e ruído de bot — não é proteção contra
- * ataque distribuído. Para isso, o Vercel Firewall.
+ * Throttle best-effort por IP, em memória do processo (uma instância no
+ * Railway). Segura repetição acidental e ruído de bot — não é proteção contra
+ * ataque distribuído.
  */
 const attempts = new Map<string, number[]>();
 const WINDOW_MS = 60_000;

@@ -40,9 +40,9 @@ export function PricingFAQ() {
                     onClick={() => toggleFAQ(index)}
                     aria-expanded={isOpen}
                     aria-controls={panelId}
-                    className="flex w-full items-center justify-between p-6 text-left"
+                    className="flex w-full items-center justify-between p-6 text-left cursor-pointer"
                   >
-                    <span className="font-semibold text-ink">{faq.question}</span>
+                    <h3 className="m-0 text-base font-semibold text-ink">{faq.question}</h3>
                     <ChevronDown
                       className={`h-5 w-5 shrink-0 text-muted transition-transform duration-200 ${
                         isOpen ? "rotate-180" : ""

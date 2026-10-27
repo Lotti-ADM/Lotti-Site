@@ -67,7 +67,8 @@ export function ProductShot({
           fill
           sizes={sizes}
           priority={priority}
-          loading={priority ? undefined : "lazy"}
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "auto"}
           className={imageFit === "contain" ? "object-contain" : "object-cover object-top"}
         />
       ) : (

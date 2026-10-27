@@ -56,7 +56,7 @@ export function HeroVideo() {
         loop
         playsInline
         preload="none"
-        aria-label="Demonstracao da plataforma Lotti"
+        aria-label="Demonstração em vídeo da plataforma Lotti: qualificação de leads com IA e CRM imobiliário"
       >
         {shouldLoad && (
           <source src="/product/hero-demo.mp4" type="video/mp4" />

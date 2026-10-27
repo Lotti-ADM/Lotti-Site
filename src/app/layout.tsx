@@ -12,46 +12,60 @@ const sora = Sora({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    /**
-     * O <title> é o campo de maior peso da página, e "Lotti" sozinho não
-     * carrega nenhum termo que alguém pesquise — ninguém busca a marca antes
-     * de conhecê-la. Começa pelo nome, para quem já busca a Lotti, e emenda o
-     * que o mercado procura. ~60 caracteres, o limite que o Google exibe.
-     */
-    default: `${siteConfig.name} - Qualificação de Leads com IA e CRM Imobiliário`,
+    default: `${siteConfig.name} - CRM Imobiliário e Qualificação de Leads com IA`,
     template: `%s - ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  applicationName: siteConfig.name,
+  applicationName: "Plataforma Lotti",
   keywords: [
     "CRM imobiliário",
+    "qualificação de leads com IA",
     "software para imobiliária",
     "sistema para corretor de imóveis",
     "gestão de aluguéis",
+    "fachadas inteligentes",
+    "placa com QR code imobiliária",
     "contrato de locação com IA",
     "funil de vendas imobiliário",
     "captação de leads imobiliários",
+    "automação imobiliária",
   ],
-  authors: [{ name: siteConfig.name }],
+  authors: [{ name: siteConfig.name, url: siteConfig.url }],
   creator: siteConfig.name,
+  publisher: siteConfig.name,
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "pt_BR",
     url: siteConfig.url,
-    siteName: siteConfig.name,
-    title: `${siteConfig.name} - ${siteConfig.tagline}`,
+    siteName: "Plataforma Lotti",
+    title: `${siteConfig.name} - CRM Imobiliário e Qualificação de Leads com IA`,
     description: siteConfig.description,
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Plataforma Lotti - CRM Imobiliário e Qualificação de Leads com IA",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} - ${siteConfig.tagline}`,
+    title: `${siteConfig.name} - CRM Imobiliário e Qualificação de Leads com IA`,
     description: siteConfig.description,
+    images: ["/opengraph-image"],
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
 };
 
@@ -67,6 +81,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR" className={sora.variable}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preload"
+          as="image"
+          href="/product/hero-demo-poster.jpg"
+          fetchPriority="high"
+        />
+      </head>
       <body>{children}</body>
     </html>
   );

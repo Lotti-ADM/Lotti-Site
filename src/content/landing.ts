@@ -300,13 +300,14 @@ export const footer = {
     "Qualificação de leads com IA e gestão imobiliária no mesmo lugar. Entenda a procura do cliente e organize o trabalho do primeiro contato ao contrato.",
   columns: [
     {
-      title: "Produto",
+      title: "Plataforma",
       links: [
-        { label: "Recursos", href: "/#recursos" },
-        { label: "Como funciona", href: "/#como-funciona" },
-        { label: "Diferenciais", href: "/#diferenciais" },
-        { label: "Planos", href: "/#planos" },
-        { label: "Comparar planos", href: "/planos" },
+        { label: "Recursos do CRM e IA", href: "/#recursos" },
+        { label: "Como funciona a qualificação", href: "/#como-funciona" },
+        { label: "Diferenciais do sistema", href: "/#diferenciais" },
+        { label: "Planos e preços", href: "/#planos" },
+        { label: "Comparativo de planos", href: "/planos" },
+        { label: "Blog de gestão imobiliária", href: "/blog" },
       ],
     },
   ],

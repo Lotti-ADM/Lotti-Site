@@ -79,6 +79,7 @@ export function Header() {
               href={PLATFORM_URL}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Acessar plataforma Lotti - Área do Cliente"
               className="header-enter-btn hidden items-center gap-2.5 rounded-full py-2 pl-4 pr-2 text-small font-semibold text-white transition-all duration-300 hover:brightness-110 lg:inline-flex"
             >
               Entrar

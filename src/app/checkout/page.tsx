@@ -6,7 +6,16 @@ export const metadata: Metadata = {
   title: "Checkout seguro",
   description: "Contrate seu plano Lotti com pagamento seguro processado pelo Asaas.",
   alternates: { canonical: "/checkout" },
-  robots: { index: false, follow: false },
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: false,
+      noimageindex: true,
+    },
+  },
 };
 
 type CheckoutPageProps = {

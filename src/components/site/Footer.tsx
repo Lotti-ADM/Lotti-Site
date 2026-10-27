@@ -59,12 +59,21 @@ export function Footer() {
               <ul className="mt-4 flex flex-col gap-3">
                 {column.links.map((link) => (
                   <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="text-small text-white/60 transition-colors hover:text-paper"
-                    >
-                      {link.label}
-                    </a>
+                    {link.href.startsWith("/") ? (
+                      <Link
+                        href={link.href}
+                        className="text-small text-white/60 transition-colors hover:text-paper"
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <a
+                        href={link.href}
+                        className="text-small text-white/60 transition-colors hover:text-paper"
+                      >
+                        {link.label}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -80,6 +89,7 @@ export function Footer() {
             </p>
             <Link
               href="/#demo"
+              aria-label="Agendar demonstração da plataforma Lotti"
               className="mt-5 inline-flex items-center gap-2 text-small font-semibold text-paper transition-opacity hover:opacity-70"
             >
               Agendar demonstração

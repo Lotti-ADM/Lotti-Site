@@ -106,7 +106,7 @@ export function Pricing({
               </div>
             )}
             <div className="flex-1 flex flex-col">
-              <p className="text-base font-semibold text-muted">{plan.name}</p>
+              <h3 className="text-base font-semibold text-muted">{plan.name}</h3>
               <div className="mt-6 flex items-center justify-center gap-x-2">
                 <span className="text-5xl font-bold tracking-tight text-ink">
                   <NumberFlow

@@ -24,12 +24,12 @@ export function Hero() {
         className="on-ink shell flex flex-col items-center text-center hero-entrance"
       >
         <div className="flex w-full flex-col items-center">
-          <h1 className="max-w-[22ch] text-display text-balance text-gradient lg:max-w-none">
+          <h1 className="max-w-[22ch] text-display text-balance text-gradient text-gradient-forest lg:max-w-none">
             <span aria-label={hero.headline[0]} className="block lg:whitespace-nowrap">{hero.headline[0]}</span>
             <span aria-label={hero.headline[1]} className="block pb-2 lg:whitespace-nowrap">{hero.headline[1]}</span>
           </h1>
 
-          <p className="mt-6 max-w-[64ch] text-lead text-white/60">{hero.lead}</p>
+          <p className="mt-6 max-w-[64ch] text-lead text-muted text-white/60">{hero.lead}</p>
 
           <div className="mt-8 flex w-full flex-col items-center" data-hero-actions="">
             <div className="flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center">
@@ -49,7 +49,7 @@ export function Hero() {
         </div>
 
         {/* Video do produto — lazy loaded, poster shown immediately */}
-        <div className="relative mt-8 w-[min(94vw,1280px)] max-w-none pt-4 sm:mt-10 sm:pt-6">
+        <div data-hero-video="" className="relative mt-8 w-[min(94vw,1280px)] max-w-none pt-4 sm:mt-10 sm:pt-6">
           <div className="hero-product-glow" aria-hidden="true" />
           <HeroVideo />
         </div>

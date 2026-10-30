@@ -298,6 +298,11 @@ export const form = {
 export const footer = {
   description:
     "Qualificação de leads com IA e gestão imobiliária no mesmo lugar. Entenda a procura do cliente e organize o trabalho do primeiro contato ao contrato.",
+  legal: {
+    cnpj: "CNPJ 64.279.344/0001-64",
+    email: "trindadeprobusiness@gmail.com",
+    phone: "+55 62 99337-0740",
+  },
   columns: [
     {
       title: "Plataforma",

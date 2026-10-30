@@ -127,9 +127,17 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col gap-3 border-t border-white/8 pt-8 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-small text-white/40">
-            © {year} {siteConfig.name}. Todos os direitos reservados.
+            © {year} {siteConfig.name}.
           </p>
           <p className="text-small text-white/40">{siteConfig.tagline}</p>
+        </div>
+        <div className="mt-5 flex flex-wrap justify-start gap-x-4 gap-y-2 border-t border-white/8 pt-5 text-[0.75rem] leading-5 text-white/40">
+          <span>{footer.legal.cnpj}</span>
+          <a href={`mailto:${footer.legal.email}`} className="transition-colors hover:text-paper">
+            {footer.legal.email}
+          </a>
+          <span>{footer.legal.phone}</span>
+          <span>Todos os direitos reservados.</span>
         </div>
       </div>
     </footer>

@@ -232,6 +232,24 @@ test("apresenta uma proposta de valor direta na página principal", async () => 
   }
 });
 
+test("mostra os dados empresariais abaixo do rodapé", async () => {
+  const footer = await readFile(
+    new URL("../src/components/site/Footer.tsx", import.meta.url),
+    "utf8",
+  );
+  const landing = await readFile(
+    new URL("../src/content/landing.ts", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(landing, /64\.279\.344\/0001-64/);
+  assert.match(landing, /trindadeprobusiness@gmail\.com/i);
+  assert.match(landing, /\+55 62 99337-0740/);
+  assert.match(footer, /flex flex-col gap-3 border-t border-white\/8 pt-8 sm:flex-row/);
+  assert.match(footer, /mt-5 flex flex-wrap justify-start gap-x-4 gap-y-2 border-t border-white\/8 pt-5 text-\[0\.75rem\] leading-5/);
+  assert.match(footer, />Todos os direitos reservados\.</);
+});
+
 test("usa grafite no cabeçalho e verde Lotti no centro das lâminas", async () => {
   const styles = await readFile(
     new URL("../src/app/globals.css", import.meta.url),

@@ -239,7 +239,7 @@ export const trust = {
 export const plans = {
   eyebrow: "Planos para crescer",
   title: "Escolha quantos leads sua IA vai atender.",
-  lead: "Inteligente, Profissional ou Eficazes: plataforma e franquia de atendimento por IA no mesmo preço. Escolha pelo volume de interessados que chegam à sua operação.",
+  lead: "Atende ou Completo para o corretor, White Label para a imobiliária: plataforma e franquia de atendimento por IA no mesmo preço. Escolha pelo volume de interessados que chegam à sua operação.",
   points: [
     "Valores mensais claros.",
     "Limites definidos por faixa de operação.",

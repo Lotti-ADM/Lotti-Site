@@ -165,7 +165,7 @@ export function Pricing({
               </ul>
 
               <Link
-                href={plan.external ? plan.href : `${plan.href}${plan.href.includes("?") ? "&" : "?"}ciclo=${isMonthly ? "monthly" : "annual"}`}
+                href={plan.href.startsWith("/checkout") ? `${plan.href}${plan.href.includes("?") ? "&" : "?"}ciclo=${isMonthly ? "monthly" : "annual"}` : plan.href}
                 target={plan.external ? "_blank" : undefined}
                 rel={plan.external ? "noopener noreferrer" : undefined}
                 className={cn(

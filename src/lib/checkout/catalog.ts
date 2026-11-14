@@ -1,11 +1,13 @@
 import {
   officialPlans,
   capacityLabel,
-  planCodes,
-  type PlanCode,
+  checkoutPlanCodes,
+  type CheckoutPlanCode,
 } from "@/content/plans";
 
-export { planCodes, type PlanCode };
+// O checkout só conhece os planos compráveis; o White Label é vendido por conversa.
+export const planCodes = checkoutPlanCodes;
+export type PlanCode = CheckoutPlanCode;
 
 export const billingCycles = ["monthly", "annual"] as const;
 

@@ -2,7 +2,6 @@
 
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { Reveal } from "@/components/ui/Reveal";
 import { Check, Star } from "lucide-react";
@@ -22,6 +21,12 @@ export interface PricingPlan {
   buttonText: string;
   href: string;
   isPopular: boolean;
+  /** Preço de tabela riscado acima do preço de lançamento. */
+  listPrice?: string;
+  /** Texto curto embaixo do preço (ex.: "+ R$ 149 por cadeira"). */
+  priceNote?: string;
+  /** Link externo (WhatsApp): sem `?ciclo=`, abre em outra aba. */
+  external?: boolean;
 }
 
 interface PricingProps {
@@ -77,7 +82,7 @@ export function Pricing({
         </label>
         <span className="ml-3 font-semibold text-ink">
           Anual{" "}
-          <span className="text-forest font-bold">(Economize 2 meses)</span>
+          <span className="text-forest font-bold">(12 meses pelo preço de 10)</span>
         </span>
       </div>
 
@@ -107,7 +112,13 @@ export function Pricing({
             )}
             <div className="flex-1 flex flex-col">
               <h3 className="text-base font-semibold text-muted">{plan.name}</h3>
-              <div className="mt-6 flex items-center justify-center gap-x-2">
+              {plan.listPrice && isMonthly ? (
+                <p className="mt-4 text-sm text-muted">
+                  <span className="line-through">R$ {plan.listPrice}</span>{" "}
+                  <span className="font-semibold text-forest">preço de lançamento</span>
+                </p>
+              ) : null}
+              <div className={cn("flex items-center justify-center gap-x-2", plan.listPrice && isMonthly ? "mt-1" : "mt-6")}>
                 <span className="text-5xl font-bold tracking-tight text-ink">
                   <NumberFlow
                     value={
@@ -135,9 +146,11 @@ export function Pricing({
               </div>
 
               <p className="text-xs leading-5 text-muted mt-1">
-                {isMonthly
-                  ? "Cobrança mensal"
-                  : "Cobrança anual (valor equivalente por mês)"}
+                {plan.priceNote
+                  ? plan.priceNote
+                  : isMonthly
+                    ? "Cobrança mensal"
+                    : "Cobrança anual (valor equivalente por mês)"}
               </p>
 
               <ul className="mt-7 mb-7 gap-3 flex flex-col flex-1 text-left">
@@ -152,7 +165,9 @@ export function Pricing({
               </ul>
 
               <Link
-                href={`${plan.href}${plan.href.includes("?") ? "&" : "?"}ciclo=${isMonthly ? "monthly" : "annual"}`}
+                href={plan.external ? plan.href : `${plan.href}${plan.href.includes("?") ? "&" : "?"}ciclo=${isMonthly ? "monthly" : "annual"}`}
+                target={plan.external ? "_blank" : undefined}
+                rel={plan.external ? "noopener noreferrer" : undefined}
                 className={cn(
                   "group relative w-full gap-2 overflow-hidden text-sm font-semibold tracking-tight cursor-pointer",
                   "inline-flex items-center justify-center rounded-full px-6 py-3",

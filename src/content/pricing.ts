@@ -49,6 +49,7 @@ export const comparisonFeatures = [
     category: "capacidade", label,
     ...Object.fromEntries(planCodes.map(code => [code, capacityLabel(officialPlans[code].capacity[key as keyof typeof officialPlans.essencial.capacity])])),
   })) as Array<{ category: string; label: string; essencial: string; profissional: string; imobiliaria: string }>,
+  { category: "atendimento", label: "Preço", essencial: "R$ 149/mês (tabela R$ 199)", profissional: "R$ 299/mês (tabela R$ 349)", imobiliaria: "R$ 499/mês + R$ 149 por cadeira (mín. 5)" },
   { category: "atendimento", label: "Suporte", essencial: "Por e-mail", profissional: "Prioritário", imobiliaria: "Prioritário" },
   { category: "atendimento", label: "Onboarding", essencial: "Não incluído", profissional: "Não incluído", imobiliaria: "Orientado" },
 ];
@@ -60,13 +61,13 @@ export const pricingFAQ = [
   { question: "O que significa qualificar um lead?", answer: "É entender a necessidade de quem demonstrou interesse: compra ou aluguel, região, orçamento, tipo de imóvel e prazo. O resultado é um resumo para orientar o trabalho do corretor." },
   { question: "O agente já começa a responder após a contratação?", answer: "O agente está em implantação. A ativação exige configuração do canal e validação do atendimento com a equipe Lotti. Confirme as condições e o prazo de ativação antes de contratar." },
   { question: "A IA escolhe o imóvel ou fecha a venda?", answer: "O agente apoia a qualificação inicial. O corretor procura opções, verifica disponibilidade, conduz visitas e negocia com o cliente. A qualificação não garante uma venda." },
-  { question: "O agente de IA está incluído no preço?", answer: "Sim. Todos os planos incluem a plataforma e a franquia mensal de atendimento por IA: 100 leads no Inteligente, 250 no Profissional e 600 no Eficazes. O agente entende região, orçamento, preferências e prazo e organiza um resumo para o corretor." },
+  { question: "O agente de IA está incluído no preço?", answer: "Sim. Todos os planos incluem a plataforma e a franquia mensal de atendimento por IA: 100 leads no Atende, 250 no Completo e 600 no White Label. O agente entende região, orçamento, preferências e prazo e organiza um resumo para o corretor." },
   { question: "O que conta como lead atendido?", answer: "Um contato que responde e inicia a qualificação. Mensagens e retomadas da mesma pessoa no mesmo mês não são novos leads. Spam, mensagens sem resposta e falhas do sistema não entram na franquia." },
   { question: "E quando a franquia de leads acabar?", answer: "Você pode contratar capacidade adicional ou mudar de plano. Não há cobrança automática de excedente sem sua autorização." },
   {
-    question: "Quando acontece a migração do Inteligente para o Profissional?",
+    question: "Quando acontece a migração do Atende para o Completo?",
     answer:
-      "A migração acontece quando o cliente ultrapassa os limites do plano Inteligente.",
+      "A migração acontece quando o cliente ultrapassa os limites do plano Atende.",
   },
   {
     question: "O que significa um item ativo?",
@@ -76,7 +77,7 @@ export const pricingFAQ = [
   {
     question: "Quais recursos não têm limite?",
     answer:
-      "Nos planos Inteligente e Profissional, CRM, clientes, funil e lançamentos financeiros não têm limite.",
+      "Nos planos Atende e Completo, CRM, clientes, funil e lançamentos financeiros não têm limite.",
   },
   {
     question: "Como posso pagar a assinatura?",
@@ -91,6 +92,6 @@ export const pricingFAQ = [
   {
     question: "A integração com Asaas está incluída?",
     answer:
-      "A integração com Asaas está incluída nos planos Inteligente e Profissional, conforme os benefícios de cada plano.",
+      "A integração com Asaas está incluída nos planos Atende e Completo, conforme os benefícios de cada plano.",
   },
 ] as const;

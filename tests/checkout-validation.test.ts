@@ -3,8 +3,10 @@ import test from "node:test";
 import {
   billingCycleForPayment,
   checkoutPlans,
+  isPlanCode,
   planPrice,
 } from "../src/lib/checkout/catalog";
+import { officialPlans } from "../src/content/plans";
 import {
   checkoutRequestSchema,
   isFutureExpiration,
@@ -70,15 +72,23 @@ test("exige endereço do titular apenas no cartão", () => {
   );
 });
 
-test("mantém os preços cobrados no catálogo do servidor", () => {
-  assert.equal(planPrice(checkoutPlans.essencial, "monthly"), 279);
-  assert.equal(planPrice(checkoutPlans.profissional, "monthly"), 399);
-  assert.equal(planPrice(checkoutPlans.imobiliaria, "monthly"), 799);
-  assert.equal(planPrice(checkoutPlans.essencial, "annual"), 2790);
-  assert.equal(planPrice(checkoutPlans.profissional, "annual"), 3990);
-  assert.equal(planPrice(checkoutPlans.imobiliaria, "annual"), 7990);
+test("mantém os preços cobrados no catálogo do servidor (lançamento 14/11/2026)", () => {
+  assert.equal(planPrice(checkoutPlans.essencial, "monthly"), 149);
+  assert.equal(planPrice(checkoutPlans.profissional, "monthly"), 299);
+  assert.equal(planPrice(checkoutPlans.essencial, "annual"), 1490);
+  assert.equal(planPrice(checkoutPlans.profissional, "annual"), 2990);
   assert.equal(billingCycleForPayment("CREDIT_CARD"), "monthly");
   assert.equal(billingCycleForPayment("PIX"), "annual");
+});
+
+test("White Label não é vendido pelo checkout: só Atende e Completo são compráveis", () => {
+  assert.deepEqual(Object.keys(checkoutPlans).sort(), ["essencial", "profissional"]);
+  assert.equal(isPlanCode("imobiliaria"), false);
+  assert.equal(isPlanCode("profissional"), true);
+  assert.equal(officialPlans.imobiliaria.contactOnly, true);
+  assert.deepEqual(officialPlans.imobiliaria.seatPricing, { base: 499, perSeat: 149, minSeats: 5 });
+  assert.equal(officialPlans.essencial.listPrice, 199);
+  assert.equal(officialPlans.profissional.listPrice, 349);
 });
 
 test("aceita Pix anual e cartão mensal, sem combinações divergentes", () => {
@@ -116,7 +126,8 @@ test("aceita Pix anual e cartão mensal, sem combinações divergentes", () => {
 });
 
 test("mantém nomes e franquias de leads no checkout", () => {
-  for (const [code, name, limit] of [["essencial", "Lotti Inteligente", 100], ["profissional", "Lotti Profissional", 250], ["imobiliaria", "Lotti Eficazes", 600]] as const) {
+  // O White Label não está no checkout; seu nome e franquia ficam só no catálogo público.
+  for (const [code, name, limit] of [["essencial", "Lotti Atende", 100], ["profissional", "Lotti Completo", 250]] as const) {
     assert.equal(checkoutPlans[code].name, name);
     assert.equal(checkoutPlans[code].checkoutFeatures[0], `${limit} leads atendidos pela IA por mês`);
   }

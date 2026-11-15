@@ -1,5 +1,5 @@
 import { isPending, siteConfig } from "@/config/site";
-import { officialPlans, planCodes } from "@/content/plans";
+import { checkoutPlanCodes, officialPlans } from "@/content/plans";
 import { pricingFAQ } from "@/content/pricing";
 
 /**
@@ -71,13 +71,14 @@ export function StructuredData() {
       "Gestão de aluguéis com faturas e repasses automáticos via Asaas",
       "Assistente de IA sobre os dados do CRM",
     ],
+    // Só os planos com preço fixo entram como oferta; o White Label é cotado por cadeira, em conversa.
     offers: {
       "@type": "AggregateOffer",
       priceCurrency: "BRL",
-      lowPrice: "279",
-      highPrice: "799",
-      offerCount: "3",
-      offers: planCodes.map((code) => {
+      lowPrice: String(Math.min(...checkoutPlanCodes.map((c) => officialPlans[c].monthlyPrice))),
+      highPrice: String(Math.max(...checkoutPlanCodes.map((c) => officialPlans[c].monthlyPrice))),
+      offerCount: String(checkoutPlanCodes.length),
+      offers: checkoutPlanCodes.map((code) => {
         const plan = officialPlans[code];
         return {
           "@type": "Offer",

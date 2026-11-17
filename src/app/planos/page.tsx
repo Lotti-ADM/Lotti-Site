@@ -10,7 +10,7 @@ import { StructuredData } from "@/components/site/StructuredData";
 export const metadata: Metadata = {
   title: "Planos e Preços",
   description:
-    "Compare os planos da Lotti: Atende por R$ 149 e Completo por R$ 299/mês (preços de lançamento), e White Label para imobiliárias a partir de R$ 499 + R$ 149 por cadeira. CRM imobiliário com IA que atende seus leads 24h.",
+    "Compare os planos da Lotti: Atende por R$ 199 e Completo por R$ 349/mês, e White Label para imobiliárias a partir de R$ 1.244/mês (R$ 499 + R$ 149 por cadeira, mínimo 5). CRM imobiliário com IA que atende seus leads 24h.",
   alternates: { canonical: "/planos" },
   openGraph: {
     type: "website",
@@ -18,13 +18,13 @@ export const metadata: Metadata = {
     url: "/planos",
     title: "Planos e Preços - CRM Imobiliário Lotti",
     description:
-      "Compare os planos da Lotti: Atende por R$ 149 e Completo por R$ 299/mês (preços de lançamento), e White Label para imobiliárias a partir de R$ 499 + R$ 149 por cadeira. CRM imobiliário com IA que atende seus leads 24h.",
+      "Compare os planos da Lotti: Atende por R$ 199 e Completo por R$ 349/mês, e White Label para imobiliárias a partir de R$ 1.244/mês (R$ 499 + R$ 149 por cadeira, mínimo 5). CRM imobiliário com IA que atende seus leads 24h.",
   },
   twitter: {
     card: "summary_large_image",
     title: "Planos e Preços - CRM Imobiliário Lotti",
     description:
-      "Compare os planos da Lotti: Atende por R$ 149 e Completo por R$ 299/mês (preços de lançamento), e White Label para imobiliárias a partir de R$ 499 + R$ 149 por cadeira. CRM imobiliário com IA que atende seus leads 24h.",
+      "Compare os planos da Lotti: Atende por R$ 199 e Completo por R$ 349/mês, e White Label para imobiliárias a partir de R$ 1.244/mês (R$ 499 + R$ 149 por cadeira, mínimo 5). CRM imobiliário com IA que atende seus leads 24h.",
   },
 };
 

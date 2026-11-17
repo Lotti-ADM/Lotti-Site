@@ -19,10 +19,8 @@ export type OfficialPlan = {
   readonly code: PlanCode;
   readonly name: string;
   readonly audience: string;
-  /** Preço cobrado hoje (lançamento). É o que o checkout usa. */
+  /** Mensalidade cobrada. É o que o checkout usa (anual = 10 mensalidades). */
   readonly monthlyPrice: number;
-  /** Preço de tabela, mostrado riscado enquanto o lançamento durar. */
-  readonly listPrice?: number;
   /** Não é comprado pelo checkout: o botão leva a uma conversa. */
   readonly contactOnly?: boolean;
   readonly seatPricing?: SeatPricing;
@@ -39,16 +37,14 @@ export type OfficialPlan = {
   readonly migrationNote?: string;
 };
 
-// Preços de lançamento de 14/11/2026 (tabela riscada ao lado). Base da decisão: painel de
-// compradores, concorrentes (entrada R$99–247) e custo real; a entrada anterior (R$279) era a mais
-// cara do mercado e o plano herói (R$399) estava no teto do que o comprador aceita.
+// Preços cheios (sem preço de lançamento nem valor riscado). O app cobra pelo catálogo do banco,
+// que precisa ter os mesmos valores (Lotti-ADM/Lotti, migration de preços dos planos).
 export const officialPlans: Record<PlanCode, OfficialPlan> = {
   essencial: {
     code: "essencial",
     name: "Lotti Atende",
     audience: "Para o corretor autônomo",
-    monthlyPrice: 149,
-    listPrice: 199,
+    monthlyPrice: 199,
     capacity: {
       properties: 250,
       rentalContracts: 5,
@@ -73,8 +69,7 @@ export const officialPlans: Record<PlanCode, OfficialPlan> = {
     code: "profissional",
     name: "Lotti Completo",
     audience: "Para quem administra aluguéis e pequenas equipes",
-    monthlyPrice: 299,
-    listPrice: 349,
+    monthlyPrice: 349,
     capacity: {
       properties: 1500,
       rentalContracts: 30,

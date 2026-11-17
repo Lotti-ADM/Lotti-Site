@@ -14,6 +14,7 @@ import NumberFlow from "@number-flow/react";
 export interface PricingPlan {
   name: string;
   price: string;
+  /** Total cobrado por ano (10 mensalidades). */
   yearlyPrice: string;
   period: string;
   features: string[];
@@ -21,9 +22,9 @@ export interface PricingPlan {
   buttonText: string;
   href: string;
   isPopular: boolean;
-  /** Preço de tabela riscado acima do preço de lançamento. */
-  listPrice?: string;
-  /** Texto curto embaixo do preço (ex.: "+ R$ 149 por cadeira"). */
+  /** Texto acima do preço (ex.: "a partir de"). */
+  pricePrefix?: string;
+  /** Nota fixa embaixo do preço; sem ela, a nota segue o ciclo mensal/anual. */
   priceNote?: string;
   /** Link externo (WhatsApp): sem `?ciclo=`, abre em outra aba. */
   external?: boolean;
@@ -112,21 +113,19 @@ export function Pricing({
             )}
             <div className="flex-1 flex flex-col">
               <h3 className="text-base font-semibold text-muted">{plan.name}</h3>
-              {plan.listPrice && isMonthly ? (
-                <p className="mt-4 text-sm text-muted">
-                  <span className="line-through">R$ {plan.listPrice}</span>{" "}
-                  <span className="font-semibold text-forest">preço de lançamento</span>
-                </p>
+              {plan.pricePrefix ? (
+                <p className="mt-4 text-sm font-semibold text-muted">{plan.pricePrefix}</p>
               ) : null}
-              <div className={cn("flex items-center justify-center gap-x-2", plan.listPrice && isMonthly ? "mt-1" : "mt-6")}>
+              <div className={cn("flex items-center justify-center gap-x-2", plan.pricePrefix ? "mt-1" : "mt-6")}>
                 <span className="text-5xl font-bold tracking-tight text-ink">
                   <NumberFlow
                     value={
                       isMonthly ? Number(plan.price) : Number(plan.yearlyPrice)
                     }
+                    locales="pt-BR"
+                    prefix="R$ "
                     format={{
-                      style: "currency",
-                      currency: "BRL",
+                      useGrouping: "always",
                       minimumFractionDigits: 0,
                       maximumFractionDigits: 0,
                     }}
@@ -140,7 +139,7 @@ export function Pricing({
                 </span>
                 {plan.period && (
                   <span className="text-sm font-semibold leading-6 tracking-wide text-muted">
-                    / {plan.period}
+                    / {isMonthly || plan.priceNote ? plan.period : "ano"}
                   </span>
                 )}
               </div>
@@ -150,7 +149,7 @@ export function Pricing({
                   ? plan.priceNote
                   : isMonthly
                     ? "Cobrança mensal"
-                    : "Cobrança anual (valor equivalente por mês)"}
+                    : "Cobrança anual · 10 mensalidades"}
               </p>
 
               <ul className="mt-7 mb-7 gap-3 flex flex-col flex-1 text-left">

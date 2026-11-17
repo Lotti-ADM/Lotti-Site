@@ -73,10 +73,10 @@ test("exige endereço do titular apenas no cartão", () => {
 });
 
 test("mantém os preços cobrados no catálogo do servidor (lançamento 14/11/2026)", () => {
-  assert.equal(planPrice(checkoutPlans.essencial, "monthly"), 149);
-  assert.equal(planPrice(checkoutPlans.profissional, "monthly"), 299);
-  assert.equal(planPrice(checkoutPlans.essencial, "annual"), 1490);
-  assert.equal(planPrice(checkoutPlans.profissional, "annual"), 2990);
+  assert.equal(planPrice(checkoutPlans.essencial, "monthly"), 199);
+  assert.equal(planPrice(checkoutPlans.profissional, "monthly"), 349);
+  assert.equal(planPrice(checkoutPlans.essencial, "annual"), 1990);
+  assert.equal(planPrice(checkoutPlans.profissional, "annual"), 3490);
   assert.equal(billingCycleForPayment("CREDIT_CARD"), "monthly");
   assert.equal(billingCycleForPayment("PIX"), "annual");
 });
@@ -87,8 +87,8 @@ test("White Label não é vendido pelo checkout: só Atende e Completo são comp
   assert.equal(isPlanCode("profissional"), true);
   assert.equal(officialPlans.imobiliaria.contactOnly, true);
   assert.deepEqual(officialPlans.imobiliaria.seatPricing, { base: 499, perSeat: 149, minSeats: 5 });
-  assert.equal(officialPlans.essencial.listPrice, 199);
-  assert.equal(officialPlans.profissional.listPrice, 349);
+  assert.equal("listPrice" in officialPlans.essencial, false);
+  assert.equal("listPrice" in officialPlans.profissional, false);
 });
 
 test("aceita Pix anual e cartão mensal, sem combinações divergentes", () => {

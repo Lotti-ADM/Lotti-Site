@@ -49,7 +49,7 @@ export const comparisonFeatures = [
     category: "capacidade", label,
     ...Object.fromEntries(planCodes.map(code => [code, capacityLabel(officialPlans[code].capacity[key as keyof typeof officialPlans.essencial.capacity])])),
   })) as Array<{ category: string; label: string; essencial: string; profissional: string; imobiliaria: string }>,
-  { category: "atendimento", label: "Preço", essencial: "R$ 149/mês (tabela R$ 199)", profissional: "R$ 299/mês (tabela R$ 349)", imobiliaria: "R$ 499/mês + R$ 149 por cadeira (mín. 5)" },
+  { category: "atendimento", label: "Preço", essencial: "R$ 199/mês ou R$ 1.990/ano", profissional: "R$ 349/mês ou R$ 3.490/ano", imobiliaria: "A partir de R$ 1.244/mês" },
   { category: "atendimento", label: "Suporte", essencial: "Por e-mail", profissional: "Prioritário", imobiliaria: "Prioritário" },
   { category: "atendimento", label: "Onboarding", essencial: "Não incluído", profissional: "Não incluído", imobiliaria: "Orientado" },
 ];

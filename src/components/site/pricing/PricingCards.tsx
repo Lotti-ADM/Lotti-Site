@@ -21,12 +21,12 @@ const plans = planCodes.map((code) => {
     );
     return {
       name: plan.name,
-      price: String(base),
-      yearlyPrice: String(base),
+      pricePrefix: "a partir de",
+      price: String(seatPlanPrice(plan.seatPricing, minSeats)),
+      yearlyPrice: String(seatPlanPrice(plan.seatPricing, minSeats)),
       period: "mês",
-      priceNote: `+ ${formatBRL(perSeat)} por cadeira de corretor · mínimo ${minSeats}`,
+      priceNote: `${formatBRL(base)} + ${formatBRL(perSeat)} por cadeira · mínimo ${minSeats} cadeiras`,
       features: [
-        `Exemplo: ${minSeats} corretores = ${formatBRL(seatPlanPrice(plan.seatPricing, minSeats))}/mês`,
         "Gestor principal incluído",
         `${plan.capacity.attendedLeads} leads atendidos pela IA / mês`,
         ...plan.benefits,
@@ -39,14 +39,11 @@ const plans = planCodes.map((code) => {
     };
   }
 
-  // Preço anual = 10 mensalidades (2 meses grátis), dividido por 12 para mostrar o valor equivalente mensal
-  const yearlyEquivalent = Math.round((plan.monthlyPrice * 10) / 12);
-
   return {
     name: plan.name,
     price: String(plan.monthlyPrice),
-    listPrice: plan.listPrice ? String(plan.listPrice) : undefined,
-    yearlyPrice: String(yearlyEquivalent),
+    // Anual = 10 mensalidades (12 meses pelo preço de 10).
+    yearlyPrice: String(plan.monthlyPrice * 10),
     period: "mês",
     features: [
       `${plan.capacity.attendedLeads} leads atendidos pela IA / mês`,

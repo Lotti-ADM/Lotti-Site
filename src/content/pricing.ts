@@ -94,4 +94,14 @@ export const pricingFAQ = [
     answer:
       "A integração com Asaas está incluída nos planos Atende e Completo, conforme os benefícios de cada plano.",
   },
+  {
+    question: "Posso cancelar a assinatura quando quiser?",
+    answer:
+      "Sim. No plano mensal no cartão de crédito, você pode cancelar a qualquer momento sem qualquer multa ou período de fidelidade. As cobranças futuras são interrompidas e o acesso permanece ativo até o fim do ciclo mensal vigente.",
+  },
+  {
+    question: "Como funciona a garantia de reembolso (7 dias)?",
+    answer:
+      "Garantimos 100% de reembolso integral caso você solicite o cancelamento em até 7 dias corridos após a contratação, em estrito cumprimento ao art. 49 do Código de Defesa do Consumidor. A solicitação pode ser feita via WhatsApp ou e-mail de suporte.",
+  },
 ] as const;

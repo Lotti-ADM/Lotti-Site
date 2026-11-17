@@ -315,5 +315,12 @@ export const footer = {
         { label: "Blog de gestão imobiliária", href: "/blog" },
       ],
     },
+    {
+      title: "Legal",
+      links: [
+        { label: "Termos de Uso", href: "/termos" },
+        { label: "Cancelamento e Reembolso", href: "/politica-de-cancelamento" },
+      ],
+    },
   ],
 } as const;

@@ -16,7 +16,7 @@ export function Footer() {
   return (
     <footer className="on-ink border-t border-white/12 bg-ink text-paper">
       <div className="shell py-12 md:py-16">
-        <div className="grid gap-10 lg:grid-cols-[1.35fr_0.8fr_1fr] lg:gap-20">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_0.8fr_0.65fr_1fr] lg:gap-12">
           <div>
             <Logo size={25} tone="paper" />
             <p className="mt-4 max-w-[36ch] text-small text-white/50">
@@ -131,12 +131,18 @@ export function Footer() {
           </p>
           <p className="text-small text-white/40">{siteConfig.tagline}</p>
         </div>
-        <div className="mt-5 flex flex-wrap justify-start gap-x-4 gap-y-2 border-t border-white/8 pt-5 text-[0.75rem] leading-5 text-white/40">
+        <div className="mt-5 flex flex-wrap items-center justify-start gap-x-4 gap-y-2 border-t border-white/8 pt-5 text-[0.75rem] leading-5 text-white/40">
           <span>{footer.legal.cnpj}</span>
           <a href={`mailto:${footer.legal.email}`} className="transition-colors hover:text-paper">
             {footer.legal.email}
           </a>
           <span>{footer.legal.phone}</span>
+          <Link href="/termos" className="transition-colors hover:text-paper">
+            Termos de Uso
+          </Link>
+          <Link href="/politica-de-cancelamento" className="transition-colors hover:text-paper">
+            Cancelamento e Reembolso
+          </Link>
           <span>Todos os direitos reservados.</span>
         </div>
       </div>

@@ -1,6 +1,10 @@
+"use client";
+
 import { ArrowRight, ClipboardList, MessageSquareText } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
+import { useRef } from "react";
+import { useDemoLoop } from "@/components/site/useDemoLoop";
 
 const messages = [
   { from: "Interessado", text: "Estou procurando um apartamento para alugar, com dois quartos." },
@@ -18,7 +22,15 @@ const summary = [
   ["A confirmar", "Bairros aceitos e demais despesas do imóvel"],
 ] as const;
 
+// Roteiro: 1 interessado, 2 agente digitando, 3 agente, 4 interessado, 5 digitando, 6 agente.
+const messageAt = [1, 3, 4, 6];
+const typingAt = [0, 2, 0, 5];
+// Passo em que cada linha do resumo aparece, conforme a conversa revela a informação.
+const summaryAt = [1, 4, 4, 4, 4, 6];
+
 export function AgentExample() {
+  const ref = useRef<HTMLOListElement>(null);
+  const passo = useDemoLoop(ref, 6, 1300, 4);
   return (
     <section id="agente" className="section scroll-mt-28">
       <div className="shell">
@@ -34,13 +46,31 @@ export function AgentExample() {
               <MessageSquareText className="h-5 w-5 text-forest" aria-hidden="true" />
               O que o interessado conversa
             </h3>
-            <ol className="space-y-4" aria-label="Exemplo de qualificação imobiliária">
-              {messages.map((message, index) => (
-                <li key={index} className={message.from === "Agente Lotti" ? "ml-5 rounded-2xl bg-forest p-4 text-white sm:ml-8" : "mr-5 rounded-2xl border border-line bg-paper p-4 text-ink sm:mr-8"}>
-                  <p className="mb-2 text-xs font-semibold">{message.from}</p>
-                  <p className="text-sm leading-relaxed">{message.text}</p>
-                </li>
-              ))}
+            <ol ref={ref} data-demo-conversa="" data-demo-loop="" className="space-y-4" aria-label="Exemplo de qualificação imobiliária">
+              {messages.map((message, index) => {
+                const agente = message.from === "Agente Lotti";
+                return (
+                  <li key={index} className="relative">
+                    {agente && (
+                      <div
+                        data-digitando=""
+                        aria-hidden="true"
+                        data-on={passo === typingAt[index]}
+                        className="hero-demo-step demo-direita absolute right-0 top-0 rounded-2xl bg-forest px-4 py-3 text-white"
+                      >
+                        <span className="demo-digitando flex gap-1"><span /><span /><span /></span>
+                      </div>
+                    )}
+                    <div
+                      data-on={passo >= messageAt[index]}
+                      className={`hero-demo-step ${agente ? "demo-direita ml-5 rounded-2xl bg-forest p-4 text-white sm:ml-8" : "mr-5 rounded-2xl border border-line bg-paper p-4 text-ink sm:mr-8"}`}
+                    >
+                      <p className="mb-2 text-xs font-semibold">{message.from}</p>
+                      <p className="text-sm leading-relaxed">{message.text}</p>
+                    </div>
+                  </li>
+                );
+              })}
             </ol>
           </article>
           <article className="rounded-3xl border border-line bg-paper p-5 sm:p-8">
@@ -49,8 +79,12 @@ export function AgentExample() {
               O que orienta o corretor
             </h3>
             <dl className="divide-y divide-line">
-              {summary.map(([label, value]) => (
-                <div key={label} className="py-4 first:pt-0">
+              {summary.map(([label, value], i) => (
+                <div
+                  key={label}
+                  data-on={passo >= summaryAt[i]}
+                  className={`hero-demo-step -mx-3 rounded-lg px-3 py-4 first:pt-3 ${passo === summaryAt[i] ? "bg-forest/5" : ""}`}
+                >
                   <dt className="text-xs font-semibold uppercase tracking-wide text-muted">{label}</dt>
                   <dd className="mt-1 text-sm leading-relaxed text-ink">{value}</dd>
                 </div>

@@ -789,6 +789,58 @@
     pointer-events: none;
   }
 
+  /* Demonstrações em loop (useDemoLoop): o passo aparece quando data-on vira true. */
+  .hero-demo-step {
+    --demo-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    transition: opacity 0.6s var(--demo-ease), transform 0.6s var(--demo-ease), background-color 0.6s ease;
+    transform-origin: left bottom;
+  }
+  .hero-demo-step[data-on="false"] {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+  /* Quem fala do lado direito entra pela direita. */
+  .hero-demo-step.demo-direita { transform-origin: right bottom; }
+  .demo-enter {
+    animation: demo-enter 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes demo-enter {
+    from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  }
+  .demo-pulse {
+    animation: demo-pulse 0.9s ease-out;
+  }
+  @keyframes demo-pulse {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-forest) 45%, transparent); }
+    100% { box-shadow: 0 0 0 14px transparent; }
+  }
+  /* "Digitando…": três pontos que sobem em sequência. */
+  .demo-digitando span {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: currentColor;
+    animation: demo-dot 1s ease-in-out infinite;
+  }
+  .demo-digitando span:nth-child(2) { animation-delay: 0.15s; }
+  .demo-digitando span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes demo-dot {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-4px); opacity: 1; }
+  }
+  /* Linha de leitura descendo sobre o QR. */
+  .demo-scan {
+    animation: demo-scan 1.1s ease-in-out infinite alternate;
+  }
+  @keyframes demo-scan {
+    from { top: 8%; }
+    to { top: 88%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-demo-step, .demo-pulse, .demo-enter, .demo-digitando span, .demo-scan { transition: none; animation: none; }
+  }
+
   /* Hachura fina na mesma inclinação, para faixas de transição */
   .blade-hatch {
     background-image: repeating-linear-gradient(
@@ -899,6 +951,141 @@
   .btn-inverted-ghost:hover {
     border-color: color-mix(in srgb, var(--color-paper) 65%, transparent);
     background-color: color-mix(in srgb, var(--color-paper) 8%, transparent);
+  }
+
+  /* Botões do hero (RollButton): o texto rola para cima, a seta sai e entra outra,
+     o principal ganha brilho que segue o mouse e o de contorno enche a partir do cursor. */
+  .btn-roll {
+    --mx: 50%;
+    --my: 50%;
+    --roll-ease: cubic-bezier(0.32, 0.72, 0, 1);
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 0 22px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    font-weight: 600;
+    transition:
+      background-color 0.4s var(--roll-ease),
+      color 0.4s var(--roll-ease),
+      border-color 0.4s var(--roll-ease),
+      box-shadow 0.4s var(--roll-ease),
+      transform 0.5s var(--roll-ease);
+  }
+  .btn-roll:active {
+    transform: scale(0.97);
+  }
+  .btn-roll__texto {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    line-height: 1.25;
+  }
+  .btn-roll__texto > span {
+    display: block;
+    transition: transform 0.55s var(--roll-ease);
+  }
+  .btn-roll__texto > span::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 100%;
+  }
+  .btn-roll:hover .btn-roll__texto > span {
+    transform: translateY(-100%);
+  }
+  .btn-roll__seta {
+    position: relative;
+    display: inline-flex;
+    overflow: hidden;
+  }
+  .btn-roll__seta svg {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+    transition: transform 0.55s var(--roll-ease);
+  }
+  .btn-roll__seta svg + svg {
+    position: absolute;
+    left: 0;
+    transform: translateX(-130%);
+  }
+  .btn-roll:hover .btn-roll__seta svg:first-child {
+    transform: translateX(130%);
+  }
+  .btn-roll:hover .btn-roll__seta svg + svg {
+    transform: translateX(0);
+  }
+  .btn-roll--primary {
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+  /* O principal: uma faixa verde varre da esquerda para a direita, o texto fica branco
+     (sem rolar) e a seta avança. O .btn-roll extra no seletor vence as regras gerais abaixo. */
+  .btn-roll.btn-roll--primary .btn-roll__fill {
+    inset: 0;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    border-radius: inherit;
+    background: var(--color-forest);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s var(--roll-ease);
+  }
+  .btn-roll.btn-roll--primary:hover .btn-roll__fill {
+    transform: scaleX(1);
+  }
+  .btn-roll.btn-roll--primary:hover .btn-roll__texto > span {
+    transform: none;
+  }
+  .btn-roll.btn-roll--primary .btn-roll__seta svg + svg {
+    display: none;
+  }
+  .btn-roll.btn-roll--primary:hover .btn-roll__seta svg:first-child {
+    transform: translateX(4px);
+  }
+  .btn-roll--primary:hover {
+    color: var(--color-paper);
+    transform: translateY(-2px);
+    box-shadow: 0 14px 36px -12px color-mix(in srgb, #14a06a 85%, transparent);
+  }
+  .btn-roll--ghost {
+    background: transparent;
+    color: var(--color-paper);
+    border-color: color-mix(in srgb, var(--color-paper) 28%, transparent);
+  }
+  .btn-roll--ghost:hover {
+    color: var(--color-ink);
+    border-color: var(--color-paper);
+  }
+  .btn-roll__fill {
+    position: absolute;
+    z-index: -1;
+    left: var(--mx);
+    top: var(--my);
+    width: 340px;
+    height: 340px;
+    margin: -170px 0 0 -170px;
+    border-radius: 50%;
+    background: var(--color-paper);
+    transform: scale(0);
+    transition: transform 0.6s var(--roll-ease);
+  }
+  .btn-roll:hover .btn-roll__fill {
+    transform: scale(1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-roll, .btn-roll__texto > span, .btn-roll__seta svg, .btn-roll__fill { transition: none; }
+    .btn-roll:hover, .btn-roll:hover .btn-roll__texto > span { transform: none; }
   }
 
   /* ---- Cards -------------------------------------------------------------
@@ -1096,9 +1283,8 @@
 
   /* --- Glassmorphism --- */
   .glass {
+    /* Sem desfoque de fundo: sobre fundo claro não aparece e pesa nos cards que se movem. */
     background: color-mix(in srgb, var(--color-paper) 70%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     border: 1px solid color-mix(in srgb, var(--color-line) 50%, transparent);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
   }

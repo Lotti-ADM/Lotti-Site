@@ -176,13 +176,31 @@ export function BeamsBackground({
       animationFrameRef.current = requestAnimationFrame(animate);
     }
 
+    // Só desenha com o hero na tela e a aba visível: o blur do canvas por quadro travava a rolagem.
+    let naTela = true;
+    const parar = () => {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = 0;
+    };
+    const sincronizar = () => {
+      const deveAnimar = naTela && !document.hidden;
+      if (deveAnimar && !animationFrameRef.current) animate();
+      if (!deveAnimar) parar();
+    };
+    const io = new IntersectionObserver(([e]) => {
+      naTela = e.isIntersecting;
+      sincronizar();
+    });
+    io.observe(canvas);
+    document.addEventListener("visibilitychange", sincronizar);
+
     animate();
 
     return () => {
       window.removeEventListener("resize", updateCanvasSize);
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
+      document.removeEventListener("visibilitychange", sincronizar);
+      io.disconnect();
+      parar();
     };
   }, [intensity]);
 

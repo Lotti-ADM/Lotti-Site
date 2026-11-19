@@ -35,22 +35,20 @@ test("renderiza a assinatura clara sobre as superfícies escuras", async () => {
   assert.match(body, /<title>Lotti(?: - [^<]+)?<\/title>/);
 });
 
-test("exibe o vídeo do produto no hero, mudo e em loop", async () => {
+test("demonstra o produto no hero com interface em código, sem vídeo", async () => {
   const { response, body } = await get("/");
 
   assert.equal(response.status, 200);
   assert.match(body, /data-hero-video=""/);
-  assert.match(body, /src="\/product\/hero-demo\.mp4"/);
-  assert.match(body, /poster="\/product\/hero-demo-poster\.jpg"/);
-  assert.match(body, /aspect-ratio:1400 \/ 1034/);
-  // Sem áudio e sem controles: é decoração, não um player.
-  assert.match(body, /muted/);
-  assert.match(body, /loop/);
-  assert.doesNotMatch(body, /<video[^>]*\scontrols/);
+  assert.match(body, /data-hero-demo=""/);
+  assert.doesNotMatch(body, /hero-demo\.mp4|hero-demo-poster\.jpg|<video/);
+  // A sequência: lead no WhatsApp, agente qualifica, funil, visita agendada.
+  for (const passo of ["Agente Lotti", "Novo", "Qualificado", "Visita agendada"]) {
+    assert.ok(body.includes(passo), `passo ausente na demonstração: ${passo}`);
+  }
 
-  const video = await fetch(`${baseUrl}/product/hero-demo.mp4`, { method: "HEAD" });
-  assert.equal(video.status, 200);
-  assert.match(video.headers.get("content-type") ?? "", /video\/mp4/);
+  const styles = await readFile(new URL("../src/app/globals.css", import.meta.url), "utf8");
+  assert.match(styles, /prefers-reduced-motion[^}]*\{[^}]*\.hero-demo/);
 });
 
 test("usa verde Lotti no lado escuro do degradê do título do hero", async () => {
@@ -71,35 +69,116 @@ test("usa verde Lotti no lado escuro do degradê do título do hero", async () =
   );
 });
 
-test("exibe a captura de Kanban no recurso de funil de vendas", async () => {
+test("demonstra o funil de vendas com dados fictícios, sem print do app", async () => {
   const { response, body } = await get("/");
 
   assert.equal(response.status, 200);
-  assert.match(body, /<img[^>]+funil-pipeline\.png/);
-  assert.match(body, /<img(?=[^>]+funil-pipeline\.png)(?=[^>]+object-cover)/);
-  assert.match(body, /aspect-ratio:1466 \/ 1267/);
-  assert.match(
-    body,
-    /<article[^>]*class="[^"]*lg:grid-cols-2/,
-  );
-
-  const image = await fetch(`${baseUrl}/product/funil-pipeline.png`, { method: "HEAD" });
-  assert.equal(image.status, 200);
-  assert.match(image.headers.get("content-type") ?? "", /image\/png/);
+  assert.match(body, /data-demo-funil=""/);
+  assert.match(body, /<article[^>]*class="[^"]*lg:grid-cols-2/);
 });
 
-test("exibe a captura real do app no recurso de fachadas", async () => {
+test("demonstra as fachadas com dados fictícios, sem print do app", async () => {
   const { response, body } = await get("/");
 
   assert.equal(response.status, 200);
-  assert.match(body, /<img[^>]+fachadas-painel\.png/);
-  assert.match(body, /<img(?=[^>]+fachadas-painel\.png)(?=[^>]+object-cover)/);
-  assert.match(body, /aspect-ratio:1462 \/ 1267/);
+  assert.match(body, /data-demo-fachadas=""/);
+  // Mostra o caminho todo: celular lê o QR, abre a página do imóvel e o lead chega.
+  for (const passo of ["data-demo-celular", "Quero visitar", "Novo lead"]) {
+    assert.ok(body.includes(passo), `passo ausente nas fachadas: ${passo}`);
+  }
   assert.match(body, /leading-\[1\.15\] pt-1/);
+});
 
-  const image = await fetch(`${baseUrl}/product/fachadas-painel.png`, { method: "HEAD" });
-  assert.equal(image.status, 200);
-  assert.match(image.headers.get("content-type") ?? "", /image\/png/);
+test("as três demonstrações rodam em loop e param para quem pede menos movimento", async () => {
+  const { body } = await get("/");
+  for (const demo of ["data-hero-demo", "data-demo-funil", "data-demo-fachadas", "data-demo-conversa"]) {
+    assert.match(body, new RegExp(`${demo}=""[^>]*data-demo-loop=""|data-demo-loop=""[^>]*${demo}=""`), `${demo} sem loop`);
+  }
+
+  // O agente "digita" antes de responder.
+  assert.match(body, /data-digitando/);
+
+  const hook = await readFile(new URL("../src/components/site/useDemoLoop.ts", import.meta.url), "utf8");
+  assert.match(hook, /setInterval/);
+  assert.match(hook, /prefers-reduced-motion: reduce/);
+});
+
+for (const pagina of ["/", "/planos"]) {
+  test(`perguntas frequentes no estilo numerado em ${pagina}`, async () => {
+    const { response, body } = await get(pagina);
+
+    assert.equal(response.status, 200);
+    assert.match(body, /data-faq=""/);
+    assert.match(body, />F\.01</);
+    // Todas começam fechadas; quem lê abre a que quiser.
+    const faq = body.slice(body.indexOf('data-faq=""'));
+    assert.match(faq, /aria-expanded="false"/);
+    assert.doesNotMatch(faq.slice(0, faq.indexOf("</section>")), /aria-expanded="true"/);
+    // Fundo branco: o FAQ escuro se emendava com o CTA final e o rodapé.
+    assert.doesNotMatch(body, /<section data-faq=""[^>]*bg-ink/);
+    assert.match(body, /<section data-faq=""[^>]*bg-surface/);
+  });
+}
+
+test("animações pausam fora da tela para a página não travar", async () => {
+  const ler = (p) => readFile(new URL(p, import.meta.url), "utf8");
+  const hook = await ler("../src/components/site/useDemoLoop.ts");
+  assert.match(hook, /IntersectionObserver/);
+
+  const beams = await ler("../src/components/ui/beams-background.tsx");
+  assert.match(beams, /IntersectionObserver/);
+  assert.match(beams, /visibilitychange/);
+
+  // Desfoque de fundo sobre branco não aparece e custa caro em cards que se movem.
+  const styles = await ler("../src/app/globals.css");
+  const glass = styles.match(/\.glass\s*\{[^}]*\}/)?.[0] ?? "";
+  assert.doesNotMatch(glass, /backdrop-filter/);
+});
+
+test("os diferenciais viram cards coloridos com ilustração, e Recursos fica numa lista enxuta", async () => {
+  const { body } = await get("/");
+  const diferenciais = body.slice(body.indexOf('id="diferenciais"'));
+  assert.equal((diferenciais.match(/data-card-diferencial=""/g) ?? []).length, 4);
+  for (const trecho of ["Compra ou aluguel?", "perto do metrô", "Corretor assumiu", "Resumo no CRM"]) {
+    assert.ok(diferenciais.includes(trecho), `card sem: ${trecho}`);
+  }
+
+  assert.doesNotMatch(body, /data-card-recurso=""/);
+  for (const recurso of ["Contratos por IA", "Aluguéis", "Assistente de IA", "Módulos de apoio"]) {
+    assert.ok(body.includes(recurso), `recurso sumiu: ${recurso}`);
+  }
+});
+
+test("botões do hero: texto rola, seta troca, brilho segue o mouse e o contorno enche a partir do cursor", async () => {
+  const { body } = await get("/");
+  const acoes = body.slice(body.indexOf("data-hero-actions"), body.indexOf("data-hero-video"));
+  assert.equal((acoes.match(/class="btn-roll__texto"/g) ?? []).length, 2);
+  assert.equal((acoes.match(/class="btn-roll__seta"/g) ?? []).length, 1);
+  // Os dois enchem a partir do cursor: o principal fica todo verde, o de contorno todo branco.
+  assert.equal((acoes.match(/class="btn-roll__fill"/g) ?? []).length, 2);
+  // O texto duplicado da rolagem é decorativo: o nome acessível vem do aria-label.
+  assert.match(acoes, /aria-label="Ver exemplo de qualificação"/);
+
+  const styles = await readFile(new URL("../src/app/globals.css", import.meta.url), "utf8");
+  assert.match(styles, /\.btn-roll:hover \.btn-roll__texto > span\s*\{[^}]*translateY\(-100%\)/);
+  assert.match(styles, /\.btn-roll:hover \.btn-roll__fill\s*\{[^}]*scale\(1\)/);
+  assert.match(styles, /\.btn-roll--primary \.btn-roll__fill\s*\{[^}]*var\(--color-forest\)/);
+  // No principal o verde varre da esquerda para a direita e o texto não rola.
+  assert.match(styles, /\.btn-roll--primary \.btn-roll__fill\s*\{[^}]*scaleX\(0\)[^}]*transform-origin:\s*left/);
+  assert.match(styles, /\.btn-roll--primary:hover \.btn-roll__fill\s*\{[^}]*scaleX\(1\)/);
+  assert.match(styles, /\.btn-roll--primary:hover \.btn-roll__texto > span\s*\{[^}]*transform:\s*none/);
+  assert.match(styles, /\.btn-roll--primary:hover\s*\{[^}]*color:\s*var\(--color-paper\)/);
+  assert.match(styles, /prefers-reduced-motion[^}]*\{[^}]*\.btn-roll/);
+  assert.doesNotMatch(styles, /btn-kenlo/);
+});
+
+test("não publica prints do app, que mostram dados reais de clientes", async () => {
+  const { body } = await get("/");
+  assert.doesNotMatch(body, /\/product\//);
+
+  const { readdir } = await import("node:fs/promises");
+  const arquivos = await readdir(new URL("../public/product/", import.meta.url)).catch(() => []);
+  assert.deepEqual(arquivos, []);
 });
 
 test("preenche o carrossel sem lacunas e remove os quadros do CTA", async () => {

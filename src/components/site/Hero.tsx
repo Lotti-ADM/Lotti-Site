@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/Button";
+import { RollButton } from "@/components/ui/RollButton";
 import { BeamsBackground } from "@/components/ui/beams-background";
 import { hero } from "@/content/landing";
-import { HeroVideo } from "@/components/ui/HeroVideo";
+import { HeroDemo } from "@/components/site/HeroDemo";
 
 /**
  * O hero é o LCP da página.
@@ -33,25 +33,21 @@ export function Hero() {
 
           <div className="mt-8 flex w-full flex-col items-center" data-hero-actions="">
             <div className="flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center">
-              <Button href="#agente" variant="inverted" arrow className="btn-shimmer w-full shadow-lg sm:w-auto">
+              <RollButton href="#agente" variant="primary" arrow className="w-full sm:w-auto">
                 {hero.primaryCta}
-              </Button>
-              <Button
-                href="#como-funciona"
-                variant="inverted-ghost"
-                className="w-full transition-transform hover:scale-105 sm:w-auto"
-              >
+              </RollButton>
+              <RollButton href="#como-funciona" variant="ghost" className="w-full sm:w-auto">
                 {hero.secondaryCta}
-              </Button>
+              </RollButton>
             </div>
             <p className="mt-5 text-small text-white/40">{hero.footnote}</p>
           </div>
         </div>
 
-        {/* Video do produto — lazy loaded, poster shown immediately */}
-        <div data-hero-video="" className="relative mt-8 w-[min(94vw,1280px)] max-w-none pt-4 sm:mt-10 sm:pt-6">
+        {/* Demonstração do produto em interface desenhada em código */}
+        <div data-hero-video="" className="relative mt-8 w-[min(94vw,1100px)] max-w-none pt-4 sm:mt-10 sm:pt-6">
           <div className="hero-product-glow" aria-hidden="true" />
-          <HeroVideo />
+          <HeroDemo />
         </div>
       </div>
     </BeamsBackground>

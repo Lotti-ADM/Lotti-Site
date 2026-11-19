@@ -1,27 +1,10 @@
 import { Check, type LucideIcon } from "lucide-react";
-import { ProductShot } from "@/components/ui/ProductShot";
+import { FachadasDemo, FunilDemo } from "@/components/site/FeatureDemos";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { features } from "@/content/landing";
 
-const primaryVisuals = [
-  <ProductShot
-    key="funil"
-    src="/product/funil-pipeline.png"
-    alt="Funil de vendas em Kanban, com negócios distribuídos por etapa"
-    aspect="1466/1267"
-    showScreenshot
-    sizes="(max-width: 1024px) 100vw, 46vw"
-  />,
-  <ProductShot
-    key="fachadas"
-    src="/product/fachadas-painel.png"
-    alt="Painel de Fachadas Inteligentes com métricas, cards de imóveis e QR Code em atividade"
-    aspect="1462/1267"
-    showScreenshot
-    sizes="(max-width: 1024px) 100vw, 46vw"
-  />,
-];
+const primaryVisuals = [<FunilDemo key="funil" />, <FachadasDemo key="fachadas" />];
 
 /** Ícone modular + nome do módulo. Sem a régua diagonal: o ícone já ancora. */
 function FeatureLabel({ icon: Icon, label }: { icon: LucideIcon; label: string }) {
@@ -90,40 +73,18 @@ export function Features() {
         </div>
 
         {/* Os quatro restantes, em grade */}
-        <div className="mt-6 grid gap-6 md:grid-cols-2">
+        <ul className="mt-10 grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
           {features.secondary.map((feature, index) => {
             const Icon = feature.icon;
-
             return (
-              <Reveal
-                as="article"
-                key={feature.label}
-                delay={index * 60}
-                className={`card flex flex-col p-6 sm:p-8 glass transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-ink/20 ${
-                  index === 0 || index === 3 ? "md:col-span-2 lg:col-span-1" : ""
-                }`}
-              >
-                <FeatureLabel icon={Icon} label={feature.label} />
-                <h3 className="mt-5 max-w-[22ch] text-h3 text-ink">{feature.title}</h3>
-                <p className="mt-3 text-small text-muted">{feature.description}</p>
-
-                {feature.label === "Módulos de apoio" ? (
-                  <ul className="mt-6 flex flex-wrap gap-2">
-                    {features.supportModules.map(({ icon: ModuleIcon, label }) => (
-                      <li
-                        key={label}
-                        className="flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-eyebrow uppercase text-muted transition-colors hover:bg-surface hover:text-ink"
-                      >
-                        <ModuleIcon size={13} strokeWidth={1.75} aria-hidden="true" />
-                        {label}
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
+              <Reveal as="li" key={feature.label} delay={index * 60} className="border-t border-line pt-6">
+                <Icon size={20} strokeWidth={1.5} className="text-forest" aria-hidden="true" />
+                <h3 className="mt-4 text-[1.0625rem] font-semibold leading-snug text-ink">{feature.label}</h3>
+                <p className="mt-2 text-small text-muted">{feature.title}</p>
               </Reveal>
             );
           })}
-        </div>
+        </ul>
       </div>
     </section>
   );

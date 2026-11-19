@@ -172,6 +172,15 @@ test("botões do hero: texto rola, seta troca, brilho segue o mouse e o contorno
   assert.doesNotMatch(styles, /btn-kenlo/);
 });
 
+test("a barra de cima mostra a borda em toda a volta, sem a ponta esquerda sumir no fundo", async () => {
+  const styles = await readFile(new URL("../src/app/globals.css", import.meta.url), "utf8");
+  const pill = styles.match(/\.header-pill\s*\{[^}]*\}/)?.[0] ?? "";
+  // O degradê não pode passar por baixo da borda (senão a borda some onde ele é preto).
+  assert.match(pill, /background-clip:\s*padding-box/);
+  // E não começa em preto puro, que se confunde com o fundo escuro do hero.
+  assert.doesNotMatch(pill, /#000000 0%/);
+});
+
 test("não publica prints do app, que mostram dados reais de clientes", async () => {
   const { body } = await get("/");
   assert.doesNotMatch(body, /\/product\//);

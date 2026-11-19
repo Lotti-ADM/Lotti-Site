@@ -17,7 +17,7 @@ function Frame({ label, children, ref, ...data }: { label: string; children: Rea
       data-demo-loop=""
       role="img"
       aria-label={label}
-      className="rounded-2xl border border-line bg-paper p-5 text-left text-ink shadow-[0_18px_50px_rgba(0,0,0,0.06)] sm:p-6"
+      className="min-w-0 rounded-2xl border border-line bg-paper p-5 text-left text-ink shadow-[0_18px_50px_rgba(0,0,0,0.06)] sm:p-6"
     >
       <div aria-hidden="true">{children}</div>
     </div>
@@ -47,7 +47,7 @@ export function FunilDemo() {
 
   return (
     <Frame ref={ref} data-demo-funil="" label="Ilustração do funil de vendas: um lead fictício é qualificado e passa para a etapa de visita">
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-3">
         {colunas.map((col) => (
           <div key={col.etapa}>
             <p className="mb-3 flex items-center justify-between border-b border-line pb-2 text-[11px] font-semibold uppercase tracking-wide text-muted">
@@ -78,7 +78,7 @@ export function FachadasDemo() {
 
   return (
     <Frame ref={ref} data-demo-fachadas="" label="Ilustração de Fachadas Inteligentes: um celular lê o QR Code de uma placa fictícia, abre a página do imóvel e o pedido de visita chega como lead">
-      <div className="flex items-center justify-center gap-4 sm:gap-6">
+      <div className="flex min-w-0 flex-col items-center justify-center gap-5 sm:flex-row sm:gap-6">
         {/* A placa */}
         <div className="w-28 shrink-0 rounded-xl bg-forest p-3 text-center text-white sm:w-32">
           <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/70">À venda</p>
@@ -93,7 +93,7 @@ export function FachadasDemo() {
         </div>
 
         {/* O celular de quem passa na rua */}
-        <div data-demo-celular="" className="w-40 shrink-0 rounded-[26px] border-[5px] border-ink bg-ink sm:w-44">
+        <div data-demo-celular="" className="w-44 shrink-0 rounded-[26px] border-[5px] border-ink bg-ink">
           <div className="relative h-64 overflow-hidden rounded-[20px] bg-paper">
             {tela === "camera" ? (
               <div key="camera" className="demo-enter flex h-full flex-col items-center justify-center bg-ink/90 text-white">
@@ -104,7 +104,7 @@ export function FachadasDemo() {
                   <span className="absolute bottom-0 right-0 h-5 w-5 rounded-br-md border-b-2 border-r-2 border-white" />
                   {p === 1 && <QrCode className="demo-enter absolute inset-3 h-[4.5rem] w-[4.5rem] text-white/80" strokeWidth={1.25} />}
                 </div>
-                <p className="mt-4 text-[11px] text-white/75">{p === 1 ? "Lendo o QR Code…" : "Aponte para a placa"}</p>
+                <p className="mt-4 text-center text-[11px] text-white/75">{p === 1 ? "Lendo o QR Code…" : "Aponte para a placa"}</p>
               </div>
             ) : (
               <div key="imovel" className="demo-enter flex h-full flex-col">
@@ -133,7 +133,7 @@ export function FachadasDemo() {
       </div>
 
       {/* O que o corretor vê no painel */}
-      <div className="mt-5 flex items-center gap-3 border-t border-line pt-4">
+      <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-line pt-4 sm:flex-nowrap">
         <div className="hero-demo-step min-w-0 flex-1" data-on={p >= 4}>
           <p className="truncate rounded-lg bg-forest/10 px-3 py-2 text-[12px] text-ink">
             <span className="font-semibold text-forest">Novo lead</span> · Fábio Exemplo quer visitar a casa

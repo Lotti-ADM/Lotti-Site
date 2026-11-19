@@ -64,7 +64,7 @@ export function Features() {
                   ) : null}
                 </div>
 
-                <div className={flip ? "lg:order-1" : undefined}>
+                <div className={flip ? "min-w-0 lg:order-1" : "min-w-0"}>
                   {primaryVisuals[index]}
                 </div>
               </Reveal>

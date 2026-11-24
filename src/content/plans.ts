@@ -46,8 +46,8 @@ export const officialPlans: Record<PlanCode, OfficialPlan> = {
     audience: "Para o corretor autônomo",
     monthlyPrice: 199,
     capacity: {
-      properties: 250,
-      rentalContracts: 5,
+      properties: 50,
+      rentalContracts: 50,
       facades: 15,
       aiContracts: 10,
       attendedLeads: 100,
@@ -71,8 +71,8 @@ export const officialPlans: Record<PlanCode, OfficialPlan> = {
     audience: "Para quem administra aluguéis e pequenas equipes",
     monthlyPrice: 349,
     capacity: {
-      properties: 1500,
-      rentalContracts: 30,
+      properties: 150,
+      rentalContracts: 100,
       facades: 60,
       aiContracts: 25,
       attendedLeads: 250,

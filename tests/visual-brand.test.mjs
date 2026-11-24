@@ -226,7 +226,7 @@ test("apresenta os limites comerciais revisados nos três planos", async () => {
   assert.equal(response.status, 200);
   for (const content of [
     "Leads atendidos pela IA", "100/mês", "250/mês", "600/mês",
-    "Até 250", "Até 1500", "Sem limite", "Agente de IA para atendimento e qualificação de leads",
+    "Até 50", "Até 150", "Até 100", "Sem limite", "Agente de IA para atendimento e qualificação de leads",
   ]) {
     assert.ok(body.includes(content), `faltando conteúdo do plano: ${content}`);
   }
@@ -451,8 +451,8 @@ test("leva cada plano mensal para o checkout", async () => {
   assert.match(body, /\/checkout\?plano=profissional/);
   assert.match(body, /\/checkout\?plano=imobiliaria/);
   assert.match(body, />Assinar agora</);
-  assert.match(body, /Até 250/);
-  assert.match(body, /Até 1500/);
+  assert.match(body, /Até 50/);
+  assert.match(body, /Até 150/);
   assert.match(body, /Sem limite/);
   assert.doesNotMatch(body, /Faturado .* por ano|Economize 2 meses|Teste grátis por 14 dias/);
 });
@@ -473,7 +473,7 @@ test("renderiza cartão à esquerda e Pix anual com 10 mensalidades", async () =
   assert.match(body, /R\$\s*399,00/);
   assert.match(body, /único endereço autorizado a criar a senha inicial/);
   assert.match(body, /Processado com segurança pelo Asaas/);
-  assert.match(body, /Imóveis: Até 1500 · Contratos de aluguel: Até 30/);
+  assert.match(body, /Imóveis: Até 150 · Contratos de aluguel: Até 100/);
   assert.match(body, /Fachadas Inteligentes: Até 60/);
   assert.match(body, /renovação anual/i);
   assert.doesNotMatch(body, /Card Holder|Expiration Date|Complete all fields/);

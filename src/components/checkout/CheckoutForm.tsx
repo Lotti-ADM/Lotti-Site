@@ -45,6 +45,7 @@ type CheckoutResponse = {
   statusToken?: string;
   status?: CheckoutStatus;
   message?: string;
+  checkoutUrl?: string;
   pix?: {
     encodedImage: string;
     payload: string;
@@ -242,6 +243,11 @@ export function CheckoutForm({ initialPlanCode, initialPaymentMethod }: Checkout
       setErrorMessage(
         data.message ?? "Não foi possível conectar ao pagamento. Verifique sua internet e tente novamente.",
       );
+      return;
+    }
+
+    if (data.checkoutUrl) {
+      window.location.href = data.checkoutUrl;
       return;
     }
 

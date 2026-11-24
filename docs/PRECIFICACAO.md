@@ -26,3 +26,10 @@ A campanha antiga de fundador (20%) foi encerrada pela migration 20260909183000_
 | imobiliaria | Lotti White Label | 499 base + 149 por cadeira (mín. 5 → 1.244) | — | sob contrato | 600 | **não**: botão de conversa (WhatsApp ou formulário de demo) |
 
 Cotas inalteradas. `src/content/plans.ts` segue como fonte única; `checkoutPlanCodes` limita o checkout a Atende e Completo (`?plano=imobiliaria` cai no padrão). Assinaturas já emitidas no Asaas não mudam. Base da decisão e evidências: Segundo Cérebro, `01-negocio/lotti/founder/pricing-decisao.md`. Data de fim do lançamento: a definir.
+
+---
+# Revisão de Limites e Capacidade — 23 de novembro de 2026
+
+- **Lotti Atende (R$ 199/mês):** até 100 imóveis ativos, até 50 contratos de aluguel ativos, 15/mês gerações ou análises de contratos com IA.
+- **Lotti Completo (R$ 349/mês):** até 200 imóveis ativos, até 100 contratos de aluguel ativos, até 3 corretores (3 contas de acesso), 30/mês gerações de contratos com IA.
+- **Lotti White Label (a partir de R$ 1.244/mês):** imóveis ativos ilimitados, contratos de aluguel ilimitados.

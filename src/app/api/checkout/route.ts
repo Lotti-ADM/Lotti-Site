@@ -1,6 +1,13 @@
 import { createHmac } from "node:crypto";
 import { NextResponse, type NextRequest } from "next/server";
 import { isAsaasConfigured, AsaasApiError, createAsaasSubscription, findOrCreateAsaasCustomer, getAsaasPixQrCode } from "@/lib/asaas/server";
+import {
+  isAbacatePayConfigured,
+  AbacatePayError,
+  createAbacatePayTransparentPix,
+  createAbacatePayCheckoutSession,
+  getAbacatePayTransparentStatus,
+} from "@/lib/abacatepay/server";
 import { checkoutPlans, planPrice } from "@/lib/checkout/catalog";
 import { consumeCheckoutRateLimit, createCheckoutOrder, getCheckoutOrder, tokensMatch, updateCheckoutOrder } from "@/lib/checkout/repository";
 import { checkoutRequestSchema } from "@/lib/checkout/validation";
@@ -44,17 +51,25 @@ export async function POST(request: NextRequest) {
     "O pagamento online está em configuração. Tente novamente em instantes.",
     503,
   );
-  // A página de criar senha (LOTTI_APP_PASSWORD_SETUP_URL) agora é configuração da API:
-  // sem ela a API responde "não configurado" no limite abaixo, antes de qualquer cobrança.
-  if (process.env.CHECKOUT_ENABLED !== "true" || !isAsaasConfigured() || !isLottiApiConfigured() || !process.env.ASAAS_WEBHOOK_TOKEN) {
+
+  if (process.env.CHECKOUT_ENABLED !== "true") {
     return notConfigured();
   }
 
-  const rateKey = createHmac('sha256', process.env.ASAAS_WEBHOOK_TOKEN!).update(requestIp(request)).digest('hex');
+  const isAbacate = isAbacatePayConfigured() && (process.env.CHECKOUT_GATEWAY === "abacatepay" || !isAsaasConfigured());
+
+  if (!isAbacate) {
+    if (!isAsaasConfigured() || !isLottiApiConfigured() || !process.env.ASAAS_WEBHOOK_TOKEN) {
+      return notConfigured();
+    }
+  }
+
+  const rateSecret = process.env.ASAAS_WEBHOOK_TOKEN || process.env.ABACATEPAY_API_KEY || "lotti-checkout-rate-limit";
+  const rateKey = createHmac("sha256", rateSecret).update(requestIp(request)).digest("hex");
   const rate = await consumeCheckoutRateLimit(rateKey);
-  if (rate === 'not_configured') return notConfigured();
-  if (rate === 'unavailable') return errorResponse('CHECKOUT_UNAVAILABLE','Não foi possível iniciar o pagamento agora.',503);
-  if (rate !== 'allowed') return errorResponse('TOO_MANY_ATTEMPTS','Aguarde um minuto antes de tentar novamente.',429);
+  if (rate === "not_configured") return notConfigured();
+  if (rate === "unavailable") return errorResponse("CHECKOUT_UNAVAILABLE", "Não foi possível iniciar o pagamento agora.", 503);
+  if (rate !== "allowed") return errorResponse("TOO_MANY_ATTEMPTS", "Aguarde um minuto antes de tentar novamente.", 429);
 
   const rawBody = await request.json().catch(() => null);
   const parsed = checkoutRequestSchema.safeParse(rawBody);
@@ -88,34 +103,112 @@ export async function POST(request: NextRequest) {
         return errorResponse("CHECKOUT_ATTEMPT_CONFLICT", "Esta tentativa de pagamento não pode ser reutilizada.", 409);
       }
 
-      if (existing) {
-        const pix = existing.payment_method === "PIX" && existing.asaas_payment_id
-          ? await getAsaasPixQrCode(existing.asaas_payment_id).catch(() => undefined)
-          : undefined;
+      if (isAbacate) {
+        const abacatePix = existing.payment_method === "PIX" && existing.asaas_payment_id
+          ? await getAbacatePayTransparentStatus(existing.asaas_payment_id).catch(() => null)
+          : null;
         return NextResponse.json({
           ok: true,
           orderId,
           statusToken,
           status: existing.status,
           paymentMethod: existing.payment_method,
-          pix,
+          pix: abacatePix?.brCode ? {
+            encodedImage: abacatePix.encodedImage ?? "",
+            payload: abacatePix.brCode,
+            expirationDate: abacatePix.expiresAt ?? "",
+          } : undefined,
         });
       }
-    } else {
-      await createCheckoutOrder({
-        id: orderId,
+
+      const pix = existing.payment_method === "PIX" && existing.asaas_payment_id
+        ? await getAsaasPixQrCode(existing.asaas_payment_id).catch(() => undefined)
+        : undefined;
+      return NextResponse.json({
+        ok: true,
+        orderId,
         statusToken,
-        payerName: checkout.name,
-        payerEmail: checkout.email,
-        payerDocument: checkout.cpfCnpj,
-        payerPhone: checkout.mobilePhone,
-        planCode: checkout.planCode,
-        billingCycle: checkout.billingCycle,
-        paymentMethod: checkout.paymentMethod,
-        amount,
+        status: existing.status,
+        paymentMethod: existing.payment_method,
+        pix,
       });
     }
+
+    await createCheckoutOrder({
+      id: orderId,
+      statusToken,
+      payerName: checkout.name,
+      payerEmail: checkout.email,
+      payerDocument: checkout.cpfCnpj,
+      payerPhone: checkout.mobilePhone,
+      planCode: checkout.planCode,
+      billingCycle: checkout.billingCycle,
+      paymentMethod: checkout.paymentMethod,
+      amount,
+    });
     orderPersisted = true;
+
+    if (isAbacate) {
+      if (checkout.paymentMethod === "PIX") {
+        const pixResult = await createAbacatePayTransparentPix({
+          orderId,
+          amount,
+          plan,
+          customer: {
+            name: checkout.name,
+            email: checkout.email,
+            taxId: checkout.cpfCnpj,
+            cellphone: checkout.mobilePhone,
+          },
+        });
+
+        await updateCheckoutOrder(orderId, {
+          status: "awaiting_payment",
+          asaas_payment_id: pixResult.id,
+        });
+
+        return NextResponse.json({
+          ok: true,
+          orderId,
+          statusToken,
+          status: "awaiting_payment",
+          paymentMethod: "PIX",
+          pix: {
+            encodedImage: pixResult.encodedImage,
+            payload: pixResult.brCode,
+            expirationDate: pixResult.expiresAt,
+          },
+        });
+      }
+
+      const session = await createAbacatePayCheckoutSession({
+        orderId,
+        amount,
+        plan,
+        billingCycle: checkout.billingCycle,
+        appUrl: request.nextUrl.origin,
+        customer: {
+          name: checkout.name,
+          email: checkout.email,
+          taxId: checkout.cpfCnpj,
+          cellphone: checkout.mobilePhone,
+        },
+      });
+
+      await updateCheckoutOrder(orderId, {
+        status: "processing",
+        asaas_payment_id: session.id,
+      });
+
+      return NextResponse.json({
+        ok: true,
+        orderId,
+        statusToken,
+        status: "processing",
+        paymentMethod: "CREDIT_CARD",
+        checkoutUrl: session.url,
+      });
+    }
 
     const customer = await findOrCreateAsaasCustomer(orderId, checkout);
     await updateCheckoutOrder(orderId, { asaas_customer_id: customer.id });
@@ -157,6 +250,16 @@ export async function POST(request: NextRequest) {
       pix: result.pixQrCode,
     });
   } catch (error) {
+    if (error instanceof AbacatePayError) {
+      if (orderPersisted) {
+        await updateCheckoutOrder(orderId, {
+          status: "failed",
+          failure_code: "ABACATEPAY_ERROR",
+        }).catch(() => undefined);
+      }
+      return errorResponse("CHECKOUT_FAILED", error.message, error.statusCode >= 400 && error.statusCode < 500 ? 400 : 503);
+    }
+
     const publicCode = error instanceof AsaasApiError ? error.publicCode : "CHECKOUT_FAILED";
     const uncertain = subscriptionRequested && (!(error instanceof AsaasApiError) || error.publicCode === "GATEWAY_UNAVAILABLE");
     if (orderPersisted) {
@@ -186,7 +289,7 @@ export async function POST(request: NextRequest) {
     if (publicCode === "INVALID_DATA") {
       return errorResponse(
         publicCode,
-        "O Asaas não aceitou os dados informados. Revise o cadastro e tente novamente.",
+        "O gateway de pagamento não aceitou os dados informados. Revise o cadastro e tente novamente.",
         400,
       );
     }

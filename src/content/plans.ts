@@ -46,10 +46,10 @@ export const officialPlans: Record<PlanCode, OfficialPlan> = {
     audience: "Para o corretor autônomo",
     monthlyPrice: 199,
     capacity: {
-      properties: 250,
-      rentalContracts: 5,
+      properties: 100,
+      rentalContracts: 50,
       facades: 15,
-      aiContracts: 10,
+      aiContracts: 15,
       attendedLeads: 100,
     },
     benefits: [
@@ -71,16 +71,17 @@ export const officialPlans: Record<PlanCode, OfficialPlan> = {
     audience: "Para quem administra aluguéis e pequenas equipes",
     monthlyPrice: 349,
     capacity: {
-      properties: 1500,
-      rentalContracts: 30,
+      properties: 200,
+      rentalContracts: 100,
       facades: 60,
-      aiContracts: 25,
+      aiContracts: 30,
       attendedLeads: 250,
     },
     benefits: [
       "Agente de IA para atendimento e qualificação de leads",
       "Resumo das necessidades do cliente para o corretor",
       "Agente em implantação: ativação com a equipe Lotti",
+      "Até 3 corretores (3 contas de acesso)",
       "CRM, clientes, funil e lançamentos financeiros sem limite",
       "Gestão de aluguéis com cobrança por boleto e Pix",
       "Financeiro completo",
@@ -108,6 +109,7 @@ export const officialPlans: Record<PlanCode, OfficialPlan> = {
       attendedLeads: 600,
     },
     benefits: [
+      "Imóveis ativos ilimitados",
       "A marca da sua imobiliária no app dos corretores",
       "Gestor acompanha a equipe: leads, respostas e produção",
       "Distribuição de leads e metas por corretor",

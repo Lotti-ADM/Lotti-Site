@@ -2,12 +2,15 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getCheckoutOrder, getPasswordAccess, tokensMatch, updateCheckoutOrder } from "@/lib/checkout/repository";
 import { isLottiApiConfigured } from "@/lib/lotti-api/server";
 import { getAsaasPixQrCode, getFirstAsaasSubscriptionPayment } from "@/lib/asaas/server";
+import { getAbacatePayTransparentStatus, isAbacatePayConfigured } from "@/lib/abacatepay/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
-  if (!isLottiApiConfigured()) {
+  const isAbacate = isAbacatePayConfigured() && (process.env.CHECKOUT_GATEWAY === "abacatepay" || !isLottiApiConfigured());
+
+  if (!isAbacate && !isLottiApiConfigured()) {
     return NextResponse.json({ ok: false }, { status: 503 });
   }
 
@@ -23,6 +26,50 @@ export async function GET(request: NextRequest) {
   }
 
   let paymentId = order.asaas_payment_id;
+
+  if (isAbacate) {
+    let orderStatus = order.status;
+    let pixData: { encodedImage: string; payload: string; expirationDate: string } | undefined;
+
+    if (paymentId) {
+      const abacateInfo = await getAbacatePayTransparentStatus(paymentId).catch(() => null);
+      if (abacateInfo) {
+        if (abacateInfo.status === "PAID" || abacateInfo.status === "COMPLETED") {
+          orderStatus = "active";
+          await updateCheckoutOrder(order.id, { status: "active" }).catch(() => null);
+        } else if (abacateInfo.status === "EXPIRED") {
+          orderStatus = "overdue";
+        } else if (abacateInfo.status === "CANCELLED") {
+          orderStatus = "failed";
+        }
+
+        if (order.payment_method === "PIX" && abacateInfo.brCode) {
+          pixData = {
+            encodedImage: abacateInfo.encodedImage ?? "",
+            payload: abacateInfo.brCode,
+            expirationDate: abacateInfo.expiresAt ?? "",
+          };
+        }
+      }
+    }
+
+    const accountReady = orderStatus === "active";
+    const access = accountReady ? await getPasswordAccess(order.id, token) : null;
+
+    return NextResponse.json({
+      ok: true,
+      status: paymentId && orderStatus === "processing" ? "awaiting_payment" : orderStatus,
+      accessEmailSent: Boolean(order.access_email_sent_at),
+      accountReady,
+      passwordSetupUrl: access?.passwordSetupUrl ?? null,
+      passwordSetupExpiresAt: access?.passwordSetupExpiresAt ?? null,
+      passwordAlreadySet: access?.passwordAlreadySet ?? false,
+      loginUrl: access?.loginUrl ?? null,
+      failureCode: order.failure_code ?? null,
+      pix: pixData,
+    }, { headers: { "cache-control": "no-store" } });
+  }
+
   if (order.payment_method === "PIX" && !paymentId && order.asaas_subscription_id) {
     const payment = await getFirstAsaasSubscriptionPayment(order.asaas_subscription_id)
       .catch(() => undefined);

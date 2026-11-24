@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --import tsx --test tests/checkout-validation.test.ts tests/payment-validation.test.ts tests/lotti-api-client.test.ts",
+    "test": "node --import tsx --test tests/checkout-validation.test.ts tests/payment-validation.test.ts tests/lotti-api-client.test.ts tests/abacatepay.test.ts",
     "test:visual": "node --test tests/visual-brand.test.mjs",
     "test:headers": "node --test tests/security-headers.test.mjs"
   },
